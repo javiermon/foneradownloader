@@ -1,0 +1,30 @@
+Fonera torrent extension
+........................
+
+Testing:
+--------
+1- install the xpi in your firefox
+To build it:
+svn co foneradownloader_url
+cd foneradownloader
+make
+
+This creates a .xpi file: foneradownloader-X.X.X.xpi
+
+Drag and drop it to a firefox window.
+
+2- You'll need the fonera's ffx rpc:
+ssh to fonera
+cd /usr/lib/lua/luci/controller
+wget http://svn.fonosfera.org/fon-ng/trunk/luci/applications/luci-ffrpc/luasrc/controller/fon_ffrpc.lua
+
+Development:
+-----------
+put foneradownloader@fon.com file into ~/.mozilla/firefox/qs35h4fl.Developer/extensions/
+change the contents to point to this folder in the filesystem
+restart firefox
+
+Creating a new ffx profile:
+---------------------------
+1- firefox -ProfileManager
+2- firefox -P <new_profile> -no-remote

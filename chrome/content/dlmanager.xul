@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+
+ (C) Fon
+ Author: Javier Monteagudo (Javier.monteagudo@fon.com)
+
+ This program is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along
+ with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrmoe://foneradownloader/skin/default/skin.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://foneradownloader/locale/dlmanager.dtd">
+
+<window id="foneradownloader-dlmanager" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	windowtype="foneradownloader:dlmanager" title="&downloadManager;" style="overflow: auto" class="dlmanager-window"
+	screenX="10" screenY="10"
+	persist="width height" orient="vertical">
+
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/fonera.js"/>    
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dlmanager.js" />    
+  <script type="application/x-javascript">
+
+    window.addEventListener("load", function(e) { Fonera.addEventListener("onTorrentsAvailable", FoneraDLManager.drawItems); }, false);
+    window.addEventListener("load", function(e) { Fonera.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems); }, false);
+
+    window.addEventListener("load", FoneraDLManager.refreshAction, false);
+
+    window.addEventListener("unload", function(e) { Fonera.removeEventListener("onTorrentsAvailable", FoneraDLManager.drawItems); }, false);
+    window.addEventListener("unload", function(e) { Fonera.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems); }, false);
+  </script>
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
+  </stringbundleset>
+
+  <richlistbox id="foneradownloader-downloads-list" flex="1"  style="overflow: auto">
+    <grid id="foneradownloader-downloads-list-grid">
+
+      <columns>
+	<column flex="2"/> <!-- name -->
+	<column flex="2"/> <!-- type -->
+	<column flex="2"/> <!-- status -->
+
+	<column flex="2"/> <!-- download progressbar -->
+      </columns>
+      <rows id="foneradownloader-downloads-list-items">
+      </rows>
+     
+    </grid>
+  </richlistbox>
+
+  <statusbar id="status-bar">
+  <button id="refreshButton" oncommand="FoneraDLManager.refreshAction()"
+          label="&refresh;"/>
+  <spacer flex="1"/>
+   <statusbarpanel id="foneradownloader-dlmicon"
+		    class="statusbarpanel-iconic" src="chrome://global/skin/icons/loading_16.png"/> 
+  </statusbar>
+</window>

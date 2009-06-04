@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+
+ (C) Fon
+ Author: Javier Monteagudo (Javier.monteagudo@fon.com)
+
+ This program is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along
+ with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<!DOCTYPE overlay SYSTEM "chrome://foneradownloader/locale/browser.dtd">
+
+<overlay id="foneraDownloader-status" 
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/fonera.js"/>    
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/status.js"/>
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dlmanager.js"/>    
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/preferences.js"/>    
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/contextmenu.js"/>    
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
+  </stringbundleset>
+
+  <script type="application/x-javascript">
+
+    window.addEventListener("load", function(e) { Fonera.addEventListener("onTorrentsAvailable", FoneraStatus.drawTooltip); }, false);
+    window.addEventListener("load", function(e) { Fonera.addEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip); }, false);
+
+    window.addEventListener("load", function(e) { Fonera.addEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip); }, false);
+    window.addEventListener("load", function(e) { Fonera.addEventListener("onCheckFoneraAvailable", Fonera.checkTorrents); }, false);
+    window.addEventListener("load", function(e) { Fonera.addEventListener("onCheckFoneraAvailable", Fonera.checkDownloads); }, false);
+
+    window.addEventListener("load", function(e) { Fonera.checkFoneraAvailable(); }, false);
+    window.addEventListener("load", function(e) { FoneraCxtxtMenu.init(); }, false);
+
+    // This doesn't work as the dialog that triggers the event is closed and we cannot access the Fonera or FoneraStatus objects
+    // window.addEventListener("load", function(e) { Fonera.addEventListener("onSendUrl", FoneraStatus.printErrors); }, false);
+    // ugly workaround:
+    window.setInterval(FoneraStatus.printErrors, 60*100);
+
+    window.setInterval(function() { Fonera.checkFoneraAvailable(); Fonera.checkTorrents(); Fonera.checkDownloads(); }, 10*60*100);
+    // we want to re-authenticate so sessions don't expire
+    window.setInterval(function() { Fonera.checkFoneraAvailable(true); }, 100*60*100);
+  </script>
+
+  <!-- right click menu-->
+  <popup id="contentAreaContextMenu">
+    <menuitem id="send-link-to-fonera" label="&sendLinkToFonera;"
+	      insertafter="context-stop" oncommand="FoneraCxtxtMenu.sendLinkToFonera();"/>
+  </popup>
+
+  <!-- tools menu -->
+  <menupopup id="menu_ToolsPopup">
+    <menuitem id="send-link-to-fonera"  label="&showfoneradownloads;" oncommand="FoneraDLManager.showDownloadsWindow();"/>
+  </menupopup>
+
+  <!-- statusbar -->
+  <statusbar id="status-bar">
+    <statusbarpanel id="foneraDownloader-sbpanel-errors" tooltiptext=""
+		    class="statusbarpanel-iconic" src="" onclick="FoneraStatus.clearErrors();"/> 
+    <!-- TODO: branding icons! -->
+    <statusbarpanel id="foneraDownloader-sbpanel" label="&fonera_downloads;" tooltiptext="&loading;"
+		    class="statusbarpanel-iconic-text" src="chrome://global/skin/icons/loading_16.png" 
+		    onclick="FoneraDLManager.showDownloadsWindow();"/> 
+  </statusbar>
+</overlay>

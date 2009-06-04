@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!--
+
+ (C) Fon
+ Author: Javier Monteagudo (Javier.monteagudo@fon.com)
+
+ This program is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along
+ with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+
+<!DOCTYPE overlay SYSTEM "chrome://foneradownloader/locale/dialog.dtd">
+
+<overlay id="foneraDownloader-dialog" 
+         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <!-- we are modifying the save dialog: unknownContentType -->  
+  <dialog id="unknownContentType">
+    <!-- This imports our javascript. -->
+    <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dialog.js" />
+    <script type="application/x-javascript" src="chrome://foneradownloader/content/js/fonera.js" />    
+    <script type="application/x-javascript">
+      try { 
+            var Application = Components.classes["@mozilla.org/fuel/application;1"]
+                 .getService(Components.interfaces.fuelIApplication);
+
+            addEventListener("load", FoneraDialog.openDownloaderHandler, false);    
+      } catch(e) {
+            Application.console.log(e);
+      }
+    </script>
+
+  </dialog>
+
+  <!-- we are modifying the save dialog: mode-->
+  <radiogroup id="mode">
+    <!--hbox insertbefore="save" flex="1"-->
+      <radio id="foneraDownloader-option" label="&download_with_fonera;" flex="1" disabled="true"/>
+    <!--/hbox-->
+  </radiogroup>
+</overlay>
+

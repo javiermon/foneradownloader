@@ -1,0 +1,8 @@
+foneradownloader@fon.com
+*.xpi
+Makefile
+exclude.lst
+TODOS
+readme
+*.svn*
+*~
