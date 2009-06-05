@@ -34,11 +34,9 @@
 
   <script type="application/x-javascript">
 
-    window.addEventListener("load", function(e) { Fonera.addEventListener("onTorrentsAvailable", FoneraStatus.drawTooltip); }, false);
     window.addEventListener("load", function(e) { Fonera.addEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip); }, false);
 
     window.addEventListener("load", function(e) { Fonera.addEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip); }, false);
-    window.addEventListener("load", function(e) { Fonera.addEventListener("onCheckFoneraAvailable", Fonera.checkTorrents); }, false);
     window.addEventListener("load", function(e) { Fonera.addEventListener("onCheckFoneraAvailable", Fonera.checkDownloads); }, false);
 
     window.addEventListener("load", function(e) { Fonera.checkFoneraAvailable(); }, false);
@@ -49,7 +47,7 @@
     // ugly workaround:
     window.setInterval(FoneraStatus.printErrors, 60*100);
 
-    window.setInterval(function() { Fonera.checkFoneraAvailable(); Fonera.checkTorrents(); Fonera.checkDownloads(); }, 10*60*100);
+    window.setInterval(function() { Fonera.checkFoneraAvailable(); Fonera.checkDownloads(); }, 10*60*100);
     // we want to re-authenticate so sessions don't expire
     window.setInterval(function() { Fonera.checkFoneraAvailable(true); }, 100*60*100);
   </script>

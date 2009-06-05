@@ -32,12 +32,10 @@
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dlmanager.js" />    
   <script type="application/x-javascript">
 
-    window.addEventListener("load", function(e) { Fonera.addEventListener("onTorrentsAvailable", FoneraDLManager.drawItems); }, false);
     window.addEventListener("load", function(e) { Fonera.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems); }, false);
 
     window.addEventListener("load", FoneraDLManager.refreshAction, false);
 
-    window.addEventListener("unload", function(e) { Fonera.removeEventListener("onTorrentsAvailable", FoneraDLManager.drawItems); }, false);
     window.addEventListener("unload", function(e) { Fonera.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems); }, false);
   </script>
 
@@ -53,7 +51,12 @@
 	<column flex="2"/> <!-- type -->
 	<column flex="2"/> <!-- status -->
 
-	<column flex="2"/> <!-- download progressbar -->
+	<column flex="2"/> <!-- download progress -->
+
+	<column flex="2"/> <!-- download start/pause -->
+	<column flex="2"/> <!-- download stop -->
+	<column flex="2"/> <!-- download del -->
+
       </columns>
       <rows id="foneradownloader-downloads-list-items">
       </rows>

@@ -61,24 +61,12 @@ let FoneraFormat = {
         // http://www.oreillynet.com/pub/a/mozilla/2000/11/10/localizing.html?page=2
         let stringsBundle = strBundleService.
             createBundle("chrome://foneradownloader/locale/foneradownloader.properties");
-
-        // 2 arguments indicate that elmt is numeric, else it's passed as is.
-        // http://svn.fonosfera.org/fon-ng/trunk/luci/applications/luci-torrent/luasrc/view/torrent/active.htm
-        // http://svn.fonosfera.org/fon-ng/trunk/luci/applications/luci-downloadmanager/luasrc/view/dlmanager/status.htm
-        if ((arguments.length == 2) && (typeof(arguments[1]) == 'number')) {
-            if (elmt == 0) return stringsBundle.GetStringFromName('waiting');
-            else if (elmt == 1) return stringsBundle.GetStringFromName('paused');
-            else if (elmt == 2) return stringsBundle.GetStringFromName('loading');
-            else if (elmt == 3) return stringsBundle.GetStringFromName('done');
-            else if (elmt == 4) return stringsBundle.GetStringFromName('hashing');
-            else if (elmt == 5) return stringsBundle.GetStringFromName('error');
-            return stringsBundle.GetStringFromName('waiting');
-        } else {
-            try {
-                return stringsBundle.GetStringFromName(elmt);
-            } catch (e) {
-                return stringsBundle.GetStringFromName('waiting');
-            }
-        }
+        if (elmt == 0) return stringsBundle.GetStringFromName('waiting');
+        else if (elmt == 1) return stringsBundle.GetStringFromName('paused');
+        else if (elmt == 2) return stringsBundle.GetStringFromName('loading');
+        else if (elmt == 3) return stringsBundle.GetStringFromName('done');
+        else if (elmt == 4) return stringsBundle.GetStringFromName('hashing');
+        else if (elmt == 5) return stringsBundle.GetStringFromName('error');
+        return stringsBundle.GetStringFromName('waiting');
     }
 };

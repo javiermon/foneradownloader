@@ -55,48 +55,6 @@ let FoneraDLManager = {
         dialog.insertBefore(dl, dialog.firstChild);
     },
 
-    drawTorrents : function(dialog) {
-        let stringsBundle = document.getElementById("string-bundle");
-        let foneraTorrents = Application.storage.get(Fonera.FONERATORRENTS, []);
-        //for (let i in foneraTorrents)
-        //    Application.console.log("found " + foneraTorrents[i].file);
-
-        if (foneraTorrents != null && foneraTorrents.length != 0) {
-            // populate
-            for (let i in foneraTorrents) {
-                let dl = document.createElement("richlistitem");
-                dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
-
-                // description:
-                // <description>name</description>
-                let description = document.createElement("description");
-                let dlName = foneraTorrents[i].file;
-                description.setAttribute("value", dlName);
-
-                let type = document.createElement("label");
-                type.setAttribute("value", stringsBundle.getString('torrent'));
-
-                let status = document.createElement("label");
-                let dlStatus = foneraTorrents[i].status;
-                status.setAttribute("value",dlStatus);
-
-                //let downloadProgress = document.createElement("label");
-                //downloadProgress.setAttribute("value", stringsBundle.getString('progress'));
-
-                let dwSize = document.createElement("label");
-                dwSize.setAttribute("value", foneraTorrents[i].downloaded);
-
-                dl.insertBefore(dwSize,dl.firstChild);
-                //dl.insertBefore(downloadProgress,dl.firstChild);
-                dl.insertBefore(status,dl.firstChild);
-                dl.insertBefore(type,dl.firstChild);
-                dl.insertBefore(description,dl.firstChild);
-                // ...
-                dialog.insertBefore(dl, dialog.firstChild);
-            }
-        }
-    },
-
     drawDownloads : function(dialog) {
         let stringsBundle = document.getElementById("string-bundle");
         let foneraDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
@@ -116,7 +74,7 @@ let FoneraDLManager = {
                 description.setAttribute("value", dlName);
 
                 let type = document.createElement("label");
-                type.setAttribute("value", stringsBundle.getString('directDownload'));
+                type.setAttribute("value", foneraDownloads[i].type);
 
                 let status = document.createElement("label");
                 let dlStatus = foneraDownloads[i].status;
@@ -150,7 +108,6 @@ let FoneraDLManager = {
 
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken)) {
-            FoneraDLManager.drawTorrents(dialog);
             FoneraDLManager.drawDownloads(dialog);
         }
         // dialog header last as we're adding in reverse
@@ -163,7 +120,6 @@ let FoneraDLManager = {
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken)) {
             Fonera.checkDisks();
-            Fonera.checkTorrents();
             Fonera.checkDownloads();
         } else {
             document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/notloading_16.png";

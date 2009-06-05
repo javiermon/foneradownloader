@@ -54,7 +54,7 @@ let FoneraStatus = {
     },
 
     drawTooltip : function() {
-        Application.console.log("Checking torrents list\n");
+        Application.console.log("Checking downloads list\n");
         let stringsBundle = document.getElementById("string-bundle");
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let panel = document.getElementById('foneraDownloader-sbpanel');
@@ -83,9 +83,9 @@ let FoneraStatus = {
 
         panel.src = "chrome://global/skin/icons/information-16.png";
         let foneraStatus = document.getElementById("foneraDownloader-sbpanel");
-        let foneratorrents = Application.storage.get(Fonera.FONERATORRENTS, []);
+
         let foneradownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
-        let totaldownloads = foneratorrents.length + foneradownloads.length;
+        let totaldownloads = foneradownloads.length;
         if (totaldownloads == 0)
             foneraStatus.tooltipText = stringsBundle.getString('noFilesFound');
         else

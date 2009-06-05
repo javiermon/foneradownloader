@@ -42,13 +42,11 @@ let Fonera = {
     DISKS : "disks",
     noDisk : "NODISK", // no disk attached
 
-    FONERATORRENTS : "foneratorrents",
     FONERADOWNLOADS : "foneradownloads",
     // Errors while sending urls:
     LASTERROR : "foneralasterror",
     // Events:
     onCheckFoneraAvailable : [],
-    onTorrentsAvailable : [],
     onDownloadsAvailable : [],
     onSendUrl : [],
 
@@ -331,42 +329,9 @@ let Fonera = {
         req.send(stream);
     },
 
-    checkTorrents : function() {
-        let rpcCall = {
-            "method" : "torrent_list"
-        };
-        let callback = function (response) {
-                let torrents = [];
-                if (response.result != null) {
-                    let items = response.result.length;
-                    for (let i=0; i < items; i++) {
-                        try {
-                            let theTorrent = response.result[i];
-                            let torrentView = [];
-                            torrentView["file"] = theTorrent.file;
-                            torrentView["status"] = FoneraFormat.stateName(theTorrent.state, 0);
-
-                            if (theTorrent.percent != null && theTorrent.percent != "")
-                                torrentView["downloaded"] = theTorrent.percent; // dltotal
-                            else
-                                torrentView["downloaded"] = "--"; // dltotal
-                            //torrentView["uploaded"] = theTorrent.ultotal;
-                            torrents.push(torrentView);
-                        } catch (e) {
-                            Application.console.log("Error parsing torrent: " + e);
-                        }
-                    }
-                    Application.storage.set(Fonera.FONERATORRENTS, torrents);
-                    Application.console.log("Updated torrents storage");
-                    Fonera.notify(Fonera.onTorrentsAvailable);
-                }
-        };
-        Fonera.checkDownloadsItems(rpcCall, callback);
-    },
-
     checkDownloads : function() {
         let rpcCall = {
-            "method" : "downloads_list"
+            "method" : "dl_list"
         };
 
         let callback = function (response) {
@@ -384,18 +349,16 @@ let Fonera = {
                             downloadView["file"] = theDownload.uri;
                         }
                         try {
-                            if (theDownload.pid != null)
-                                downloadView["status"] = FoneraFormat.stateName('active', 'string');
-                            else
-                                downloadView["status"] = FoneraFormat.stateName(theDownload.status, 'string');
+                            downloadView["status"] = FoneraFormat.stateName(theDownload.status);
+                            downloadView["type"] = theDownload.type;
+                            downloadView["id"] = theDownload.id;
+
                             if (theDownload.status == "done")
                                 downloadView["downloaded"] = "100%";
-                            else {
-                                let calc = (theDownload.stepsize / theDownload.size) * 100;
-                                if (typeof(calc) == "number" && calc.toString() != NaN.toString())
-                                    downloadView["downloaded"] = calc.toFixed(2) + "%";
-                                else
-                                    downloadView["downloaded"] = "--";
+                            else if (theDownload.percent != null && theDownload.percent != "") {
+                                downloadView["downloaded"] = theDownload.percent;
+                            } else {
+                                downloadView["downloaded"] = "--";
                             }
                         } catch (e) {
                             downloadView["downloaded"] = "0.0%";
