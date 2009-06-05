@@ -74,7 +74,7 @@ let FoneraDLManager = {
                 description.setAttribute("value", dlName);
 
                 let type = document.createElement("label");
-                type.setAttribute("value", foneraDownloads[i].type);
+                type.setAttribute("value", stringsBundle.getString(foneraDownloads[i].type));
 
                 let status = document.createElement("label");
                 let dlStatus = foneraDownloads[i].status;
