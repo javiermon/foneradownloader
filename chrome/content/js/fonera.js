@@ -84,53 +84,61 @@ let Fonera = {
         return prefs.getCharPref(preference);
     },
 
+    isPluginEnabled :function() {
+        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        return prefs.getBoolPref("enabled");
+    },
+
     // url for reaching the fonera.
     foneraURL : function () {
         return "http://" + this.getUserPref("foneraip") + "/luci";
     },
 
     authenticated : function(authToken) {
+        if (!this.isPluginEnabled())
+            return false;
         return (authToken != null && authToken != this.authFailed
                 && authToken != this.authError);
     },
 
     checkFoneraAvailable: function() {
-        try {
-            // do we want to re-authenticate?
-            let reAuth = false;
-            reAuth = (arguments.length == 1 && arguments[0] == true);
-	    // checks if we can reach the luci interface
-	    let req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
-	        .createInstance(Components.interfaces.nsIXMLHttpRequest);
-
-	    let url = this.foneraURL();
-            Application.console.log("Checking URL : " + url + "\n");
-	    req.open('GET', url, true); /* asynchronous! */
-            req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
-	    req.onreadystatechange = function (aEvt) {
-                if (req.readyState == 4) {
-	            if(req.status == 200) {
-                        /**
-                         * Fonera.notify(Fonera.onCheckFoneraAvailable):
-                         * - We notify failures immediately to detect
-                         * errors as soon as posible.
-                         * - We notify success on the LAST call so final
-                         * status is correctly propagated.
-                         */
-                        Fonera.authenticate(reAuth);
-                        Fonera.checkDisks();
-		    }
-		    else {
-                        Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
-                        Application.console.log("Fonera NOT ready\n");
-                        Fonera.notify(Fonera.onCheckFoneraAvailable);
-		    }
-	        }
-	    };
-	    req.send(null);
-        } catch (e) {
-            Application.console.log(e);
+        if (!this.isPluginEnabled()) {
+            this.notify(this.onCheckFoneraAvailable);
+            return;
         }
+
+        // do we want to re-authenticate?
+        let reAuth = false;
+        reAuth = (arguments.length == 1 && arguments[0] == true);
+	// checks if we can reach the luci interface
+	let req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+	    .createInstance(Components.interfaces.nsIXMLHttpRequest);
+
+	let url = this.foneraURL();
+        Application.console.log("Checking URL : " + url + "\n");
+	req.open('GET', url, true); /* asynchronous! */
+        req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
+	req.onreadystatechange = function (aEvt) {
+            if (req.readyState == 4) {
+	        if(req.status == 200) {
+                    /**
+                     * Fonera.notify(Fonera.onCheckFoneraAvailable):
+                     * - We notify failures immediately to detect
+                     * errors as soon as posible.
+                     * - We notify success on the LAST call so final
+                     * status is correctly propagated.
+                     */
+                    Fonera.authenticate(reAuth);
+                    Fonera.checkDisks();
+	        }
+	        else {
+                    Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
+                    Application.console.log("Fonera NOT ready\n");
+                    Fonera.notify(Fonera.onCheckFoneraAvailable);
+	        }
+	    }
+	};
+	req.send(null);
     },
 
     authenticate: function(reAuth) {
@@ -185,7 +193,6 @@ let Fonera = {
             return;
         }
 
-        Application.console.log("sendurl " + authToken + "\n");
         // https://developer.mozilla.org/En/Using_XMLHttpRequest
         // https://developer.mozilla.org/en/nsIJSON
         let nJSON = Components.classes["@mozilla.org/dom/json;1"]
@@ -330,6 +337,11 @@ let Fonera = {
     },
 
     checkDownloads : function() {
+        if (!Fonera.isPluginEnabled()) {
+            Fonera.notify(Fonera.onCheckFoneraAvailable);
+            return;
+        }
+
         let rpcCall = {
             "method" : "dl_list"
         };
@@ -378,6 +390,11 @@ let Fonera = {
      * therefore we use Fonera. instead of this.
      */
     checkDownloadsItems : function(rpcCall, callback) {
+        if (!this.isPluginEnabled()) {
+            this.notify(this.onCheckFoneraAvailable);
+            return;
+        }
+
         let nJSON = Components.classes["@mozilla.org/dom/json;1"]
             .createInstance(Components.interfaces.nsIJSON);
 
@@ -409,6 +426,14 @@ let Fonera = {
         };
         req.send(stream);
         return;
+    },
+
+    loadEvents : function() {
+        Fonera.addEventListener("onCheckFoneraAvailable", Fonera.checkDownloads);
+    },
+
+    unloadEvents : function() {
+        Fonera.removeEventListener("onCheckFoneraAvailable", Fonera.checkDownloads);
     }
 };
 

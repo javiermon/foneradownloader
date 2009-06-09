@@ -127,6 +127,9 @@ let FoneraDLManager = {
     },
 
     showDownloadsWindow : function() {
+        if (!Fonera.isPluginEnabled())
+            return;
+
         // https://developer.mozilla.org/en/Working_with_windows_in_chrome_code
         let name = "chrome://foneradownloader/content/dlmanager.xul";
         let type = "foneradownloader:dlmanager";
@@ -147,5 +150,25 @@ let FoneraDLManager = {
         // ,
         window.open(name, "", "chrome,width=520,height=230,centerscreen,resizable=yes");
         return;
+    },
+
+    processClick : function(event) {
+        if (!Fonera.isPluginEnabled())
+            return;
+
+        let button = event.button; // 0: left 1: middle 2: right
+
+        if (button == 2) {
+            // rightclick -> show option to disable plugin
+        } else if (button == 0)
+            FoneraDLManager.showDownloadsWindow();
+    },
+
+    loadEvents : function() {
+        Fonera.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
+    },
+
+    unloadEvents : function() {
+        Fonera.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
     }
 };

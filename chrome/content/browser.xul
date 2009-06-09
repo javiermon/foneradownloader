@@ -33,11 +33,8 @@
   </stringbundleset>
 
   <script type="application/x-javascript">
-
-    window.addEventListener("load", function(e) { Fonera.addEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip); }, false);
-
-    window.addEventListener("load", function(e) { Fonera.addEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip); }, false);
-    window.addEventListener("load", function(e) { Fonera.addEventListener("onCheckFoneraAvailable", Fonera.checkDownloads); }, false);
+    FoneraStatus.loadEvents();
+    Fonera.loadEvents();
 
     window.addEventListener("load", function(e) { Fonera.checkFoneraAvailable(); }, false);
     window.addEventListener("load", function(e) { FoneraCxtxtMenu.init(); }, false);
@@ -59,9 +56,9 @@
   </popup>
 
   <!-- tools menu -->
-  <menupopup id="menu_ToolsPopup">
-    <menuitem id="send-link-to-fonera"  label="&showfoneradownloads;" oncommand="FoneraDLManager.showDownloadsWindow();"/>
-  </menupopup>
+  <!--menupopup id="menu_ToolsPopup">
+    <menuitem id="show-fonera-dlwindow"  label="&showfoneradownloads;" oncommand="FoneraDLManager.showDownloadsWindow();"/>
+  </menupopup-->
 
   <!-- statusbar -->
   <statusbar id="status-bar">
@@ -70,6 +67,6 @@
     <!-- TODO: branding icons! -->
     <statusbarpanel id="foneraDownloader-sbpanel" label="&fonera_downloads;" tooltiptext="&loading;"
 		    class="statusbarpanel-iconic-text" src="chrome://global/skin/icons/loading_16.png" 
-		    onclick="FoneraDLManager.showDownloadsWindow();"/> 
+		    onclick="FoneraDLManager.processClick(event);"/> 
   </statusbar>
 </overlay>

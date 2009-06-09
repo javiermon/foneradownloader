@@ -26,13 +26,14 @@
 let Application = Components.classes["@mozilla.org/fuel/application;1"]
     .getService(Components.interfaces.fuelIApplication);
 
+let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
+    .getService(Components.interfaces.nsIPrefService);
+
 Components.utils.import("resource://modules/fonera.js");
 
 function PrefListener(branchName, func) {
 
-  var prefService = Components.classes["@mozilla.org/preferences-service;1"]
-    .getService(Components.interfaces.nsIPrefService);
-  var branch = prefService.getBranch(branchName);
+  let branch = Preferences.getBranch(branchName);
   branch.QueryInterface(Components.interfaces.nsIPrefBranch2);
 
   this.register = function()  {
@@ -59,7 +60,8 @@ var myListener = new PrefListener("extensions.foneradownloader.",
                          case "username":
                          case "password":
                          case "foneraip":
-		             Fonera.checkFoneraAvailable(true);
+                         case "enabled":
+                             Fonera.checkFoneraAvailable(true);
                              break;
                          default:
                              break;

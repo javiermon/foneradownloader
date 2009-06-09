@@ -65,7 +65,8 @@ let FoneraCxtxtMenu = {
         let show = document.getElementById("send-link-to-fonera");
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let diskToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
-        if (Fonera.authenticated(authToken) && diskToken != Fonera.noDisk) {
+        if (Fonera.authenticated(authToken) && diskToken != Fonera.noDisk
+            && Fonera.isPluginEnabled()) {
             try {
                 // 1st: check if it's a link, if it is, unhide
                 if (document.popupNode.localName == "A") {

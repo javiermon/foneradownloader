@@ -32,11 +32,11 @@
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dlmanager.js" />    
   <script type="application/x-javascript">
 
-    window.addEventListener("load", function(e) { Fonera.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems); }, false);
+    window.addEventListener("load", FoneraDLManager.loadEvents, false);
 
     window.addEventListener("load", FoneraDLManager.refreshAction, false);
 
-    window.addEventListener("unload", function(e) { Fonera.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems); }, false);
+    window.addEventListener("unload", FoneraDLManager.unloadEvents, false);
   </script>
 
   <stringbundleset id="stringbundleset">

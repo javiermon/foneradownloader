@@ -31,6 +31,7 @@
       <preference id="foneradownloader-username" name="extensions.foneradownloader.username" type="string"/>
       <preference id="foneradownloader-password" name="extensions.foneradownloader.password" type="string"/>
       <preference id="foneradownloader-foneraip" name="extensions.foneradownloader.foneraip" type="string"/>
+      <preference id="foneradownloader-enabled" name="extensions.foneradownloader.enabled" type="bool"/>
     </preferences>		
     <groupbox>
       <caption label="&fonera_dash_setts;"/>
@@ -50,6 +51,10 @@
 	  <row>
 	    <label control="foneraip" align="left" value="&fonera_ip;"/>
 	    <textbox id="foneraip" align="right" preference="foneradownloader-foneraip"/>
+	  </row>
+	  <row>
+	    <label control="enabled" align="left" value="&enabled;"/>
+	    <checkbox id="foneraip" align="right" preference="foneradownloader-enabled"/>
 	  </row>
 	</rows>
       </grid>
