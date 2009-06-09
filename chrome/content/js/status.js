@@ -58,8 +58,6 @@ let FoneraStatus = {
     drawTooltip : function() {
         let stringsBundle = document.getElementById("string-bundle");
         let panel = document.getElementById('foneraDownloader-sbpanel');
-
-        panel.src = "chrome://global/skin/icons/loading_16.png";
         if (!Fonera.isPluginEnabled()) {
             panel.tooltipText = stringsBundle.getString('disabledString');
             panel.src = "chrome://global/skin/icons/errorBarIcon-16.png";
@@ -79,6 +77,7 @@ let FoneraStatus = {
             return;
         } else if (authToken == null) {
             Application.console.log("Waiting for authentication!\n");
+            panel.src = "chrome://global/skin/icons/loading_16.png";
             return;
         }
         // check disks:
@@ -91,7 +90,6 @@ let FoneraStatus = {
 
         panel.src = "chrome://global/skin/icons/information-16.png";
         let foneraStatus = document.getElementById("foneraDownloader-sbpanel");
-
         let foneradownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
         let totaldownloads = foneradownloads.length;
         if (totaldownloads == 0)

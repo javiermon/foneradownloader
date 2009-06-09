@@ -72,10 +72,10 @@ let Fonera = {
         }
     },
 
-    notify : function(event) {
-        for (let i in event) {
-            let callback = event[i];
-            callback();
+    notify : function(aEvent) {
+        for (let i in aEvent) {
+            let aCallback = aEvent[i];
+            aCallback();
         }
     },
 
@@ -102,14 +102,24 @@ let Fonera = {
     },
 
     checkFoneraAvailable: function() {
-        if (!this.isPluginEnabled()) {
-            this.notify(this.onCheckFoneraAvailable);
-            return;
-        }
-
         // do we want to re-authenticate?
         let reAuth = false;
         reAuth = (arguments.length == 1 && arguments[0] == true);
+        // disable sessions:
+        if (reAuth) {
+            Application.console.log("Disable session storage");
+            Application.storage.set(this.AUTHTOKEN, null);
+            Application.storage.set(this.FONERADOWNLOADS, []);
+            Application.storage.set(this.DISKS, null);
+            this.notify(this.onCheckFoneraAvailable);
+        }
+
+        if (!this.isPluginEnabled()) {
+            if (!reAuth)
+                this.notify(this.onCheckFoneraAvailable);
+            return;
+        }
+
 	// checks if we can reach the luci interface
 	let req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
 	    .createInstance(Components.interfaces.nsIXMLHttpRequest);
@@ -338,7 +348,6 @@ let Fonera = {
 
     checkDownloads : function() {
         if (!Fonera.isPluginEnabled()) {
-            Fonera.notify(Fonera.onCheckFoneraAvailable);
             return;
         }
 
