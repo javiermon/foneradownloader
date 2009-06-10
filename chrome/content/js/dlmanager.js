@@ -58,7 +58,10 @@ let FoneraDLManager = {
                 let image = document.createElement("image");
                 let extension = foneraDownloads[i].file.substring(foneraDownloads[i].file.lastIndexOf("."),
                                                                   foneraDownloads[i].file.length);
-                image.setAttribute("src","moz-icon://" + extension + "?size=32");
+                if (extension != "")
+                    image.setAttribute("src","moz-icon://" + extension + "?size=32");
+                else
+                    image.setAttribute("src","moz-icon://.file?size=32");
                 vboxImage.insertBefore(image,vboxImage.firstChild);
 
                 // DATA
