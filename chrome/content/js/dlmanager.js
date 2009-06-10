@@ -58,39 +58,63 @@ let FoneraDLManager = {
     drawDownloads : function(dialog) {
         let stringsBundle = document.getElementById("string-bundle");
         let foneraDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
-        //for (let i in foneraDownloads)
-        //    Application.console.log("found " + foneraDownloads[i].file);
-
         if (foneraDownloads != null && foneraDownloads.length != 0) {
             // populate
             for (let i in foneraDownloads) {
                 let dl = document.createElement("richlistitem");
-                dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
+                dl.setAttribute("style", "padding: 10px;");
+                /*
+                 *
+                 * ---------------------------------------
+                 *        | name              |  |
+                 *  image | ------------------|  | percent
+                 *        | type    | status  |  |
+                 * ---------------------------------------
+
+                 */
+                // dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
+
+                // IMAGE
+                let vboxImage = document.createElement("vbox");
+                let image = document.createElement("image");
+                let extension = foneraDownloads[i].file.substring(foneraDownloads[i].file.lastIndexOf("."), foneraDownloads[i].file.length);
+                image.setAttribute("src","moz-icon://" + extension + "?size=32");
+                vboxImage.insertBefore(image,vboxImage.firstChild);
+
+                // DATA
+                let hboxName = document.createElement("hbox");
+                hboxName.setAttribute("flex", "1");
 
                 // description:
                 // <description>name</description>
                 let description = document.createElement("description");
                 let dlName = foneraDownloads[i].file;
                 description.setAttribute("value", dlName);
+                hboxName.insertBefore(description, hboxName.firstChild);
 
+                let hboxData = document.createElement("hbox");
                 let type = document.createElement("label");
-                type.setAttribute("value", stringsBundle.getString(foneraDownloads[i].type));
+                type.setAttribute("value", stringsBundle.getString('type') + ":" + stringsBundle.getString(foneraDownloads[i].type));
 
                 let status = document.createElement("label");
-                let dlStatus = foneraDownloads[i].status;
-                status.setAttribute("value",dlStatus);
+                status.setAttribute("value", stringsBundle.getString('status') + ":" + foneraDownloads[i].status);
+                hboxData.insertBefore(status, hboxData.firstChild);
+                hboxData.insertBefore(type, hboxData.firstChild);
 
-                //let downloadProgress = document.createElement("label");
-                //downloadProgress.setAttribute("value", stringsBundle.getString('progress'));
-
+                let vboxPercent = document.createElement("hbox");
                 let dwSize = document.createElement("label");
                 dwSize.setAttribute("value", foneraDownloads[i].downloaded);
 
-                dl.insertBefore(dwSize,dl.firstChild);
-                //dl.insertBefore(downloadProgress,dl.firstChild);
-                dl.insertBefore(status,dl.firstChild);
-                dl.insertBefore(type,dl.firstChild);
-                dl.insertBefore(description,dl.firstChild);
+                vboxPercent.insertBefore(dwSize,vboxPercent.firstChild);
+                //vboxPercent.insertBefore(downloadProgress,vboxPercent.firstChild);
+                vboxPercent.insertBefore(status,vboxPercent.firstChild);
+                vboxPercent.insertBefore(type,vboxPercent.firstChild);
+                vboxPercent.insertBefore(description,vboxPercent.firstChild);
+
+                dl.insertBefore(vboxPercent,dl.firstChild);
+                dl.insertBefore(hboxName,dl.firstChild);
+                dl.insertBefore(vboxImage,dl.firstChild);
+
                 // ...
                 dialog.insertBefore(dl, dialog.firstChild);
             }
@@ -100,7 +124,8 @@ let FoneraDLManager = {
     drawItems : function() {
         document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/loading_16.png";
 
-        let dialog = document.getElementById("foneradownloader-downloads-list-items"); // richlistbox-grid-rows
+        // let dialog = document.getElementById("foneradownloader-downloads-list-items"); // richlistbox-grid-rows
+        let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
         // remove childs
         while (dialog.hasChildNodes()) {
             dialog.removeChild(dialog.firstChild);
@@ -111,7 +136,7 @@ let FoneraDLManager = {
             FoneraDLManager.drawDownloads(dialog);
         }
         // dialog header last as we're adding in reverse
-        FoneraDLManager.drawHeader(dialog);
+        // FoneraDLManager.drawHeader(dialog);
         document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/notloading_16.png";
     },
 

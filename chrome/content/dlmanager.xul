@@ -20,7 +20,7 @@
 -->
 
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
-<?xml-stylesheet href="chrmoe://foneradownloader/skin/default/skin.css" type="text/css"?>
+<?xml-stylesheet href="chrome://foneradownloader/skin/skin.css" type="text/css"?>
 <!DOCTYPE window SYSTEM "chrome://foneradownloader/locale/dlmanager.dtd">
 
 <window id="foneradownloader-dlmanager" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
@@ -43,25 +43,19 @@
     <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
   </stringbundleset>
 
-  <richlistbox id="foneradownloader-downloads-list" flex="1"  style="overflow: auto">
-    <grid id="foneradownloader-downloads-list-grid">
+  <richlistbox id="foneradownloader-downloads-list" flex="1" style="width:500px; height:300px; border: 1px solid black; overflow: auto;"><!--  style="overflow: auto"> -->
+    <!--grid id="foneradownloader-downloads-list-grid">
 
       <columns>
-	<column flex="2"/> <!-- name -->
-	<column flex="2"/> <!-- type -->
-	<column flex="2"/> <!-- status -->
-
-	<column flex="2"/> <!-- download progress -->
-
-	<column flex="2"/> <!-- download start/pause -->
-	<column flex="2"/> <!-- download stop -->
-	<column flex="2"/> <!-- download del -->
-
+	<column flex="2"/>
+	<column flex="2"/>
+	<column flex="2"/>
+	<column flex="2"/>
       </columns>
       <rows id="foneradownloader-downloads-list-items">
       </rows>
      
-    </grid>
+    </grid-->
   </richlistbox>
 
   <statusbar id="status-bar">

@@ -1,3 +1,3 @@
-dlmanager-window {
-  background-image: url("chrome://foneradownload/skin/logofonosfera.png");
+foneradownloader-downloads-list {
+  overflow: auto;
 }
