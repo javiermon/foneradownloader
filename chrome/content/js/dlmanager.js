@@ -33,13 +33,15 @@ Components.utils.import("resource://modules/format.js");
 let FoneraDLManager = {
 
     drawDownloads : function(dialog) {
+        // FIXME: move styling to css
+        // Example: http://www.nexgenmedia.net/mozilla/richlistbox/richlistbox-simple.xul
         let stringsBundle = document.getElementById("string-bundle");
         let foneraDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
         if (foneraDownloads != null && foneraDownloads.length != 0) {
             // populate
             for (let i in foneraDownloads) {
                 let dl = document.createElement("richlistitem");
-                dl.setAttribute("style", "padding: 10px;");
+                dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;");
                 /*
                  *
                  *  ---------------------------------------
@@ -61,13 +63,14 @@ let FoneraDLManager = {
 
                 // DATA
                 let vboxData = document.createElement("vbox");
+                vboxData.setAttribute("style", "text-align: center; min-width: 200px;");
                 // name
                 let hboxName = document.createElement("hbox");
                 hboxName.setAttribute("flex", "1");
                 let description = document.createElement("description");
                 let dlName = foneraDownloads[i].file;
                 description.appendChild(document.createTextNode(dlName));
-                description.setAttribute("style", "font-style: bold;");
+                description.setAttribute("style", "font-style: bold; font-size: 1.2em; text-align: center;");
                 // description.setAttribute("class", "title");
                 hboxName.insertBefore(description, hboxName.firstChild);
                 // data
@@ -75,22 +78,33 @@ let FoneraDLManager = {
                 let type = document.createElement("label");
                 type.setAttribute("value", stringsBundle.getString('type') + " "
                                   + stringsBundle.getString(foneraDownloads[i].type));
+                type.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
                 let status = document.createElement("label");
                 status.setAttribute("value", stringsBundle.getString('status') + " "
                                     + foneraDownloads[i].status);
+                status.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
                 hboxData.insertBefore(status, hboxData.firstChild);
                 hboxData.insertBefore(type, hboxData.firstChild);
 
                 vboxData.insertBefore(hboxData,vboxData.firstChild);
                 vboxData.insertBefore(hboxName,vboxData.firstChild);
 
+                /*
+                    insert here the control buttons
+                    and append them to dl directly?
+                */
+
+                let space = document.createElement("spacer");
+                space.setAttribute("flex","1");
+
                 let vboxPercent = document.createElement("vbox");
                 let dwSize = document.createElement("label");
                 dwSize.setAttribute("value", foneraDownloads[i].downloaded);
-                dwSize.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
+                dwSize.setAttribute("style", "font-style: bold; font-size: 1.6em; text-align: center;");
                 vboxPercent.insertBefore(dwSize,vboxPercent.firstChild);
 
                 dl.insertBefore(vboxPercent,dl.firstChild);
+                dl.insertBefore(space,dl.firstChild);
                 dl.insertBefore(vboxData,dl.firstChild);
                 dl.insertBefore(vboxImage,dl.firstChild);
 
