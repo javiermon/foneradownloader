@@ -32,29 +32,6 @@ Components.utils.import("resource://modules/format.js");
 // The Download Manager Window
 let FoneraDLManager = {
 
-    drawHeader : function(dialog) {
-        let stringsBundle = document.getElementById("string-bundle");
-        let dl = document.createElement("richlistitem");
-        dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal; background-color:WhiteSmoke");
-        let description = document.createElement("description");
-        description.setAttribute("value", stringsBundle.getString('file'));
-
-        let type = document.createElement("description");
-        type.setAttribute("value", stringsBundle.getString('type'));
-
-        let status = document.createElement("description");
-        status.setAttribute("value", stringsBundle.getString('status'));
-
-        let progress = document.createElement("description");
-        progress.setAttribute("value", stringsBundle.getString('progress'));
-
-        dl.insertBefore(progress,dl.firstChild);
-        dl.insertBefore(status,dl.firstChild);
-        dl.insertBefore(type,dl.firstChild);
-        dl.insertBefore(description,dl.firstChild);
-        dialog.insertBefore(dl, dialog.firstChild);
-    },
-
     drawDownloads : function(dialog) {
         let stringsBundle = document.getElementById("string-bundle");
         let foneraDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
@@ -65,54 +42,56 @@ let FoneraDLManager = {
                 dl.setAttribute("style", "padding: 10px;");
                 /*
                  *
-                 * ---------------------------------------
-                 *        | name              |  |
-                 *  image | ------------------|  | percent
-                 *        | type    | status  |  |
-                 * ---------------------------------------
-
+                 *  ---------------------------------------
+                 * |       | name              |           |
+                 * | image | ------------------|  percent  |
+                 * |       | type    | status  |           |
+                 *  ---------------------------------------
+                 *
                  */
                 // dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
 
                 // IMAGE
                 let vboxImage = document.createElement("vbox");
                 let image = document.createElement("image");
-                let extension = foneraDownloads[i].file.substring(foneraDownloads[i].file.lastIndexOf("."), foneraDownloads[i].file.length);
+                let extension = foneraDownloads[i].file.substring(foneraDownloads[i].file.lastIndexOf("."),
+                                                                  foneraDownloads[i].file.length);
                 image.setAttribute("src","moz-icon://" + extension + "?size=32");
                 vboxImage.insertBefore(image,vboxImage.firstChild);
 
                 // DATA
+                let vboxData = document.createElement("vbox");
+                // name
                 let hboxName = document.createElement("hbox");
                 hboxName.setAttribute("flex", "1");
-
-                // description:
-                // <description>name</description>
                 let description = document.createElement("description");
                 let dlName = foneraDownloads[i].file;
-                description.setAttribute("value", dlName);
+                description.appendChild(document.createTextNode(dlName));
+                description.setAttribute("style", "font-style: bold;");
+                // description.setAttribute("class", "title");
                 hboxName.insertBefore(description, hboxName.firstChild);
-
+                // data
                 let hboxData = document.createElement("hbox");
                 let type = document.createElement("label");
-                type.setAttribute("value", stringsBundle.getString('type') + ":" + stringsBundle.getString(foneraDownloads[i].type));
-
+                type.setAttribute("value", stringsBundle.getString('type') + " "
+                                  + stringsBundle.getString(foneraDownloads[i].type));
                 let status = document.createElement("label");
-                status.setAttribute("value", stringsBundle.getString('status') + ":" + foneraDownloads[i].status);
+                status.setAttribute("value", stringsBundle.getString('status') + " "
+                                    + foneraDownloads[i].status);
                 hboxData.insertBefore(status, hboxData.firstChild);
                 hboxData.insertBefore(type, hboxData.firstChild);
 
-                let vboxPercent = document.createElement("hbox");
+                vboxData.insertBefore(hboxData,vboxData.firstChild);
+                vboxData.insertBefore(hboxName,vboxData.firstChild);
+
+                let vboxPercent = document.createElement("vbox");
                 let dwSize = document.createElement("label");
                 dwSize.setAttribute("value", foneraDownloads[i].downloaded);
-
+                dwSize.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
                 vboxPercent.insertBefore(dwSize,vboxPercent.firstChild);
-                //vboxPercent.insertBefore(downloadProgress,vboxPercent.firstChild);
-                vboxPercent.insertBefore(status,vboxPercent.firstChild);
-                vboxPercent.insertBefore(type,vboxPercent.firstChild);
-                vboxPercent.insertBefore(description,vboxPercent.firstChild);
 
                 dl.insertBefore(vboxPercent,dl.firstChild);
-                dl.insertBefore(hboxName,dl.firstChild);
+                dl.insertBefore(vboxData,dl.firstChild);
                 dl.insertBefore(vboxImage,dl.firstChild);
 
                 // ...
@@ -136,7 +115,6 @@ let FoneraDLManager = {
             FoneraDLManager.drawDownloads(dialog);
         }
         // dialog header last as we're adding in reverse
-        // FoneraDLManager.drawHeader(dialog);
         document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/notloading_16.png";
     },
 
