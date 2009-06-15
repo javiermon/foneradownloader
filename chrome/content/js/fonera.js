@@ -292,10 +292,11 @@ let Fonera = {
         this.callRpcInFonera(rpcCall, callback);
     },
 
-    deleteAllDownloads : function(id) {
+    deleteCompletedDownloads : function(id) {
         let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
         for (let i in downloads) {
-            this.deleteDownloadById(downloads[i].id);
+            if (downloads[i].status == "done")
+                this.deleteDownloadById(downloads[i].id);
         }
     },
 

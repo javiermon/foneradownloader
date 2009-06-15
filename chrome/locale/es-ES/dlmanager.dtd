@@ -3,4 +3,5 @@
 <!ENTITY messages-tab "Mensajes">
 <!ENTITY downloadManager "Descargas de la Fonera">
 <!ENTITY refresh "Refrescar">
+<!ENTITY clear-complete "Limpiar completados">
 <!ENTITY no-torrents "No se encontraron torrents">

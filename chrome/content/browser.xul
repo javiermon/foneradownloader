@@ -46,7 +46,7 @@
 
     window.setInterval(function() { Fonera.checkFoneraAvailable(); Fonera.checkDownloads(); }, 10*60*100);
     // we want to re-authenticate so sessions don't expire
-    window.setInterval(function() { Fonera.checkFoneraAvailable(true); }, 100*60*100);
+    window.setInterval(function() { Fonera.checkFoneraAvailable(true); }, 500*60*100);
   </script>
 
   <!-- right click menu-->

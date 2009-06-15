@@ -3,4 +3,5 @@
 <!ENTITY messages-tab "Messages">
 <!ENTITY downloadManager "Fonera Downloads Manager">
 <!ENTITY refresh "Refresh">
+<!ENTITY clear-complete "Clear completed">
 <!ENTITY no-torrents "No torrents found!">
