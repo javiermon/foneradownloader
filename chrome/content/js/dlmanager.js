@@ -102,7 +102,7 @@ let FoneraDLManager = {
                 // hboxButtons.setAttribute("style", "text-align: center;");
                 let playb = document.createElement("image");
                 let action = "none";
-                Application.console.log(foneraDownloads[i].status);
+
                 if (foneraDownloads[i].status != "load") {
                     action = "start";
                     playb.setAttribute("style",
