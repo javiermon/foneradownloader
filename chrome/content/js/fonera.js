@@ -266,6 +266,7 @@ let Fonera = {
             else {
                 Application.storage.set(errorStorage, null);
             }
+            Fonera.notify(Fonera.onDownloadsAvailable);
         };
         this.callRpcInFonera(rpcCall, callback);
     },
@@ -286,6 +287,7 @@ let Fonera = {
             else {
                 Application.storage.set(errorStorage, null);
             }
+            Fonera.notify(Fonera.onDownloadsAvailable);
         };
         this.callRpcInFonera(rpcCall, callback);
     },
@@ -313,6 +315,7 @@ let Fonera = {
             else {
                 Application.storage.set(errorStorage, null);
             }
+            Fonera.notify(Fonera.onDownloadsAvailable);
         };
         this.callRpcInFonera(rpcCall, callback);
     },
@@ -336,6 +339,7 @@ let Fonera = {
             } else {
                 Application.storage.set(errorStorage, null);
             }
+            Fonera.notify(Fonera.onDownloadsAvailable);
         };
         this.callRpcInFonera(rpcCall, callback);
     },
@@ -358,6 +362,7 @@ let Fonera = {
             else {
                 Application.storage.set(errorStorage, null);
             }
+            Fonera.notify(Fonera.onDownloadsAvailable);
         };
         this.callRpcInFonera(rpcCall, callback);
     },

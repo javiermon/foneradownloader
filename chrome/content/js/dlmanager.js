@@ -124,7 +124,7 @@ let FoneraDLManager = {
                                    "list-style-image: url('chrome://mozapps/skin/downloads/downloadButtons.png'); "
                                      + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
 
-                cancelb.setAttribute("onlick","FoneraDLManager.downloadAction('" + foneraDownloads[i].id + "','cancel')");
+                cancelb.setAttribute("onclick","FoneraDLManager.downloadAction('" + foneraDownloads[i].id + "','delete')");
 
                 let spaceb = document.createElement("spacer");
                 spaceb.setAttribute("flex","1");
@@ -154,6 +154,7 @@ let FoneraDLManager = {
     },
 
     downloadAction : function(id, action) {
+        // FIXME: we trigger refresh action so the throbbler spins and gives some UI feedback
         Application.console.log("action :" + action + " called on " + id);
         switch(action) {
         case "pause":
