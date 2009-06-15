@@ -98,24 +98,44 @@ let FoneraDLManager = {
                 let vboxPercent = document.createElement("vbox");
                 let dwSize = document.createElement("label");
                 dwSize.setAttribute("value", foneraDownloads[i].downloaded);
-                dwSize.setAttribute("style", "font-style: bold; font-size: 1.6em;");
-                    //+ " text-align: center;");
+                dwSize.setAttribute("style", "font-style: bold; font-size: 1.6em;"
+                    + " text-align: center;");
 
                 // chrome://mozapps/skin/downloads/downloadButtons.png
+                // http://hg.mozilla.org/mozilla-central/file/eac99a38d8d9/toolkit/themes/winstripe/mozapps/downloads/downloads.css
                 let hboxButtons = document.createElement("hbox");
                 // hboxButtons.setAttribute("style", "text-align: center;");
                 let playb = document.createElement("image");
-                playb.setAttribute("style",
+                let action = "none";
+                if (foneraDownloads[i].status != "load") {
+                    action = "start";
+                    playb.setAttribute("style",
                                    "list-style-image: url('chrome://mozapps/skin/downloads/downloadButtons.png'); "
                                    + "-moz-image-region: rect(32px, 16px, 48px, 0px);");
+                } else if (foneraDownloads[i].status == "done") {
+                    playb.setAttribute("style","");
+                } else{
+                    action = "pause";
+                    playb.setAttribute("style",
+                                   "list-style-image: url('chrome://mozapps/skin/downloads/downloadButtons.png'); "
+                                   + "-moz-image-region: rect(0px, 48px, 16px, 32px);");
+
+                }
+                playb.setAttribute("onclick","FoneraDLManager.downloadAction('" + foneraDownloads[i].id + "','" + action  + "')");
 
                 let cancelb = document.createElement("image");
                 cancelb.setAttribute("style",
                                    "list-style-image: url('chrome://mozapps/skin/downloads/downloadButtons.png'); "
                                      + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
 
+                cancelb.setAttribute("onlick","FoneraDLManager.downloadAction('" + foneraDownloads[i].id + "','cancel')");
+
+                let spaceb = document.createElement("spacer");
+                spaceb.setAttribute("flex","1");
+
                 hboxButtons.insertBefore(cancelb, hboxButtons.firstChild);
                 hboxButtons.insertBefore(playb, hboxButtons.firstChild);
+                hboxButtons.insertBefore(spaceb, hboxButtons.firstChild);
 
                 vboxPercent.insertBefore(hboxButtons,vboxPercent.firstChild);
                 vboxPercent.insertBefore(dwSize,vboxPercent.firstChild);
@@ -128,6 +148,26 @@ let FoneraDLManager = {
                 // ...
                 dialog.insertBefore(dl, dialog.firstChild);
             }
+        }
+    },
+
+    downloadAction : function(id, action) {
+        switch(action) {
+        case "pause":
+            Fonera.pauseDownloadById(id);
+            FoneraDLManager.refreshAction();
+            break;
+        case "delete":
+            Fonera.deleteDownloadById(id);
+            FoneraDLManager.refreshAction();
+            break;
+        case "start":
+            Fonera.startDownloadById(id);
+            FoneraDLManager.refreshAction();
+            break;
+        case "none":
+        default:
+            break;
         }
     },
 

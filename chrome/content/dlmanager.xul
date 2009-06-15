@@ -62,6 +62,8 @@
   <button id="refreshButton" oncommand="FoneraDLManager.refreshAction()"
           label="&refresh;"/>
   <spacer flex="1"/>
+  <!--button id="clearButton" oncommand="Fonera.deleteAllDownloads()"
+          label="&refresh;"/-->
    <statusbarpanel id="foneradownloader-dlmicon"
 		    class="statusbarpanel-iconic" src="chrome://global/skin/icons/loading_16.png"/> 
   </statusbar>

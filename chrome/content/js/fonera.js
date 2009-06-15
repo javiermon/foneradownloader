@@ -249,6 +249,75 @@ let Fonera = {
         req.send(stream);
     },
 
+
+    pauseDownloadById : function(id) {
+        let rpcCall = {
+            "method" : "dl_pause",
+            "params" : [id]
+        };
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+        let errorStorage = this.LASTERROR;
+
+        let callback = function(response) {
+            if (response.error != null) {
+                Application.console.log("Response Error");
+            }
+            else {
+                Application.storage.set(errorStorage, null);
+            }
+        };
+        this.callRpcInFonera(rpcCall, callback);
+    },
+
+    startDownloadById : function(id) {
+        let rpcCall = {
+            "method" : "dl_start",
+            "params" : [id]
+        };
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+        let errorStorage = this.LASTERROR;
+
+        let callback = function(response) {
+            if (response.error != null) {
+                Application.console.log("Response Error");
+            }
+            else {
+                Application.storage.set(errorStorage, null);
+            }
+        };
+        this.callRpcInFonera(rpcCall, callback);
+    },
+
+    deleteAllDownloads : function(id) {
+        let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
+        for (let i in downloads) {
+            this.deleteDownloadById(downloads[i].id);
+        }
+    },
+
+    deleteDownloadById : function(id) {
+        let rpcCall = {
+            "method" : "dl_delete",
+            "params" : [id]
+        };
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+        let errorStorage = this.LASTERROR;
+
+        let callback = function(response) {
+            if (response.error != null) {
+                Application.console.log("Response Error");
+            }
+            else {
+                Application.storage.set(errorStorage, null);
+            }
+        };
+        this.callRpcInFonera(rpcCall, callback);
+    },
+
+
     sendDownloadUrlToFonera : function(myUrl) {
         let rpcCall = {
             "method" : "downloads_add",
@@ -268,7 +337,7 @@ let Fonera = {
                 Application.storage.set(errorStorage, null);
             }
         };
-        this.sendUrlToFonera(rpcCall, callback);
+        this.callRpcInFonera(rpcCall, callback);
     },
 
     sendTorrentUrlToFonera : function(myUrl) {
@@ -290,10 +359,10 @@ let Fonera = {
                 Application.storage.set(errorStorage, null);
             }
         };
-        this.sendUrlToFonera(rpcCall, callback);
+        this.callRpcInFonera(rpcCall, callback);
     },
 
-    sendUrlToFonera : function (rpcCall, callback) {
+    callRpcInFonera : function (rpcCall, callback) {
         // for some reason I need to declare here Application
         // or else it won't be accesible in the onload function
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
