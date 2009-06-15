@@ -298,6 +298,7 @@ let Fonera = {
             if (downloads[i].status == "done")
                 this.deleteDownloadById(downloads[i].id);
         }
+        this.notify(this.onDownloadsAvailable);
     },
 
     deleteDownloadById : function(id) {
