@@ -84,7 +84,7 @@ let FoneraDLManager = {
                 type.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
                 let status = document.createElement("label");
                 status.setAttribute("value", stringsBundle.getString('status') + " "
-                                    + foneraDownloads[i].status);
+                                    + FoneraFormat.stateName(foneraDownloads[i].status));
                 status.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
                 hboxData.insertBefore(status, hboxData.firstChild);
                 hboxData.insertBefore(type, hboxData.firstChild);
@@ -96,17 +96,13 @@ let FoneraDLManager = {
                 space.setAttribute("flex","1");
 
                 let vboxPercent = document.createElement("vbox");
-                let dwSize = document.createElement("label");
-                dwSize.setAttribute("value", foneraDownloads[i].downloaded);
-                dwSize.setAttribute("style", "font-style: bold; font-size: 1.6em;"
-                    + " text-align: center;");
-
                 // chrome://mozapps/skin/downloads/downloadButtons.png
                 // http://hg.mozilla.org/mozilla-central/file/eac99a38d8d9/toolkit/themes/winstripe/mozapps/downloads/downloads.css
                 let hboxButtons = document.createElement("hbox");
                 // hboxButtons.setAttribute("style", "text-align: center;");
                 let playb = document.createElement("image");
                 let action = "none";
+                Application.console.log(foneraDownloads[i].status);
                 if (foneraDownloads[i].status != "load") {
                     action = "start";
                     playb.setAttribute("style",
@@ -138,6 +134,12 @@ let FoneraDLManager = {
                 hboxButtons.insertBefore(spaceb, hboxButtons.firstChild);
 
                 vboxPercent.insertBefore(hboxButtons,vboxPercent.firstChild);
+
+                let dwSize = document.createElement("label");
+                dwSize.setAttribute("value", foneraDownloads[i].downloaded);
+                dwSize.setAttribute("style", "font-style: bold; font-size: 1.6em;"
+                    + " text-align: center;");
+
                 vboxPercent.insertBefore(dwSize,vboxPercent.firstChild);
 
                 dl.insertBefore(vboxPercent,dl.firstChild);
@@ -152,6 +154,7 @@ let FoneraDLManager = {
     },
 
     downloadAction : function(id, action) {
+        Application.console.log("action :" + action + " called on " + id);
         switch(action) {
         case "pause":
             Fonera.pauseDownloadById(id);

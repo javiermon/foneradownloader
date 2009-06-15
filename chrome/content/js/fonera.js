@@ -439,7 +439,8 @@ let Fonera = {
                             downloadView["file"] = theDownload.uri;
                         }
                         try {
-                            downloadView["status"] = FoneraFormat.stateName(theDownload.status);
+                            //downloadView["status"] = FoneraFormat.stateName(theDownload.status);
+                            downloadView["status"] = theDownload.status;
                             downloadView["type"] = theDownload.type;
                             downloadView["id"] = theDownload.id;
 
