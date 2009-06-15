@@ -44,11 +44,11 @@ let FoneraDLManager = {
                 dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;");
                 /*
                  *
-                 *  ---------------------------------------
-                 * |       | name              |           |
-                 * | image | ------------------|  percent  |
-                 * |       | type    | status  |           |
-                 *  ---------------------------------------
+                 *  --------------------------------------------------
+                 * |       | name              |        | percent     |
+                 * | image | ------------------| space  |             |
+                 * |       | type    | status  |        | play/cancel |
+                 *  --------------------------------------------------
                  *
                  */
                 // dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
@@ -92,18 +92,32 @@ let FoneraDLManager = {
                 vboxData.insertBefore(hboxData,vboxData.firstChild);
                 vboxData.insertBefore(hboxName,vboxData.firstChild);
 
-                /*
-                    insert here the control buttons
-                    and append them to dl directly?
-                */
-
                 let space = document.createElement("spacer");
                 space.setAttribute("flex","1");
 
                 let vboxPercent = document.createElement("vbox");
                 let dwSize = document.createElement("label");
                 dwSize.setAttribute("value", foneraDownloads[i].downloaded);
-                dwSize.setAttribute("style", "font-style: bold; font-size: 1.6em; text-align: center;");
+                dwSize.setAttribute("style", "font-style: bold; font-size: 1.6em;");
+                    //+ " text-align: center;");
+
+                // chrome://mozapps/skin/downloads/downloadButtons.png
+                let hboxButtons = document.createElement("hbox");
+                // hboxButtons.setAttribute("style", "text-align: center;");
+                let playb = document.createElement("image");
+                playb.setAttribute("style",
+                                   "list-style-image: url('chrome://mozapps/skin/downloads/downloadButtons.png'); "
+                                   + "-moz-image-region: rect(32px, 16px, 48px, 0px);");
+
+                let cancelb = document.createElement("image");
+                cancelb.setAttribute("style",
+                                   "list-style-image: url('chrome://mozapps/skin/downloads/downloadButtons.png'); "
+                                     + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
+
+                hboxButtons.insertBefore(cancelb, hboxButtons.firstChild);
+                hboxButtons.insertBefore(playb, hboxButtons.firstChild);
+
+                vboxPercent.insertBefore(hboxButtons,vboxPercent.firstChild);
                 vboxPercent.insertBefore(dwSize,vboxPercent.firstChild);
 
                 dl.insertBefore(vboxPercent,dl.firstChild);
