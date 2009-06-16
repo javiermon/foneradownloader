@@ -86,6 +86,13 @@ let FoneraDLManager = {
                 status.setAttribute("value", stringsBundle.getString('status') + " "
                                     + FoneraFormat.stateName(foneraDownloads[i].status));
                 status.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
+
+                let size = document.createElement("label");
+                size.setAttribute("value", stringsBundle.getString('size') + " "
+                                    + FoneraFormat.bytesToSize(foneraDownloads[i].size, 2));
+                size.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
+
+                hboxData.insertBefore(size, hboxData.firstChild);
                 hboxData.insertBefore(status, hboxData.firstChild);
                 hboxData.insertBefore(type, hboxData.firstChild);
 

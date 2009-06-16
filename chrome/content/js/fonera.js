@@ -457,6 +457,7 @@ let Fonera = {
                             //downloadView["status"] = FoneraFormat.stateName(theDownload.status);
                             downloadView["status"] = theDownload.status;
                             downloadView["type"] = theDownload.type;
+                            downloadView["size"] = theDownload.size;
                             downloadView["id"] = theDownload.id;
 
                             if (theDownload.status == "done")
