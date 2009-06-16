@@ -205,7 +205,6 @@ let FoneraDLManager = {
     },
 
     clearCompleted : function() {
-        document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/loading_16.png";
         Fonera.deleteCompletedDownloads();
         FoneraDLManager.refreshAction();
     },
