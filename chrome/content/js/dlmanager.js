@@ -110,11 +110,13 @@ let FoneraDLManager = {
                     playb.setAttribute("style",
                                    "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
                                    + "-moz-image-region: rect(0px, 48px, 16px, 32px);");
+                    playb.tooltipText = stringsBundle.getString("pause");
                 } else {
                     action = "start";
                     playb.setAttribute("style",
                                    "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
                                    + "-moz-image-region: rect(32px, 16px, 48px, 0px);");
+                    playb.tooltipText = stringsBundle.getString("start");
                 }
                 playb.setAttribute("onclick","FoneraDLManager.downloadAction('" + foneraDownloads[i].id + "','" + action  + "')");
 
@@ -124,6 +126,7 @@ let FoneraDLManager = {
                                      + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
 
                 cancelb.setAttribute("onclick","FoneraDLManager.downloadAction('" + foneraDownloads[i].id + "','delete')");
+                cancelb.tooltipText = stringsBundle.getString("cancel");
 
                 let spaceb = document.createElement("spacer");
                 spaceb.setAttribute("flex","1");
