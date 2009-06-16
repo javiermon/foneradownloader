@@ -106,14 +106,14 @@ let FoneraDLManager = {
                 if (foneraDownloads[i].status != "load") {
                     action = "start";
                     playb.setAttribute("style",
-                                   "list-style-image: url('chrome://mozapps/skin/downloads/downloadButtons.png'); "
+                                   "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
                                    + "-moz-image-region: rect(32px, 16px, 48px, 0px);");
                 } else if (foneraDownloads[i].status == "done") {
                     playb.setAttribute("style","");
                 } else{
                     action = "pause";
                     playb.setAttribute("style",
-                                   "list-style-image: url('chrome://mozapps/skin/downloads/downloadButtons.png'); "
+                                   "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
                                    + "-moz-image-region: rect(0px, 48px, 16px, 32px);");
 
                 }
@@ -121,7 +121,7 @@ let FoneraDLManager = {
 
                 let cancelb = document.createElement("image");
                 cancelb.setAttribute("style",
-                                   "list-style-image: url('chrome://mozapps/skin/downloads/downloadButtons.png'); "
+                                   "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
                                      + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
 
                 cancelb.setAttribute("onclick","FoneraDLManager.downloadAction('" + foneraDownloads[i].id + "','delete')");
