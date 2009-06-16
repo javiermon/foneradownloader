@@ -84,9 +84,17 @@ let Fonera = {
         return prefs.getCharPref(preference);
     },
 
-    isPluginEnabled :function() {
+    isPluginEnabled : function() {
         let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
         return prefs.getBoolPref("enabled");
+    },
+
+    togglePluginOnOff : function() {
+        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        if (prefs.getBoolPref("enabled"))
+            prefs.setBoolPref("enabled", false);
+        else
+            prefs.setBoolPref("enabled", true);
     },
 
     // url for reaching the fonera.

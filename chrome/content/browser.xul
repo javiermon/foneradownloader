@@ -67,6 +67,13 @@
     <!-- TODO: branding icons! -->
     <statusbarpanel id="foneraDownloader-sbpanel" label="&fonera_downloads;" tooltiptext="&loading;"
 		    class="statusbarpanel-iconic-text" src="chrome://global/skin/icons/loading_16.png" 
-		    onclick="FoneraDLManager.processClick(event);"/> 
+		    onclick="FoneraDLManager.processClick(event);" context="foneradownloader-sbpanel-cxtmenu"/> 
+    <popupset>
+      <menupopup id="foneradownloader-sbpanel-cxtmenu">
+	<menuitem label="&enable_disable;" default="true"
+		  oncommand="Fonera.togglePluginOnOff()"/>
+      </menupopup>
+    </popupset>
+
   </statusbar>
 </overlay>
