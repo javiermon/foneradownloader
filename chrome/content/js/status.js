@@ -60,7 +60,7 @@ let FoneraStatus = {
         let panel = document.getElementById('foneraDownloader-sbpanel');
         if (!Fonera.isPluginEnabled()) {
             panel.tooltipText = stringsBundle.getString('disabledString');
-            panel.src = "chrome://global/skin/icons/wrap.png";
+            panel.src = "chrome://foneradownloader/skin/disabled.png";
             return;
         }
 
