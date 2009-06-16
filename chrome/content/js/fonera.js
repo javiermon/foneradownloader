@@ -301,10 +301,29 @@ let Fonera = {
     },
 
     deleteCompletedDownloads : function(id) {
+        // we do the same call as in deleteDownloadById, but
+        // call the nofity at the end, not on every call
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+        let errorStorage = this.LASTERROR;
         let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
         for (let i in downloads) {
-            if (downloads[i].status == "done")
-                this.deleteDownloadById(downloads[i].id);
+            if (downloads[i].status == "done") {
+                let id = downloads[i].id;
+                let rpcCall = {
+                    "method" : "dl_delete",
+                    "params" : [id]
+                };
+
+                let callback = function(response) {
+                    if (response.error != null) {
+                        Application.console.log("Response Error");
+                    } else {
+                        Application.storage.set(errorStorage, null);
+                    }
+                };
+                this.callRpcInFonera(rpcCall, callback);
+            }
         }
         this.notify(this.onDownloadsAvailable);
     },
