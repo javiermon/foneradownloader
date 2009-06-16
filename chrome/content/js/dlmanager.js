@@ -103,14 +103,13 @@ let FoneraDLManager = {
                 let playb = document.createElement("image");
                 let action = "none";
 
-                if (foneraDownloads[i].status == "done") {
+                if (foneraDownloads[i].status == "done" || foneraDownloads[i].status == "hashing") {
                     playb.setAttribute("style","");
                 } else if (foneraDownloads[i].status == "load") {
                     action = "pause";
                     playb.setAttribute("style",
                                    "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
                                    + "-moz-image-region: rect(0px, 48px, 16px, 32px);");
-
                 } else {
                     action = "start";
                     playb.setAttribute("style",
