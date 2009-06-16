@@ -43,20 +43,7 @@
     <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
   </stringbundleset>
 
-  <richlistbox id="foneradownloader-downloads-list" flex="1" style="width:500px; height:300px; border: 1px solid black; overflow: auto;"><!--  style="overflow: auto"> -->
-    <!--grid id="foneradownloader-downloads-list-grid">
-
-      <columns>
-	<column flex="2"/>
-	<column flex="2"/>
-	<column flex="2"/>
-	<column flex="2"/>
-      </columns>
-      <rows id="foneradownloader-downloads-list-items">
-      </rows>
-     
-    </grid-->
-  </richlistbox>
+  <richlistbox id="foneradownloader-downloads-list" flex="1" style="width:500px; height:300px; border: 1px solid black; overflow: auto;"/>
 
   <statusbar id="status-bar">
   <button id="refreshButton" oncommand="FoneraDLManager.refreshAction()"
