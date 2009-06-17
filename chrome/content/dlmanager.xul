@@ -28,7 +28,6 @@
 	screenX="10" screenY="10"
 	persist="width height screenX screenY sizemode" orient="vertical">
 
-  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/fonera.js"/>    
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dlmanager.js" />    
   <script type="application/x-javascript">
 
