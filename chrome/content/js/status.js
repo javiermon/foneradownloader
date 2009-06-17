@@ -98,6 +98,11 @@ let FoneraStatus = {
             foneraStatus.tooltipText = totaldownloads + " " + stringsBundle.getString('totaldownloads');
     },
 
+    showPreferences : function() {
+        let features = "chrome,titlebar,toolbar,centerscreen,modal";
+        window.openDialog("chrome://foneradownloader/content/options.xul", "Preferences", features);
+    },
+
     loadEvents : function() {
         Fonera.addEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip);

@@ -70,8 +70,8 @@
 		    onclick="FoneraDLManager.processClick(event);" context="foneradownloader-sbpanel-cxtmenu"/> 
     <popupset>
       <menupopup id="foneradownloader-sbpanel-cxtmenu">
-	<menuitem label="&enable_disable;" default="true"
-		  oncommand="Fonera.togglePluginOnOff()"/>
+	<menuitem label="&preferences;" default="true"
+		  oncommand="FoneraStatus.showPreferences()"/>
       </menupopup>
     </popupset>
 

@@ -2,4 +2,4 @@
 <!ENTITY loading "Cargando la información de la fonera...">
 <!ENTITY showfoneradownloads "Mostrar las descargas de la Fonera">
 <!ENTITY sendLinkToFonera "Descargar con la Fonera">
-<!ENTITY enable_disable "Habilitar/Deshabilitar plugin">
+<!ENTITY preferences "Preferencias del plugin">

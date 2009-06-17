@@ -89,14 +89,6 @@ let Fonera = {
         return prefs.getBoolPref("enabled");
     },
 
-    togglePluginOnOff : function() {
-        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
-        if (prefs.getBoolPref("enabled"))
-            prefs.setBoolPref("enabled", false);
-        else
-            prefs.setBoolPref("enabled", true);
-    },
-
     // url for reaching the fonera.
     foneraURL : function () {
         return "http://" + this.getUserPref("foneraip") + "/luci";
