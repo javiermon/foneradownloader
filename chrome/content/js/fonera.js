@@ -140,8 +140,7 @@ let Fonera = {
                      */
                     Fonera.authenticate(reAuth);
                     Fonera.checkDisks();
-	        }
-	        else {
+	        } else {
                     Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
                     Application.console.log("Fonera NOT ready\n");
                     Fonera.notify(Fonera.onCheckFoneraAvailable);
