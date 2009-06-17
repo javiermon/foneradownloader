@@ -185,10 +185,8 @@ let FoneraDLManager = {
     },
 
     drawItems : function() {
-        document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/loading_16.png";
-
-        // let dialog = document.getElementById("foneradownloader-downloads-list-items"); // richlistbox-grid-rows
         let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
+        document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/loading_16.png";
         // remove childs
         while (dialog.hasChildNodes()) {
             dialog.removeChild(dialog.firstChild);
@@ -198,7 +196,6 @@ let FoneraDLManager = {
         if (Fonera.authenticated(authToken)) {
             FoneraDLManager.drawDownloads(dialog);
         }
-        // dialog header last as we're adding in reverse
         document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/notloading_16.png";
     },
 
