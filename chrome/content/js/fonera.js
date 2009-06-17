@@ -366,7 +366,8 @@ let Fonera = {
     },
 
     sendTorrentUrlToFonera : function(myUrl) {
-        let basename = myUrl.replace( /.*\//, "" );
+        // get basename and strip the .torrent in the end as the fonera will add it eventually
+        let basename = myUrl.replace( /.*\//, "" ).replace( ".torrent", "" );
         let rpcCall = {
             "method" : "torrent_addurl",
             "params" : [myUrl, basename]
