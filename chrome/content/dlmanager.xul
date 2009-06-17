@@ -24,9 +24,9 @@
 <!DOCTYPE window SYSTEM "chrome://foneradownloader/locale/dlmanager.dtd">
 
 <window id="foneradownloader-dlmanager" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-	windowtype="foneradownloader:dlmanager" title="&downloadManager;" style="overflow: auto" class="dlmanager-window"
+	windowtype="foneradownloader:dlmanager" title="&downloadManager;" class="dlmanager-window"
 	screenX="10" screenY="10"
-	persist="width height" orient="vertical">
+	persist="width height screenX screenY sizemode" orient="vertical">
 
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/fonera.js"/>    
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dlmanager.js" />    
@@ -43,7 +43,7 @@
     <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
   </stringbundleset>
 
-  <richlistbox id="foneradownloader-downloads-list" flex="1" style="width:500px; height:300px; border: 1px solid black; overflow: auto;"/>
+  <richlistbox id="foneradownloader-downloads-list" flex="1"/>
 
   <statusbar id="status-bar">
   <button id="refreshButton" oncommand="FoneraDLManager.refreshAction()"
