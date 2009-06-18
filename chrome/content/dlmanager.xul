@@ -33,7 +33,6 @@
 
     window.addEventListener("load", FoneraDLManager.loadEvents, false);
     window.addEventListener("load", FoneraDLManager.refreshAction, false);
-    // window.setInterval(FoneraDLManager.refreshAction, 5*60*100);
     window.addEventListener("unload", FoneraDLManager.unloadEvents, false);
   </script>
 

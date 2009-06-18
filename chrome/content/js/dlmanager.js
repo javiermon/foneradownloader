@@ -167,15 +167,21 @@ let FoneraDLManager = {
         Application.console.log("action :" + action + " called on " + id);
         switch(action) {
         case "pause":
+            FoneraDLManager.startThrobbler();
             Fonera.pauseDownloadById(id);
+            // Force UI update:
             FoneraDLManager.refreshAction();
             break;
         case "delete":
+            FoneraDLManager.startThrobbler();
             Fonera.deleteDownloadById(id);
+            // Force UI update:
             FoneraDLManager.refreshAction();
             break;
         case "start":
+            FoneraDLManager.startThrobbler();
             Fonera.startDownloadById(id);
+            // Force UI update:
             FoneraDLManager.refreshAction();
             break;
         case "none":
@@ -184,9 +190,18 @@ let FoneraDLManager = {
         }
     },
 
-    drawItems : function() {
-        let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
+    startThrobbler : function() {
         document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/loading_16.png";
+    },
+
+    stopThrobbler : function() {
+        document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/notloading_16.png";
+    },
+
+    drawItems : function() {
+        // FIXME: the throbbler doesn't appear to work either because it's done too fast or on the same redraw
+        FoneraDLManager.startThrobbler();
+        let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
         // remove childs
         while (dialog.hasChildNodes()) {
             dialog.removeChild(dialog.firstChild);
@@ -196,22 +211,24 @@ let FoneraDLManager = {
         if (Fonera.authenticated(authToken)) {
             FoneraDLManager.drawDownloads(dialog);
         }
-        document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/notloading_16.png";
+        FoneraDLManager.stopThrobbler();
     },
 
     refreshAction : function() {
-        document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/loading_16.png";
+        FoneraDLManager.startThrobbler();
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken)) {
             Fonera.checkDisks();
             Fonera.checkDownloads();
         } else {
-            document.getElementById("foneradownloader-dlmicon").src = "chrome://global/skin/icons/notloading_16.png";
+            FoneraDLManager.stopThrobbler();
         }
     },
 
     clearCompleted : function() {
+        FoneraDLManager.startThrobbler();
         Fonera.deleteCompletedDownloads();
+        // Force UI update:
         FoneraDLManager.refreshAction();
     },
 
@@ -246,11 +263,9 @@ let FoneraDLManager = {
             return;
 
         let button = event.button; // 0: left 1: middle 2: right
-
-        if (button == 2) {
-            // rightclick -> show option to disable plugin
-        } else if (button == 0)
+        if (button == 0)
             FoneraDLManager.showDownloadsWindow();
+
     },
 
     loadEvents : function() {
