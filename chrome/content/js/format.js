@@ -76,7 +76,9 @@ let FoneraFormat = {
         case "waiting":
             return "yellow";
         case "loading":
+        case "load":
         case "active":
+            return "green";
         case "done":
             return "green";
         case "hashing":
