@@ -41,7 +41,8 @@ let FoneraDLManager = {
             // populate
             for (let i in foneraDownloads) {
                 let dl = document.createElement("richlistitem");
-                dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;");
+                let color = (i % 2) ? "Gainsboro" : "";
+                dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px; background-color: " + color + ";");
                 /*
                  *
                  *  --------------------------------------------------
@@ -78,7 +79,7 @@ let FoneraDLManager = {
                 hboxName.insertBefore(description, hboxName.firstChild);
                 // data
                 let hboxData = document.createElement("hbox");
-                hboxData.setAttribute("style", "text-align: left;");
+                hboxData.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
                 let type = document.createElement("label");
                 type.setAttribute("value", stringsBundle.getString('type'));
                 type.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
@@ -93,7 +94,8 @@ let FoneraDLManager = {
 
                 let statusString = document.createElement("label");
                 statusString.setAttribute("value", FoneraFormat.stateName(foneraDownloads[i].status));
-                statusString.setAttribute("style", "margin-left:15px; font-size: 0.8em;");
+                statusString.setAttribute("style", "margin-left:15px; font-size: 0.8em; "
+                                          + "color: " + FoneraFormat.colorPicker(foneraDownloads[i].status) + ";");
 
                 let size = document.createElement("label");
                 size.setAttribute("value", stringsBundle.getString('size'));

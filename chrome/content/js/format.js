@@ -66,5 +66,25 @@ let FoneraFormat = {
         } catch (e) {
             return stringsBundle.GetStringFromName('waiting');
         }
+    },
+
+    colorPicker : function(item) {
+        switch(item) {
+        case "suspended":
+        case "pending":
+        case "paused":
+        case "waiting":
+            return "yellow";
+        case "loading":
+        case "active":
+        case "done":
+            return "green";
+        case "hashing":
+            return "blue";
+        case "error":
+            return "red";
+        default:
+            return "";
+        }
     }
 };
