@@ -40,7 +40,7 @@
     <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
   </stringbundleset>
 
-  <richlistbox id="foneradownloader-downloads-list" flex="1"/>
+  <richlistbox id="foneradownloader-downloads-list" flex="1" onselect="FoneraDLManager.stripeifyList(this)"/>
 
   <statusbar id="status-bar">
   <button id="refreshButton" oncommand="FoneraDLManager.refreshAction()"

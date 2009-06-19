@@ -41,8 +41,6 @@ let FoneraDLManager = {
             // populate
             for (let i in foneraDownloads) {
                 let dl = document.createElement("richlistitem");
-                let color = (i % 2) ? "Gainsboro" : "";
-                dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px; background-color: " + color + ";");
                 /*
                  *
                  *  --------------------------------------------------
@@ -226,6 +224,7 @@ let FoneraDLManager = {
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken)) {
             FoneraDLManager.drawDownloads(dialog);
+            FoneraDLManager.stripeifyList(dialog);
         }
         FoneraDLManager.stopThrobbler();
     },
@@ -238,6 +237,20 @@ let FoneraDLManager = {
             Fonera.checkDownloads();
         } else {
             FoneraDLManager.stopThrobbler();
+        }
+    },
+
+    stripeifyList : function(list) {
+        let style = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
+        let item = list.firstChild;
+        let i = 0;
+        while (item) {
+            if (item != list.selectedItem && (i % 2) == 0)
+                item.setAttribute("style", style + " background-color: Gainsboro;");
+            else
+                item.setAttribute("style", style);
+            i++;
+            item = item.nextSibling;
         }
     },
 
