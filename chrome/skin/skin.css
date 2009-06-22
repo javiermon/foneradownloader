@@ -1,5 +1,9 @@
+small-item-string {
+ font-size: 0.9em;
+}
+
 foneradownloader-downloads-list {
-  overflow: auto;
+ overflow: auto;
 }
 
 foneradownloader-cancel {

@@ -74,7 +74,7 @@ let FoneraFormat = {
         case "pending":
         case "paused":
         case "waiting":
-            return "yellow";
+            return "GoldenRod";
         case "loading":
         case "load":
         case "active":

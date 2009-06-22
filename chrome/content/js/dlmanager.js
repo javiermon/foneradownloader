@@ -80,28 +80,28 @@ let FoneraDLManager = {
                 hboxData.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
                 let type = document.createElement("label");
                 type.setAttribute("value", stringsBundle.getString('type'));
-                type.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
+                type.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
 
                 let typeString = document.createElement("label");
                 typeString.setAttribute("value", stringsBundle.getString(foneraDownloads[i].type));
-                typeString.setAttribute("style", "margin-left:15px; font-size: 0.8em;");
+                typeString.setAttribute("style", "font-size: 0.9em;");
 
                 let status = document.createElement("label");
                 status.setAttribute("value", stringsBundle.getString('status'));
-                status.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
+                status.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
 
                 let statusString = document.createElement("label");
                 statusString.setAttribute("value", FoneraFormat.stateName(foneraDownloads[i].status));
-                statusString.setAttribute("style", "margin-left:15px; font-size: 0.8em; "
+                statusString.setAttribute("style", "font-size: 0.9em; "
                                           + "color: " + FoneraFormat.colorPicker(foneraDownloads[i].status) + ";");
 
                 let size = document.createElement("label");
                 size.setAttribute("value", stringsBundle.getString('size'));
-                size.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.8em;");
+                size.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
 
                 let sizeString = document.createElement("label");
                 sizeString.setAttribute("value", FoneraFormat.bytesToSize(foneraDownloads[i].size, 2));
-                sizeString.setAttribute("style", "margin-left:15px; font-size: 0.8em;");
+                sizeString.setAttribute("style", "font-size: 0.9em;");
 
                 hboxData.insertBefore(sizeString, hboxData.firstChild);
                 hboxData.insertBefore(size, hboxData.firstChild);
