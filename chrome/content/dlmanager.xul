@@ -47,7 +47,7 @@
           label="&refresh;"/>
   <spacer flex="1"/>
   <button id="clearButton" oncommand="FoneraDLManager.clearCompleted()"
-          label="&clear-complete;"/>
+          label="&clear-complete;" disabled="true"/>
    <statusbarpanel id="foneradownloader-dlmicon"
 		    class="statusbarpanel-iconic" src="chrome://global/skin/icons/loading_16.png"/> 
   </statusbar>

@@ -32,6 +32,131 @@ Components.utils.import("resource://modules/format.js");
 // The Download Manager Window
 let FoneraDLManager = {
 
+    drawDownloadItem : function(downloadItem, dl, stringsBundle) {
+        /*
+         *
+         *  --------------------------------------------------
+         * |       | name              |        | percent     |
+         * | image | ------------------| space  |             |
+         * |       | type    | status  |        | play/cancel |
+         *  --------------------------------------------------
+         *
+         */
+        // IMAGE
+        let vboxImage = document.createElement("vbox");
+        let image = document.createElement("image");
+        let extension = downloadItem.file.substring(downloadItem.file.lastIndexOf("."),
+                                                          downloadItem.file.length);
+        if (extension != "")
+            image.setAttribute("src","moz-icon://" + extension + "?size=32");
+        else
+            image.setAttribute("src","moz-icon://.file?size=32");
+        vboxImage.insertBefore(image,vboxImage.firstChild);
+
+        // DATA
+        let vboxData = document.createElement("vbox");
+        vboxData.setAttribute("style", "text-align: center; min-width: 200px;");
+        // name
+        let hboxName = document.createElement("hbox");
+        hboxName.setAttribute("flex", "1");
+        let description = document.createElement("description");
+        let dlName = downloadItem.file;
+        description.appendChild(document.createTextNode(dlName));
+        description.setAttribute("style", "font-style: bold; font-size: 1.2em; text-align: center;");
+        hboxName.insertBefore(description, hboxName.firstChild);
+        // data
+        let hboxData = document.createElement("hbox");
+        hboxData.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
+        let type = document.createElement("label");
+        type.setAttribute("value", stringsBundle.getString('type'));
+        type.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
+
+        let typeString = document.createElement("label");
+        typeString.setAttribute("value", stringsBundle.getString(downloadItem.type));
+        typeString.setAttribute("style", "font-size: 0.9em;");
+
+        let status = document.createElement("label");
+        status.setAttribute("value", stringsBundle.getString('status'));
+        status.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
+
+        let statusString = document.createElement("label");
+        statusString.setAttribute("value", FoneraFormat.stateName(downloadItem.status));
+        statusString.setAttribute("style", "font-size: 0.9em; "
+                                  + "color: " + FoneraFormat.colorPicker(downloadItem.status) + ";");
+
+        let size = document.createElement("label");
+        size.setAttribute("value", stringsBundle.getString('size'));
+        size.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
+
+        let sizeString = document.createElement("label");
+        sizeString.setAttribute("value", FoneraFormat.bytesToSize(downloadItem.size, 2));
+        sizeString.setAttribute("style", "font-size: 0.9em;");
+
+        hboxData.insertBefore(sizeString, hboxData.firstChild);
+        hboxData.insertBefore(size, hboxData.firstChild);
+        hboxData.insertBefore(statusString, hboxData.firstChild);
+        hboxData.insertBefore(status, hboxData.firstChild);
+        hboxData.insertBefore(typeString, hboxData.firstChild);
+        hboxData.insertBefore(type, hboxData.firstChild);
+
+        vboxData.insertBefore(hboxData,vboxData.firstChild);
+        vboxData.insertBefore(hboxName,vboxData.firstChild);
+
+        let space = document.createElement("spacer");
+        space.setAttribute("flex","1");
+
+        let vboxPercent = document.createElement("vbox");
+        let hboxButtons = document.createElement("hbox");
+        let playb = document.createElement("image");
+        let action = "none";
+
+        if (downloadItem.status == "done" || downloadItem.status == "hashing") {
+            playb.setAttribute("style","");
+        } else if (downloadItem.status == "load") {
+            action = "pause";
+            playb.setAttribute("style",
+                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
+                           + "-moz-image-region: rect(0px, 48px, 16px, 32px);");
+            playb.tooltipText = stringsBundle.getString("pause");
+        } else {
+            action = "start";
+            playb.setAttribute("style",
+                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
+                           + "-moz-image-region: rect(32px, 16px, 48px, 0px);");
+            playb.tooltipText = stringsBundle.getString("start");
+        }
+        playb.setAttribute("onclick","FoneraDLManager.downloadAction('" + downloadItem.id + "','" + action  + "')");
+
+        let cancelb = document.createElement("image");
+        cancelb.setAttribute("style",
+                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
+                             + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
+
+        cancelb.setAttribute("onclick","FoneraDLManager.downloadAction('" + downloadItem.id + "','delete')");
+        cancelb.tooltipText = stringsBundle.getString("cancel");
+
+        let spaceb = document.createElement("spacer");
+        spaceb.setAttribute("flex","1");
+
+        hboxButtons.insertBefore(cancelb, hboxButtons.firstChild);
+        hboxButtons.insertBefore(playb, hboxButtons.firstChild);
+        hboxButtons.insertBefore(spaceb, hboxButtons.firstChild);
+
+        vboxPercent.insertBefore(hboxButtons,vboxPercent.firstChild);
+
+        let dwSize = document.createElement("label");
+        dwSize.setAttribute("value", downloadItem.downloaded);
+        dwSize.setAttribute("style", "font-style: bold; font-size: 1.6em;"
+            + " text-align: center;");
+
+        vboxPercent.insertBefore(dwSize,vboxPercent.firstChild);
+
+        dl.insertBefore(vboxPercent,dl.firstChild);
+        dl.insertBefore(space,dl.firstChild);
+        dl.insertBefore(vboxData,dl.firstChild);
+        dl.insertBefore(vboxImage,dl.firstChild);
+    },
+
     drawDownloads : function(dialog) {
         // FIXME: move styling to css
         // Example: http://www.nexgenmedia.net/mozilla/richlistbox/richlistbox-simple.xul
@@ -41,138 +166,15 @@ let FoneraDLManager = {
             // populate
             for (let i in foneraDownloads) {
                 let dl = document.createElement("richlistitem");
-                /*
-                 *
-                 *  --------------------------------------------------
-                 * |       | name              |        | percent     |
-                 * | image | ------------------| space  |             |
-                 * |       | type    | status  |        | play/cancel |
-                 *  --------------------------------------------------
-                 *
-                 */
-                // dl.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
-
-                // IMAGE
-                let vboxImage = document.createElement("vbox");
-                let image = document.createElement("image");
-                let extension = foneraDownloads[i].file.substring(foneraDownloads[i].file.lastIndexOf("."),
-                                                                  foneraDownloads[i].file.length);
-                if (extension != "")
-                    image.setAttribute("src","moz-icon://" + extension + "?size=32");
-                else
-                    image.setAttribute("src","moz-icon://.file?size=32");
-                vboxImage.insertBefore(image,vboxImage.firstChild);
-
-                // DATA
-                let vboxData = document.createElement("vbox");
-                vboxData.setAttribute("style", "text-align: center; min-width: 200px;");
-                // name
-                let hboxName = document.createElement("hbox");
-                hboxName.setAttribute("flex", "1");
-                let description = document.createElement("description");
-                let dlName = foneraDownloads[i].file;
-                description.appendChild(document.createTextNode(dlName));
-                description.setAttribute("style", "font-style: bold; font-size: 1.2em; text-align: center;");
-                // description.setAttribute("class", "title");
-                hboxName.insertBefore(description, hboxName.firstChild);
-                // data
-                let hboxData = document.createElement("hbox");
-                hboxData.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
-                let type = document.createElement("label");
-                type.setAttribute("value", stringsBundle.getString('type'));
-                type.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
-
-                let typeString = document.createElement("label");
-                typeString.setAttribute("value", stringsBundle.getString(foneraDownloads[i].type));
-                typeString.setAttribute("style", "font-size: 0.9em;");
-
-                let status = document.createElement("label");
-                status.setAttribute("value", stringsBundle.getString('status'));
-                status.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
-
-                let statusString = document.createElement("label");
-                statusString.setAttribute("value", FoneraFormat.stateName(foneraDownloads[i].status));
-                statusString.setAttribute("style", "font-size: 0.9em; "
-                                          + "color: " + FoneraFormat.colorPicker(foneraDownloads[i].status) + ";");
-
-                let size = document.createElement("label");
-                size.setAttribute("value", stringsBundle.getString('size'));
-                size.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
-
-                let sizeString = document.createElement("label");
-                sizeString.setAttribute("value", FoneraFormat.bytesToSize(foneraDownloads[i].size, 2));
-                sizeString.setAttribute("style", "font-size: 0.9em;");
-
-                hboxData.insertBefore(sizeString, hboxData.firstChild);
-                hboxData.insertBefore(size, hboxData.firstChild);
-                hboxData.insertBefore(statusString, hboxData.firstChild);
-                hboxData.insertBefore(status, hboxData.firstChild);
-                hboxData.insertBefore(typeString, hboxData.firstChild);
-                hboxData.insertBefore(type, hboxData.firstChild);
-
-                vboxData.insertBefore(hboxData,vboxData.firstChild);
-                vboxData.insertBefore(hboxName,vboxData.firstChild);
-
-                let space = document.createElement("spacer");
-                space.setAttribute("flex","1");
-
-                let vboxPercent = document.createElement("vbox");
-                // chrome://mozapps/skin/downloads/downloadButtons.png
-                // http://hg.mozilla.org/mozilla-central/file/eac99a38d8d9/toolkit/themes/winstripe/mozapps/downloads/downloads.css
-                let hboxButtons = document.createElement("hbox");
-                // hboxButtons.setAttribute("style", "text-align: center;");
-                let playb = document.createElement("image");
-                let action = "none";
-
-                if (foneraDownloads[i].status == "done" || foneraDownloads[i].status == "hashing") {
-                    playb.setAttribute("style","");
-                } else if (foneraDownloads[i].status == "load") {
-                    action = "pause";
-                    playb.setAttribute("style",
-                                   "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
-                                   + "-moz-image-region: rect(0px, 48px, 16px, 32px);");
-                    playb.tooltipText = stringsBundle.getString("pause");
-                } else {
-                    action = "start";
-                    playb.setAttribute("style",
-                                   "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
-                                   + "-moz-image-region: rect(32px, 16px, 48px, 0px);");
-                    playb.tooltipText = stringsBundle.getString("start");
-                }
-                playb.setAttribute("onclick","FoneraDLManager.downloadAction('" + foneraDownloads[i].id + "','" + action  + "')");
-
-                let cancelb = document.createElement("image");
-                cancelb.setAttribute("style",
-                                   "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
-                                     + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
-
-                cancelb.setAttribute("onclick","FoneraDLManager.downloadAction('" + foneraDownloads[i].id + "','delete')");
-                cancelb.tooltipText = stringsBundle.getString("cancel");
-
-                let spaceb = document.createElement("spacer");
-                spaceb.setAttribute("flex","1");
-
-                hboxButtons.insertBefore(cancelb, hboxButtons.firstChild);
-                hboxButtons.insertBefore(playb, hboxButtons.firstChild);
-                hboxButtons.insertBefore(spaceb, hboxButtons.firstChild);
-
-                vboxPercent.insertBefore(hboxButtons,vboxPercent.firstChild);
-
-                let dwSize = document.createElement("label");
-                dwSize.setAttribute("value", foneraDownloads[i].downloaded);
-                dwSize.setAttribute("style", "font-style: bold; font-size: 1.6em;"
-                    + " text-align: center;");
-
-                vboxPercent.insertBefore(dwSize,vboxPercent.firstChild);
-
-                dl.insertBefore(vboxPercent,dl.firstChild);
-                dl.insertBefore(space,dl.firstChild);
-                dl.insertBefore(vboxData,dl.firstChild);
-                dl.insertBefore(vboxImage,dl.firstChild);
-
+                FoneraDLManager.drawDownloadItem(foneraDownloads[i], dl, stringsBundle);
                 // ...
                 dialog.insertBefore(dl, dialog.firstChild);
             }
+            // enable clear downloads
+            document.getElementById("clearButton").disabled = false;
+        } else {
+            // disable clear downloads
+            document.getElementById("clearButton").disabled = true;
         }
     },
 
