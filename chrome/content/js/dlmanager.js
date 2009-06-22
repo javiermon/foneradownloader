@@ -235,6 +235,7 @@ let FoneraDLManager = {
         if (Fonera.authenticated(authToken)) {
             Fonera.checkDisks();
             Fonera.checkDownloads();
+            // the throbbler should be updates async
         } else {
             FoneraDLManager.stopThrobbler();
         }
