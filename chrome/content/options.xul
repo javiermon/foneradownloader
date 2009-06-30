@@ -132,7 +132,6 @@
 
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/accprefs.js"/>    
   <script type="application/x-javascript">    
-    // window.addEventListener("load", function(e) { Fonera.checkAccountsSettings(); }, false);
     window.addEventListener("load", function(e) { FoneraAccountsPrefs.fillAccountsIntoTree(); }, false);
     window.addEventListener("load", FoneraAccountsPrefs.loadEvents, false);
     window.addEventListener("unload", FoneraAccountsPrefs.unloadEvents, false);
