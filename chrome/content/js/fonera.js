@@ -50,6 +50,10 @@ let Fonera = {
     onDownloadsAvailable : [],
     onSendUrl : [],
 
+    // Accounts:
+    ACCOUNTS : "ACCOUNTS",
+    EMPTY_ACCOUNTS : [],
+
     addEventListener : function(event, callback) {
         try {
             // example: event == onCheckFoneraAvailable
@@ -140,6 +144,7 @@ let Fonera = {
                      */
                     Fonera.authenticate(reAuth);
                     Fonera.checkDisks();
+                    Fonera.checkAccountsSettings();
 	        } else {
                     Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
                     Application.console.log("Fonera NOT ready\n");
@@ -533,6 +538,36 @@ let Fonera = {
         req.send(stream);
         return;
     },
+
+    checkAccountsSettings : function() {
+        let rpcCall = {
+            "method" : "downloads_listcookies"
+        };
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+        let errorStorage = this.LASTERROR;
+
+        let callback = function(response) {
+            if (response.error != null) {
+                Application.console.log("Response Error");
+            } else {
+                // first clean, then re-read:
+                Application.storage.set(Fonera.ACCOUNTS, Fonera.EMPTY_ACCOUNTS);
+                let accounts = Application.storage.get(Fonera.ACCOUNTS, []);
+                for (let i in response.result) {
+                    let service = response.result[i].domain;
+                    accounts.push({ "service" : response.result[i].domain,
+                                    "uname" : response.result[i]._user });
+                }
+                Application.storage.set(Fonera.ACCOUNTS, accounts);
+                Application.storage.set(errorStorage, null);
+            }
+            // FIXME: change this event to on accounts ready or something similar
+            // Fonera.notify(Fonera.onDownloadsAvailable);
+        };
+        this.callRpcInFonera(rpcCall, callback);
+    },
+
 
     loadEvents : function() {
         Fonera.addEventListener("onCheckFoneraAvailable", Fonera.checkDownloads);

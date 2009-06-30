@@ -63,54 +63,71 @@
   </prefpane>	
   <!-- rs/mu accounts settings -->
   <prefpane id="accounts-prefs" label="&fonera_accounts_prefs;" image="chrome://foneradownloader/skin/dlmanager.png">
-    <!-- this panee is populated automatically -->
-    <preferences>
-      <preference id="foneradownloader-megaupload-username" name="extensions.foneradownloader.megauploadusername" type="string"/>
-      <preference id="foneradownloader-megaupload-password" name="extensions.foneradownloader.megauploadpassword" type="string"/>
+    <!-- 
+	 same as in luci
+	 - accounts list
+	 - widget to add accounts
+	 - label + throbbler for status info
+      -->
 
-      <preference id="foneradownloader-rapidshare-username" name="extensions.foneradownloader.rapidshareusername" type="string"/>
-      <preference id="foneradownloader-rapidshare-password" name="extensions.foneradownloader.rapidsharepassword" type="string"/>
+      <groupbox id="accounts-list">
+	<caption label="Accounts"/>
+        <hbox>
+  	<tree flex="1" rows="1">
+  	  <treecols>
+  	    <treecol id="account-type" label="type" flex="1"/>
+  	    <treecol id="account-uname" label="uname" flex="2"/>
+  	  </treecols>
+  	  <treechildren id="accounts-list-items">
+  	  </treechildren>
+  	</tree>
+        </hbox>
+      </groupbox>
 
-    </preferences>		
-    <groupbox>
-      <caption label="&fonera_dwn_setts;"/>
-      <separator class="groove-thin"/>
-      <grid>
-	<column flex="1"/>
-	<column flex="2"/>
-	<rows>
-	  <row>
-	    <label control="account-name" align="left" value="&account_name;"/>
-	    <menulist oncommand="switchAccount(this.selectedItem);" selectedIndex="1">
-	      <menupopup>
-		<menuitem label="&megaupload;" value="megaupload"/>
-		<menuitem label="&rapidshare;" value="rapidshare"/>
-	      </menupopup>
-	    </menulist>
-	  </row>
-	  <row>
-	    <label control="username" align="left" value="&username;"/>
-	    <textbox id="account-username" align="right" preference="foneradownloader-megaupload-username"/>
-	  </row>
-	  <row>
-	    <label control="password" align="left" value="&password;"/>
-	    <textbox id="account-password" align="right" type="password" preference="foneradownloader-megaupload-password"/>
-	  </row>
-	</rows>
-      </grid>
-    </groupbox>			
+      <groupbox id="accounts-adder">
+	<caption label="Add account"/>
+
+        <grid>
+  	<column flex="1"/>
+  	<column flex="2"/>
+  	<rows>
+  	  <row>
+  	    <label control="account-name" align="left" value="&account_name;"/>
+  	    <menulist id="accounts-list" selectedIndex="1">
+  	      <menupopup>
+  		<menuitem label="&megaupload;" value="megaupload"/>
+  		<menuitem label="&rapidshare;" value="rapidshare"/>
+  	      </menupopup>
+  	    </menulist>
+  	  </row>
+  	  <row>
+  	    <!-- this should be read from fonera on startup -->
+  	    <label control="username" align="left" value="&username;"/>
+  	    <textbox id="account-username" align="right"/>
+  	  </row>
+  	  <row>
+  	    <label control="password" align="left" value="&password;"/>
+  	    <textbox id="account-password" align="right" type="password"/>
+  	  </row>
+  	  <row>
+  	    <button id="submit-account" onclick="document.getElementById('status-messages').hidden='false';" label="Submit Account"/>
+  	    <spacer flex="1"/>
+  	  </row>
+  
+  	</rows>
+        </grid>
+      </groupbox>
+
+      <hbox id="status-messages">
+	<label value="" /> <!-- reading data / adding account / etc messages -->
+	<spacer flex="1" />
+	<image src="chrome://global/skin/icons/loading_16.png"/>
+      </hbox>
+
   </prefpane>	
-  <script type="application/javascript">
-    function switchAccount(accountName) {
-        let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
-              .getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
-        if (accountName != null) {
-            document.getElementById("account-username").preference = "foneradownloader-" + accountName.value + "-username";
-            document.getElementById("account-password").preference = "foneradownloader-" + accountName.value + "-password";
-            // Refresh textboxes    
-            document.getElementById("account-username").value = Preferences.getCharPref(accountName.value + "username");
-            document.getElementById("account-password").value = Preferences.getCharPref(accountName.value + "password");
-        }   
-    }
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/accprefs.js"/>    
+  <script type="application/x-javascript">    
+    // window.addEventListener("load", function(e) { Fonera.checkAccountsSettings(); }, false);
+    window.addEventListener("load", function(e) { FoneraAccountsPrefs.fillAccountsIntoTree(); }, false);
   </script>
 </prefwindow>
