@@ -1,4 +1,11 @@
-- more megaupload/rapidshare integration
+- more megaupload/rapidshare integration:
+  - add accounts
+  - list accounts
+  - detect rs/mu links and dont process them if no accounts are found
 - Download link manager window 
-  - Capture all links
-  - filters
+  - Capture all links:
+    lists every single link, image or embed object contained in a webpage
+  - filters (by names/ types of files)
+- upload local torrents:
+  needs RPC in fonera.
+
