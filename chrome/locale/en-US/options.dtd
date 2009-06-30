@@ -4,4 +4,9 @@
 <!ENTITY fonera_down_prefs "Fonera Downloader Preferences">
 <!ENTITY fonera_dash_setts "Fonera Dashboard Settings">
 <!ENTITY enabled "Addon enabled">
+<!ENTITY fonera_dwn_setts "Fonera Downloads Accounts Settings">
+<!ENTITY fonera_accounts_prefs "Accounts">
+<!ENTITY account_name "Account">
+<!ENTITY megaupload "Megaupload">
+<!ENTITY rapidshare "Rapidshare">
 

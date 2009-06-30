@@ -25,8 +25,9 @@
 <prefwindow 
    title="&fonera_down_prefs;"
    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-  
-  <prefpane label="&fonera_down_prefs;">
+
+  <!-- general preferences -->
+  <prefpane id="fonera-prefs" label="&fonera_down_prefs;" image="chrome://foneradownloader/skin/logofonosfera.png" onclick="showPane(this);">
     <preferences>
       <preference id="foneradownloader-username" name="extensions.foneradownloader.username" type="string"/>
       <preference id="foneradownloader-password" name="extensions.foneradownloader.password" type="string"/>
@@ -60,4 +61,56 @@
       </grid>
     </groupbox>			
   </prefpane>	
+  <!-- rs/mu accounts settings -->
+  <prefpane id="accounts-prefs" label="&fonera_accounts_prefs;" image="chrome://foneradownloader/skin/dlmanager.png">
+    <!-- this panee is populated automatically -->
+    <preferences>
+      <preference id="foneradownloader-megaupload-username" name="extensions.foneradownloader.megauploadusername" type="string"/>
+      <preference id="foneradownloader-megaupload-password" name="extensions.foneradownloader.megauploadpassword" type="string"/>
+
+      <preference id="foneradownloader-rapidshare-username" name="extensions.foneradownloader.rapidshareusername" type="string"/>
+      <preference id="foneradownloader-rapidshare-password" name="extensions.foneradownloader.rapidsharepassword" type="string"/>
+
+    </preferences>		
+    <groupbox>
+      <caption label="&fonera_dwn_setts;"/>
+      <separator class="groove-thin"/>
+      <grid>
+	<column flex="1"/>
+	<column flex="2"/>
+	<rows>
+	  <row>
+	    <label control="account-name" align="left" value="&account_name;"/>
+	    <menulist oncommand="switchAccount(this.selectedItem);" selectedIndex="1">
+	      <menupopup>
+		<menuitem label="&megaupload;" value="megaupload"/>
+		<menuitem label="&rapidshare;" value="rapidshare"/>
+	      </menupopup>
+	    </menulist>
+	  </row>
+	  <row>
+	    <label control="username" align="left" value="&username;"/>
+	    <textbox id="account-username" align="right" preference="foneradownloader-megaupload-username"/>
+	  </row>
+	  <row>
+	    <label control="password" align="left" value="&password;"/>
+	    <textbox id="account-password" align="right" type="password" preference="foneradownloader-megaupload-password"/>
+	  </row>
+	</rows>
+      </grid>
+    </groupbox>			
+  </prefpane>	
+  <script type="application/javascript">
+    function switchAccount(accountName) {
+        let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
+              .getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
+        if (accountName != null) {
+            document.getElementById("account-username").preference = "foneradownloader-" + accountName.value + "-username";
+            document.getElementById("account-password").preference = "foneradownloader-" + accountName.value + "-password";
+            // Refresh textboxes    
+            document.getElementById("account-username").value = Preferences.getCharPref(accountName.value + "username");
+            document.getElementById("account-password").value = Preferences.getCharPref(accountName.value + "password");
+        }   
+    }
+  </script>
 </prefwindow>

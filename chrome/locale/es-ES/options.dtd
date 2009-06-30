@@ -4,4 +4,8 @@
 <!ENTITY fonera_down_prefs "Preferencias">
 <!ENTITY fonera_dash_setts "Ajustes del panel de control de la Fonera">
 <!ENTITY enabled "Complemento habilitado">
-
+<!ENTITY fonera_dwn_setts "Ajustes de las cuentas de descarga">
+<!ENTITY fonera_accounts_prefs "Cuentas">
+<!ENTITY account_name "Cuenta">
+<!ENTITY megaupload "Megaupload">
+<!ENTITY rapidshare "Rapidshare">
