@@ -75,8 +75,8 @@
         <hbox>
   	<tree flex="1" rows="1">
   	  <treecols>
-  	    <treecol id="account-type" label="type" flex="1"/>
-  	    <treecol id="account-uname" label="uname" flex="2"/>
+  	    <treecol id="account-type" label="&account_name;" flex="1"/>
+  	    <treecol id="account-uname" label="&username;" flex="2"/>
   	  </treecols>
   	  <treechildren id="accounts-list-items">
   	  </treechildren>
@@ -110,7 +110,7 @@
   	    <textbox id="account-password" align="right" type="password"/>
   	  </row>
   	  <row>
-  	    <button id="submit-account" onclick="FoneraAccountsPrefs.addAccount();" label="Submit Account"/>
+  	    <button id="submit-account" onclick="FoneraAccountsPrefs.addAccount();" label="&submitAccount;"/>
   	    <spacer flex="1"/>
   	  </row>
   
@@ -119,15 +119,22 @@
       </groupbox>
 
       <hbox id="status-messages">
-	<label value="" /> <!-- reading data / adding account / etc messages -->
+	<label id="status-messages-text" value="" /> <!-- reading data / adding account / etc messages -->
 	<spacer flex="1" />
 	<image id="status-throbbler" src="chrome://global/skin/icons/loading_16.png"/>
       </hbox>
 
   </prefpane>	
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
+  </stringbundleset>
+
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/accprefs.js"/>    
   <script type="application/x-javascript">    
     // window.addEventListener("load", function(e) { Fonera.checkAccountsSettings(); }, false);
     window.addEventListener("load", function(e) { FoneraAccountsPrefs.fillAccountsIntoTree(); }, false);
+    window.addEventListener("load", FoneraAccountsPrefs.loadEvents, false);
+    window.addEventListener("unload", FoneraAccountsPrefs.unloadEvents, false);
   </script>
 </prefwindow>

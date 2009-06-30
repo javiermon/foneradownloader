@@ -64,6 +64,7 @@ let FoneraAccountsPrefs = {
             tree.appendChild(treeItem);
         }
         tree.setAttribute("rows", accounts.length);
+        FoneraAccountsPrefs.stopThrobbler();
     },
 
     startThrobbler : function() {
@@ -74,19 +75,38 @@ let FoneraAccountsPrefs = {
         document.getElementById("status-throbbler").src = "chrome://global/skin/icons/notloading_16.png";
     },
 
+    addAccountCallback : function () {
+        let stringsBundle = document.getElementById("string-bundle");
+        FoneraAccountsPrefs.stopThrobbler();
+        let msglabel = document.getElementById("status-messages-text");
+        let errors = Application.storage.get(Fonera.LASTERROR, "");
+        Application.console.log("lastError: " + errors);
+        if (errors == Fonera.ACCOUNTERROR)
+            msglabel.value = stringsBundle.getString(errors);
+        else
+            msglabel.value = "";
+
+    },
+
     addAccount : function () {
+        this.startThrobbler();
+        let stringsBundle = document.getElementById("string-bundle");
+        let msglabel = document.getElementById("status-messages-text");
+        msglabel.value = stringsBundle.getString("addingAccount");
         let username = document.getElementById("account-username").value;
         let password = document.getElementById("account-password").value;
         let accountsList = document.getElementById("accounts-names");
         let provider = accountsList.getItemAtIndex(accountsList.selectedIndex).value;
-        this.startThrobbler();
         Fonera.addAccount(provider, username, password);
     },
 
     loadEvents : function() {
-        Fonera.addEventListener("onAccountsUpdates", FoneraAccountsPrefs.stopThrobbler);
-    }
+        Fonera.addEventListener("onAccountsUpdates", FoneraAccountsPrefs.addAccountCallback);
+    },
 
+    unloadEvents : function() {
+        Fonera.removeEventListener("onAccountsUpdates", FoneraAccountsPrefs.addAccountCallback);
+    }
 
 };
 

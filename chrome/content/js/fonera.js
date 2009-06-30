@@ -48,12 +48,15 @@ let Fonera = {
     // Events:
     onCheckFoneraAvailable : [],
     onDownloadsAvailable : [],
-    onAccountUpdates : [],
+    onAccountsUpdates : [],
     onSendUrl : [],
 
     // Accounts:
     ACCOUNTS : "ACCOUNTS",
+    ACCOUNTERROR : "account-error",
+    NOACCOUNTERROR : "no-account-for-link",
     EMPTY_ACCOUNTS : [],
+    DOMAINS : "megaupload|rapidshare",
 
     addEventListener : function(event, callback) {
         try {
@@ -357,6 +360,21 @@ let Fonera = {
         let errorStorage = this.LASTERROR;
         let basename = myUrl.replace( /.*\//, "" );
 
+        // check for rapidshare / megaupload links and if there's an account setup:
+
+        let accounts = Application.storage.get(this.ACCOUNTS, []);
+        let domain = myUrl.match(this.DOMAINS);
+        let found = false;
+        if (domain != null) {
+            for (let j in accounts)
+                found = (accounts[j].service.match(domain) == domain);
+            if (!found) {
+                Application.console.log("Found " + domain  + " link and no account associated");
+                Application.storage.set(errorStorage, this.NOACCOUNTERROR + ":" + domain);
+                return;
+            }
+        }
+
         Application.console.log("My URL : " + myUrl + "\n");
         let callback = function(response) {
             if (!response.result.status) {
@@ -548,10 +566,13 @@ let Fonera = {
         };
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
+        let FONERAERROR = this.LASTERROR;
+        let FACCOUNTERROR = this.ACCOUNTERROR;
 
         let callback = function(response) {
             if (response.error != null) {
                 Application.console.log("Response Error");
+                Application.storage.set(FONERAERROR, FACCOUNTERROR);
             }
             Fonera.notify(Fonera.onAccountsUpdates);
         };
@@ -565,13 +586,14 @@ let Fonera = {
         };
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-
+        let FONERAERROR = this.LASTERROR;
         let callback = function(response) {
             if (response.error != null) {
                 Application.console.log("Response Error");
             } else {
                 // first clean, then re-read:
                 Application.storage.set(Fonera.ACCOUNTS, Fonera.EMPTY_ACCOUNTS);
+                Application.storage.set(FONERAERROR, null);
                 let accounts = Application.storage.get(Fonera.ACCOUNTS, []);
                 for (let i in response.result) {
                     let service = response.result[i].domain;
