@@ -73,7 +73,7 @@
       <groupbox id="accounts-list">
 	<caption label="Accounts"/>
         <hbox>
-  	<tree flex="1" rows="1">
+  	<tree flex="1" rows="2">
   	  <treecols>
   	    <treecol id="account-type" label="&account_name;" flex="1"/>
   	    <treecol id="account-uname" label="&username;" flex="2"/>
