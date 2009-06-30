@@ -48,6 +48,7 @@ let Fonera = {
     // Events:
     onCheckFoneraAvailable : [],
     onDownloadsAvailable : [],
+    onAccountUpdates : [],
     onSendUrl : [],
 
     // Accounts:
@@ -539,13 +540,31 @@ let Fonera = {
         return;
     },
 
+    addAccount : function(provider, username,  password) {
+        let rpcCall = {
+            "method" : "downloads_createcookie",
+            "params" : [provider, username, password]
+
+        };
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+
+        let callback = function(response) {
+            if (response.error != null) {
+                Application.console.log("Response Error");
+            }
+            Fonera.notify(Fonera.onAccountsUpdates);
+        };
+        this.callRpcInFonera(rpcCall, callback);
+    },
+
+
     checkAccountsSettings : function() {
         let rpcCall = {
             "method" : "downloads_listcookies"
         };
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        let errorStorage = this.LASTERROR;
 
         let callback = function(response) {
             if (response.error != null) {
@@ -560,10 +579,8 @@ let Fonera = {
                                     "uname" : response.result[i]._user });
                 }
                 Application.storage.set(Fonera.ACCOUNTS, accounts);
-                Application.storage.set(errorStorage, null);
             }
-            // FIXME: change this event to on accounts ready or something similar
-            // Fonera.notify(Fonera.onDownloadsAvailable);
+            Fonera.notify(Fonera.onAccountsUpdates);
         };
         this.callRpcInFonera(rpcCall, callback);
     },

@@ -93,7 +93,7 @@
   	<rows>
   	  <row>
   	    <label control="account-name" align="left" value="&account_name;"/>
-  	    <menulist id="accounts-list" selectedIndex="1">
+  	    <menulist id="accounts-names" selectedIndex="1">
   	      <menupopup>
   		<menuitem label="&megaupload;" value="megaupload"/>
   		<menuitem label="&rapidshare;" value="rapidshare"/>
@@ -110,7 +110,7 @@
   	    <textbox id="account-password" align="right" type="password"/>
   	  </row>
   	  <row>
-  	    <button id="submit-account" onclick="document.getElementById('status-messages').hidden='false';" label="Submit Account"/>
+  	    <button id="submit-account" onclick="FoneraAccountsPrefs.addAccount();" label="Submit Account"/>
   	    <spacer flex="1"/>
   	  </row>
   
@@ -121,7 +121,7 @@
       <hbox id="status-messages">
 	<label value="" /> <!-- reading data / adding account / etc messages -->
 	<spacer flex="1" />
-	<image src="chrome://global/skin/icons/loading_16.png"/>
+	<image id="status-throbbler" src="chrome://global/skin/icons/loading_16.png"/>
       </hbox>
 
   </prefpane>	
