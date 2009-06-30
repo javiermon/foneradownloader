@@ -33,16 +33,6 @@ Components.utils.import("resource://modules/fonera.js");
 
 let FoneraAccountsPrefs = {
 
-    //switchAccount : function (accountName) {
-    //    if (accountName != null) {
-    //        document.getElementById("account-username").preference = "foneradownloader-" + accountName.value + "-username";
-    //        document.getElementById("account-password").preference = "foneradownloader-" + accountName.value + "-password";
-    //        // Refresh textboxes
-    //        document.getElementById("account-username").value = PreferencesBranch.getCharPref(accountName.value + "username");
-    //        document.getElementById("account-password").value = PreferencesBranch.getCharPref(accountName.value + "password");
-    //    }
-    //},
-
     fillAccountsIntoTree : function () {
         let accounts = Application.storage.get(Fonera.ACCOUNTS,[]);
         let tree = document.getElementById("accounts-list-items");
@@ -104,11 +94,22 @@ let FoneraAccountsPrefs = {
         Fonera.addAccount(provider, username, password);
     },
 
+    enableAccountManager : function () {
+        let disabled = !Fonera.isPluginEnabled();
+        document.getElementById("accounts-tree").disabled = disabled;
+        document.getElementById("accounts-names").disabled = disabled;
+        document.getElementById("account-username").disabled = disabled;
+        document.getElementById("account-password").disabled = disabled;
+        document.getElementById("submit-account").disabled = disabled;
+    },
+
     loadEvents : function() {
+        Fonera.addEventListener("onCheckFoneraAvailable", FoneraAccountsPrefs.enableAccountManager);
         Fonera.addEventListener("onAccountsUpdates", FoneraAccountsPrefs.addAccountCallback);
     },
 
     unloadEvents : function() {
+        Fonera.removeEventListener("onCheckFoneraAvailable", FoneraAccountsPrefs.enableAccountManager);
         Fonera.removeEventListener("onAccountsUpdates", FoneraAccountsPrefs.addAccountCallback);
     }
 

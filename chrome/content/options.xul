@@ -73,7 +73,7 @@
       <groupbox id="accounts-list">
 	<caption label="&accounts;"/>
         <hbox>
-  	<tree flex="1" rows="3">
+  	<tree id="accounts-tree" flex="1" rows="3" disabled="true">
   	  <treecols>
   	    <treecol id="account-type" label="&account_name;" flex="1"/>
   	    <treecol id="account-uname" label="&username;" flex="2"/>
@@ -93,7 +93,7 @@
   	<rows>
   	  <row>
   	    <label control="account-name" align="left" value="&account_name;"/>
-  	    <menulist id="accounts-names" selectedIndex="1">
+  	    <menulist id="accounts-names" selectedIndex="1" disabled="true">
   	      <menupopup>
   		<menuitem label="&megaupload;" value="megaupload"/>
   		<menuitem label="&rapidshare;" value="rapidshare"/>
@@ -103,14 +103,14 @@
   	  <row>
   	    <!-- this should be read from fonera on startup -->
   	    <label control="username" align="left" value="&username;"/>
-  	    <textbox id="account-username" align="right"/>
+  	    <textbox id="account-username" align="right" disabled="true"/>
   	  </row>
   	  <row>
   	    <label control="password" align="left" value="&password;"/>
-  	    <textbox id="account-password" align="right" type="password"/>
+  	    <textbox id="account-password" align="right" type="password" disabled="true"/>
   	  </row>
   	  <row>
-  	    <button id="submit-account" onclick="FoneraAccountsPrefs.addAccount();" label="&submitAccount;"/>
+  	    <button id="submit-account" onclick="FoneraAccountsPrefs.addAccount();" label="&submitAccount;" disabled="true"/>
   	    <spacer flex="1"/>
   	  </row>
   
@@ -133,6 +133,7 @@
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/accprefs.js"/>    
   <script type="application/x-javascript">    
     window.addEventListener("load", FoneraAccountsPrefs.fillAccountsIntoTree, false);
+    window.addEventListener("load", FoneraAccountsPrefs.enableAccountManager, false);
     window.addEventListener("load", FoneraAccountsPrefs.loadEvents, false);
     window.addEventListener("unload", FoneraAccountsPrefs.unloadEvents, false);
     window.setInterval(FoneraAccountsPrefs.fillAccountsIntoTree, 5*60*100);
