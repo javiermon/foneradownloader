@@ -574,7 +574,8 @@ let Fonera = {
                 Application.console.log("Response Error");
                 Application.storage.set(FONERAERROR, FACCOUNTERROR);
             }
-            Fonera.notify(Fonera.onAccountsUpdates);
+            // refresh accounts storage
+            Fonera.checkAccountsSettings();
         };
         this.callRpcInFonera(rpcCall, callback);
     },

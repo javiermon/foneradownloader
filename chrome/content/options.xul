@@ -71,9 +71,9 @@
       -->
 
       <groupbox id="accounts-list">
-	<caption label="Accounts"/>
+	<caption label="&accounts;"/>
         <hbox>
-  	<tree flex="1" rows="2">
+  	<tree flex="1" rows="3">
   	  <treecols>
   	    <treecol id="account-type" label="&account_name;" flex="1"/>
   	    <treecol id="account-uname" label="&username;" flex="2"/>
@@ -85,7 +85,7 @@
       </groupbox>
 
       <groupbox id="accounts-adder">
-	<caption label="Add account"/>
+	<caption label="&addAccount;"/>
 
         <grid>
   	<column flex="1"/>
@@ -119,7 +119,7 @@
       </groupbox>
 
       <hbox id="status-messages">
-	<label id="status-messages-text" value="" /> <!-- reading data / adding account / etc messages -->
+	<label id="status-messages-text" value="" /> <!-- adding account messages -->
 	<spacer flex="1" />
 	<image id="status-throbbler" src="chrome://global/skin/icons/loading_16.png"/>
       </hbox>
@@ -132,8 +132,9 @@
 
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/accprefs.js"/>    
   <script type="application/x-javascript">    
-    window.addEventListener("load", function(e) { FoneraAccountsPrefs.fillAccountsIntoTree(); }, false);
+    window.addEventListener("load", FoneraAccountsPrefs.fillAccountsIntoTree, false);
     window.addEventListener("load", FoneraAccountsPrefs.loadEvents, false);
     window.addEventListener("unload", FoneraAccountsPrefs.unloadEvents, false);
+    window.setInterval(FoneraAccountsPrefs.fillAccountsIntoTree, 5*60*100);
   </script>
 </prefwindow>

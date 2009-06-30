@@ -47,6 +47,10 @@ let FoneraAccountsPrefs = {
         let accounts = Application.storage.get(Fonera.ACCOUNTS,[]);
         let tree = document.getElementById("accounts-list-items");
 
+        while (tree.hasChildNodes()) {
+            tree.removeChild(tree.firstChild);
+        }
+
         for (let i in accounts) {
             let treeItem = document.createElement("treeitem");
             let treeCellType = document.createElement("treecell");
@@ -85,7 +89,7 @@ let FoneraAccountsPrefs = {
             msglabel.value = stringsBundle.getString(errors);
         else
             msglabel.value = "";
-
+        FoneraAccountsPrefs.fillAccountsIntoTree();
     },
 
     addAccount : function () {
