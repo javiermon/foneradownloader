@@ -43,8 +43,10 @@ let FoneraAccountsPrefs = {
 
         for (let i in accounts) {
             let treeItem = document.createElement("treeitem");
+
             let treeCellType = document.createElement("treecell");
             let treeCellUname = document.createElement("treecell");
+
             let treeRow = document.createElement("treerow");
 
             Application.console.log(accounts[i].service + " - " + accounts[i].uname);
@@ -57,7 +59,6 @@ let FoneraAccountsPrefs = {
             treeItem.appendChild(treeRow);
             tree.appendChild(treeItem);
         }
-        tree.setAttribute("rows", accounts.length);
         FoneraAccountsPrefs.stopThrobbler();
     },
 
@@ -69,13 +70,13 @@ let FoneraAccountsPrefs = {
         document.getElementById("status-throbbler").src = "chrome://global/skin/icons/notloading_16.png";
     },
 
-    addAccountCallback : function () {
+    actionOnAccountCallback : function () {
         let stringsBundle = document.getElementById("string-bundle");
         FoneraAccountsPrefs.stopThrobbler();
         let msglabel = document.getElementById("status-messages-text");
         let errors = Application.storage.get(Fonera.LASTERROR, "");
         Application.console.log("lastError: " + errors);
-        if (errors == Fonera.ACCOUNTERROR)
+        if ((errors == Fonera.ACCOUNTERROR) || (errors == Fonera.ACCOUNTDELERROR))
             msglabel.value = stringsBundle.getString(errors);
         else
             msglabel.value = "";
@@ -94,6 +95,27 @@ let FoneraAccountsPrefs = {
         Fonera.addAccount(provider, username, password);
     },
 
+    deleteAccount : function () {
+        let tree = document.getElementById("accounts-tree");
+        let index = tree.currentIndex;
+        if (index == -1)
+            return;
+        let selection = tree.view.selection;
+        let cellType = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(0));
+        let cellUname = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(1));
+        // find the id of the username/domain:
+        let accounts = Application.storage.get(Fonera.ACCOUNTS, []);
+        for (let i in accounts) {
+            if ((accounts[i].service == cellType) && (accounts[i].uname == cellUname))
+                Fonera.deleteAccount(accounts[i].id);
+        }
+        this.startThrobbler();
+        let msglabel = document.getElementById("status-messages-text");
+        let stringsBundle = document.getElementById("string-bundle");
+        msglabel.value = stringsBundle.getString("deletingAccount");
+
+    },
+
     enableAccountManager : function () {
         let disabled = !Fonera.isPluginEnabled();
         document.getElementById("accounts-tree").disabled = disabled;
@@ -101,16 +123,17 @@ let FoneraAccountsPrefs = {
         document.getElementById("account-username").disabled = disabled;
         document.getElementById("account-password").disabled = disabled;
         document.getElementById("submit-account").disabled = disabled;
+        document.getElementById("delete-account").disabled = disabled;
     },
 
     loadEvents : function() {
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraAccountsPrefs.enableAccountManager);
-        Fonera.addEventListener("onAccountsUpdates", FoneraAccountsPrefs.addAccountCallback);
+        Fonera.addEventListener("onAccountsUpdates", FoneraAccountsPrefs.actionOnAccountCallback);
     },
 
     unloadEvents : function() {
         Fonera.removeEventListener("onCheckFoneraAvailable", FoneraAccountsPrefs.enableAccountManager);
-        Fonera.removeEventListener("onAccountsUpdates", FoneraAccountsPrefs.addAccountCallback);
+        Fonera.removeEventListener("onAccountsUpdates", FoneraAccountsPrefs.actionOnAccountCallback);
     }
 
 };

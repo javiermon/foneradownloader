@@ -54,6 +54,7 @@ let Fonera = {
     // Accounts:
     ACCOUNTS : "ACCOUNTS",
     ACCOUNTERROR : "account-error",
+    ACCOUNTDELERROR : "account-delete-error",
     NOACCOUNTERROR : "no-account-for-link",
     EMPTY_ACCOUNTS : [],
     DOMAINS : "megaupload|rapidshare",
@@ -265,14 +266,13 @@ let Fonera = {
         };
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        let errorStorage = this.LASTERROR;
 
         let callback = function(response) {
             if (response.error != null) {
                 Application.console.log("Response Error");
             }
             else {
-                Application.storage.set(errorStorage, null);
+                Application.storage.set(Fonera.LASTERROR, null);
             }
             Fonera.notify(Fonera.onDownloadsAvailable);
         };
@@ -286,14 +286,13 @@ let Fonera = {
         };
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        let errorStorage = this.LASTERROR;
 
         let callback = function(response) {
             if (response.error != null) {
                 Application.console.log("Response Error");
             }
             else {
-                Application.storage.set(errorStorage, null);
+                Application.storage.set(Fonera.LASTERROR, null);
             }
             Fonera.notify(Fonera.onDownloadsAvailable);
         };
@@ -305,7 +304,7 @@ let Fonera = {
         // call the nofity at the end, not on every call
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        let errorStorage = this.LASTERROR;
+
         let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
         for (let i in downloads) {
             if (downloads[i].status == "done") {
@@ -319,7 +318,7 @@ let Fonera = {
                     if (response.error != null) {
                         Application.console.log("Response Error");
                     } else {
-                        Application.storage.set(errorStorage, null);
+                        Application.storage.set(Fonera.LASTERROR, null);
                     }
                 };
                 this.callRpcInFonera(rpcCall, callback);
@@ -335,14 +334,13 @@ let Fonera = {
         };
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        let errorStorage = this.LASTERROR;
 
         let callback = function(response) {
             if (response.error != null) {
                 Application.console.log("Response Error");
             }
             else {
-                Application.storage.set(errorStorage, null);
+                Application.storage.set(Fonera.LASTERROR, null);
             }
             Fonera.notify(Fonera.onDownloadsAvailable);
         };
@@ -378,10 +376,10 @@ let Fonera = {
         Application.console.log("My URL : " + myUrl + "\n");
         let callback = function(response) {
             if (!response.result.status) {
-                Application.storage.set(errorStorage, basename);
+                Application.storage.set(Fonera.LASTERROR, basename);
                 Application.console.log("Response Error");
             } else {
-                Application.storage.set(errorStorage, null);
+                Application.storage.set(Fonera.LASTERROR, null);
             }
             Fonera.notify(Fonera.onDownloadsAvailable);
         };
@@ -397,15 +395,14 @@ let Fonera = {
         };
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        let errorStorage = this.LASTERROR;
 
         let callback = function(response) {
             if (response.error != null) {
-                Application.storage.set(errorStorage, basename);
+                Application.storage.set(Fonera.LASTERROR, basename);
                 Application.console.log("Response Error");
             }
             else {
-                Application.storage.set(errorStorage, null);
+                Application.storage.set(Fonera.LASTERROR, null);
             }
             Fonera.notify(Fonera.onDownloadsAvailable);
         };
@@ -419,7 +416,6 @@ let Fonera = {
             .getService(Components.interfaces.fuelIApplication);
 
         // workaround for this/Fonera wierdness in closures
-        let self = this;
 
         let authToken = Application.storage.get(this.AUTHTOKEN, null);
         if (!this.authenticated(authToken)) {
@@ -458,8 +454,6 @@ let Fonera = {
                 } else {
                     Application.console.log("Http Status Error :" + req.status + "\n");
                 }
-                // doesn't work:
-                // self.notify(self.onSendUrl);
             }
         };
         req.send(stream);
@@ -566,13 +560,11 @@ let Fonera = {
         };
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        let FONERAERROR = this.LASTERROR;
-        let FACCOUNTERROR = this.ACCOUNTERROR;
 
         let callback = function(response) {
-            if (response.error != null) {
+            if (response.error != null || !response.result || response.result == false) {
                 Application.console.log("Response Error");
-                Application.storage.set(FONERAERROR, FACCOUNTERROR);
+                Application.storage.set(Fonera.LASTERROR, Fonera.ACCOUNTERROR);
             }
             // refresh accounts storage
             Fonera.checkAccountsSettings();
@@ -580,6 +572,25 @@ let Fonera = {
         this.callRpcInFonera(rpcCall, callback);
     },
 
+    deleteAccount : function(id) {
+        let rpcCall = {
+            "method" : "downloads_removecookie",
+            "params" : [id]
+
+        };
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+
+        let callback = function(response) {
+            if (response.error != null || !response.result || response.result == false) {
+                Application.console.log("Response Error");
+                Application.storage.set(Fonera.LASTERROR, Fonera.ACCOUNTDELERROR);
+            }
+            // refresh accounts storage
+            Fonera.checkAccountsSettings();
+        };
+        this.callRpcInFonera(rpcCall, callback);
+    },
 
     checkAccountsSettings : function() {
         let rpcCall = {
@@ -587,19 +598,20 @@ let Fonera = {
         };
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        let FONERAERROR = this.LASTERROR;
+
         let callback = function(response) {
             if (response.error != null) {
                 Application.console.log("Response Error");
             } else {
                 // first clean, then re-read:
                 Application.storage.set(Fonera.ACCOUNTS, Fonera.EMPTY_ACCOUNTS);
-                Application.storage.set(FONERAERROR, null);
+                Application.storage.set(Fonera.LASTERROR, null);
                 let accounts = Application.storage.get(Fonera.ACCOUNTS, []);
                 for (let i in response.result) {
                     let service = response.result[i].domain;
-                    accounts.push({ "service" : response.result[i].domain,
-                                    "uname" : response.result[i]._user });
+                    accounts.push({ "service" : response.result[i]["domain"],
+                                    "uname" : response.result[i]["_user"],
+                                    "id" : response.result[i][".name"] });
                 }
                 Application.storage.set(Fonera.ACCOUNTS, accounts);
             }

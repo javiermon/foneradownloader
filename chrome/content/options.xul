@@ -72,8 +72,8 @@
 
       <groupbox id="accounts-list">
 	<caption label="&accounts;"/>
-        <hbox>
-  	<tree id="accounts-tree" flex="1" rows="3" disabled="true">
+        <vbox>
+  	<tree id="accounts-tree" flex="1" rows="3" disabled="true" seltype="single">
   	  <treecols>
   	    <treecol id="account-type" label="&account_name;" flex="1"/>
   	    <treecol id="account-uname" label="&username;" flex="2"/>
@@ -81,7 +81,11 @@
   	  <treechildren id="accounts-list-items">
   	  </treechildren>
   	</tree>
-        </hbox>
+	<hbox>
+  	<button id="delete-account" onclick="FoneraAccountsPrefs.deleteAccount();" label="&delete;" disabled="true"/>
+  	<spacer flex="1"/>
+	</hbox>
+        </vbox>
       </groupbox>
 
       <groupbox id="accounts-adder">
