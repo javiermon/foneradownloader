@@ -364,8 +364,15 @@ let Fonera = {
         let domain = myUrl.match(this.DOMAINS);
         let found = false;
         if (domain != null) {
-            for (let j in accounts)
-                found = (accounts[j].service.match(domain) == domain);
+            for (let j in accounts) {
+                let service = accounts[j].service.match(domain);
+                try {
+                    found = (service.toString() == domain.toString());
+                    if (found) break;
+                }
+                catch(e) { /* do nothing */ }
+            }
+
             if (!found) {
                 Application.console.log("Found " + domain  + " link and no account associated");
                 Application.storage.set(errorStorage, this.NOACCOUNTERROR + ":" + domain);
