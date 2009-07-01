@@ -74,12 +74,13 @@ let FoneraAccountsPrefs = {
         let stringsBundle = document.getElementById("string-bundle");
         FoneraAccountsPrefs.stopThrobbler();
         let msglabel = document.getElementById("status-messages-text");
-        let errors = Application.storage.get(Fonera.LASTERROR, "");
+        let errors = Application.storage.get(Fonera.LASTERROR, null);
         Application.console.log("lastError: " + errors);
         if ((errors == Fonera.ACCOUNTERROR) || (errors == Fonera.ACCOUNTDELERROR))
             msglabel.value = stringsBundle.getString(errors);
         else
             msglabel.value = "";
+        Application.storage.set(Fonera.LASTERROR, null);
         FoneraAccountsPrefs.fillAccountsIntoTree();
     },
 

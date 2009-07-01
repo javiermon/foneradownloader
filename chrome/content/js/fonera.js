@@ -563,7 +563,7 @@ let Fonera = {
 
         let callback = function(response) {
             if (response.error != null || !response.result || response.result == false) {
-                Application.console.log("Response Error");
+                Application.console.log("Response Error. Setting " + Fonera.LASTERROR + " to " + Fonera.ACCOUNTERROR);
                 Application.storage.set(Fonera.LASTERROR, Fonera.ACCOUNTERROR);
             }
             // refresh accounts storage
@@ -583,7 +583,7 @@ let Fonera = {
 
         let callback = function(response) {
             if (response.error != null || !response.result || response.result == false) {
-                Application.console.log("Response Error");
+                Application.console.log("Response Error. Setting " + Fonera.LASTERROR + " to " + Fonera.ACCOUNTDELERROR);
                 Application.storage.set(Fonera.LASTERROR, Fonera.ACCOUNTDELERROR);
             }
             // refresh accounts storage
@@ -603,9 +603,9 @@ let Fonera = {
             if (response.error != null) {
                 Application.console.log("Response Error");
             } else {
-                // first clean, then re-read:
+                // dont clean first as we are called from add/delete and
+                // we can have errors pending for reading
                 Application.storage.set(Fonera.ACCOUNTS, Fonera.EMPTY_ACCOUNTS);
-                Application.storage.set(Fonera.LASTERROR, null);
                 let accounts = Application.storage.get(Fonera.ACCOUNTS, []);
                 for (let i in response.result) {
                     let service = response.result[i].domain;
