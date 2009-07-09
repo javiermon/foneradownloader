@@ -176,6 +176,9 @@ let Fonera = {
     },
 
     authenticate: function(reAuth) {
+        /*
+         * Can't call callrpcinfonera, need to create authToken!!!
+         */
         let authToken = Application.storage.get(this.AUTHTOKEN, null);
         if (!reAuth && this.authenticated(authToken)) {
             Application.console.log("already authenticated\n");
@@ -196,7 +199,41 @@ let Fonera = {
                 Fonera.notify(Fonera.onCheckFoneraAvailable);
             }
         };
-        this.callRpcInFonera(rpcCall, callback, url);
+
+        if (!this.isPluginEnabled()) {
+            this.notify(this.onCheckFoneraAvailable);
+            return;
+        }
+
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+        let nJSON = Components.classes["@mozilla.org/dom/json;1"]
+            .createInstance(Components.interfaces.nsIJSON);
+        let req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
+            .createInstance(Components.interfaces.nsIXMLHttpRequest);
+        let stream = nJSON.encode(rpcCall);
+
+        Application.console.log("Send URL : " + url + "\n");
+        Application.console.log("POST : " + stream + "\n");
+
+        // async even if dialog is closed:
+        req.mozBackgroundRequest = true;
+        req.open('POST', url, true); /* asynchronous! */
+        req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
+        req.setRequestHeader('Content-Type', "application/json");
+
+        req.onload = function (aEvt) {
+            if (req.readyState == 4) {
+                Application.console.log("Response :" + req.responseText + "\n");
+    	        if (req.status == 200) {
+                    let response = nJSON.decode(req.responseText);
+                    callback(response);
+                } else {
+                    Application.console.log("Http Status Error :" + req.status + "\n");
+                }
+            }
+        };
+        req.send(stream);
     },
 
     authenticateInTransmission : function () {
@@ -223,6 +260,7 @@ let Fonera = {
                 Application.console.log("Response :" + req.responseText + "\n");
     	        if (req.status == 409) {
                     let session = req.getResponseHeader(Fonera.TRANSSESSION);
+                    Application.console.log(Fonera.TRANSSESSION + " : " +  session);
                     Application.storage.set(Fonera.TRANSSESSION, session);
                 }
             }
