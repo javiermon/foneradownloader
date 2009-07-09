@@ -232,6 +232,7 @@ let Fonera = {
         let req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
             .createInstance(Components.interfaces.nsIXMLHttpRequest);
 
+        Application.console.log("Authenticating to URL : " + url + "\n");
         req.mozBackgroundRequest = true;
         req.open('GET', url, true); /* asynchronous! */
         req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
@@ -350,6 +351,11 @@ let Fonera = {
     },
 
     startDownloadById : function(id) {
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+
+        let downloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
+
         let download  = null; let url = null;
         let rpcCall = null; let callback = null;
         for (let i in downloads) {
@@ -621,12 +627,12 @@ let Fonera = {
                         downloadView["file"] = theDownload.name;
                         // FIXME: get status:
                         // 8 -> seeding | 4 -> downloading | 16 -> paused
-                        downloadView["status"] = theDownload.status;
+                        downloadView["status"] = FoneraFormat.transmissionStateName(theDownload.status);
                         downloadView["type"] = "torrent";
                         downloadView["size"] = theDownload.totalSize;
                         downloadView["id"] = theDownload.id;
-                        let whatsdone = ((theDownload.totalSize - theDownload.leftUntilDone)/res.arguments.torrents[0].totalSize);
-                        downloadView["downloaded"] = whatsdone*100;
+                        let whatsdone = ((theDownload.totalSize - theDownload.leftUntilDone)/theDownload.totalSize);
+                        downloadView["downloaded"] = (whatsdone*100) + "%";
                         downloads.push(downloadView);
                     }
                     let prevDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
