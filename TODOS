@@ -8,4 +8,4 @@
   - filters (by names/ types of files)
 - upload local torrents:
   needs RPC in fonera.
-
+- enable/disable torrent/downloads (partial functionality)
