@@ -68,6 +68,22 @@ let FoneraFormat = {
         }
     },
 
+    transmissionStateName : function(elmt) {
+        // translate state to human
+        // http://www.oreillynet.com/pub/a/mozilla/2000/11/10/localizing.html?page=2
+        let stringsBundle = strBundleService.
+            createBundle("chrome://foneradownloader/locale/foneradownloader.properties");
+
+        // TODO: there are more states, find them
+        if (elmt == 8)
+            return stringsBundle.GetStringFromName('done');
+        else if (elmt == 4)
+            return stringsBundle.GetStringFromName('load');
+        else if (elmt == 16)
+            return stringsBundle.GetStringFromName('paused');
+        return stringsBundle.GetStringFromName('waiting');
+    },
+
     colorPicker : function(item) {
         switch(item) {
         case "suspended":
