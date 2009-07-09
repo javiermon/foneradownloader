@@ -327,7 +327,10 @@ let Fonera = {
                 "arguments": { "ids":[id] }
             };
             callback = function(response) {
-                Fonera.notify(Fonera.onDownloadsAvailable);
+                if (response.result == "success")
+                    Fonera.notify(Fonera.onDownloadsAvailable);
+                else
+                    Application.console.log("Response Error");
             };
             url = this.transmissionUrl();
         } else {
@@ -364,10 +367,13 @@ let Fonera = {
         }
         if (download != null && download.type == "torrent") {
             callback = function(response) {
-                Fonera.notify(Fonera.onDownloadsAvailable);
+                if (response.result == "success")
+                    Fonera.notify(Fonera.onDownloadsAvailable);
+                else
+                    Application.console.log("Response Error");
             };
             rpcCall = {
-                "method":"torrent-stop",
+                "method":"torrent-start",
                 "arguments":{ "ids":[id] }
                 };
             url = this.transmissionUrl();
@@ -412,8 +418,11 @@ let Fonera = {
                         "arguments": { "ids": [id] }
                     };
 
-                    let callback = function(response) {
-                        Fonera.notify(Fonera.onDownloadsAvailable);
+                    callback = function(response) {
+                        if (response.result == "success")
+                            Fonera.notify(Fonera.onDownloadsAvailable);
+                        else
+                            Application.console.log("Response Error");
                     };
                     url = this.transmissionUrl();
                 } else {
@@ -448,7 +457,10 @@ let Fonera = {
         }
         if (download != null && download.type == "torrent") {
             callback = function(response) {
-                Fonera.notify(Fonera.onDownloadsAvailable);
+                if (response.result == "success")
+                    Fonera.notify(Fonera.onDownloadsAvailable);
+                else
+                    Application.console.log("Response Error");
             };
             rpcCall = {
                 "method":"torrent-remove",
@@ -531,20 +543,14 @@ let Fonera = {
         let basename = myUrl.replace( /.*\//, "" ).replace( ".torrent", "" );
         let rpcCall = {
             "method" : "torrent-add",
-            "params" : { "arguments" : { "paused" : "false", "filename" : myUrl} }
+            "params" : { "arguments" : { "paused" : "true", "filename" : myUrl} }
         };
 
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
 
         let callback = function(response) {
-            if (response.result != "success") {
-                Application.storage.set(Fonera.LASTERROR, basename);
-                Application.console.log("Response Error");
-            }
-            else {
-                Application.storage.set(Fonera.LASTERROR, null);
-            }
+            // apparently transmission doesn't respond to this call
             Fonera.notify(Fonera.onDownloadsAvailable);
         };
         let url = this.transmissionUrl();
@@ -587,12 +593,16 @@ let Fonera = {
         req.mozBackgroundRequest = true;
         req.open('POST', url, true); /* asynchronous! */
         req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
-        req.setRequestHeader('Content-Type', "application/json");
+        // req.setRequestHeader('Content-Type', "application/json");
 
         if (this.transmissionUrl() == url) {
             let session = Application.storage.get(Fonera.TRANSSESSION, null);
             if (session != null)
                 req.setRequestHeader(Fonera.TRANSSESSION, session);
+            else {
+                Application.console.log("No " + Fonera.TRANSSESSION + "found!");
+                return;
+            }
         }
 
         req.onload = function (aEvt) {
