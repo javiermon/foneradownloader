@@ -313,6 +313,7 @@ let Fonera = {
         let rpcCall = null; let callback = null;
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
+        id = parseInt(id);
 
         let downloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
         let download  = null; let url = null;
@@ -358,6 +359,7 @@ let Fonera = {
             .getService(Components.interfaces.fuelIApplication);
 
         let downloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
+        id = parseInt(id);
 
         let download  = null; let url = null;
         let rpcCall = null; let callback = null;
@@ -409,7 +411,7 @@ let Fonera = {
         let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
         for (let i in downloads) {
             if (downloads[i].status == "done") {
-                let id = downloads[i].id;
+                let id = parseInt(downloads[i].id);
                 let rpcCall = null; let callback = null; let url = null;
 
                 if (downloads[i].type == "torrent") {
@@ -450,6 +452,7 @@ let Fonera = {
     deleteDownloadById : function(id) {
         let rpcCall = null; let download = null;
         let callback = null; let url = null;
+        id = parseInt(id);
 
         for (let i in downloads) {
             if (downloads[i].id == id)
@@ -642,7 +645,7 @@ let Fonera = {
                         downloadView["size"] = theDownload.totalSize;
                         downloadView["id"] = theDownload.id;
                         let whatsdone = ((theDownload.totalSize - theDownload.leftUntilDone)/theDownload.totalSize);
-                        downloadView["downloaded"] = (whatsdone*100) + "%";
+                        downloadView["downloaded"] = (whatsdone.toFixed(2)*100) + "%";
                         downloads.push(downloadView);
                     }
                     let prevDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
