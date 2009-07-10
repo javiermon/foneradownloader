@@ -645,7 +645,7 @@ let Fonera = {
                         downloadView["size"] = theDownload.totalSize;
                         downloadView["id"] = theDownload.id;
                         let whatsdone = ((theDownload.totalSize - theDownload.leftUntilDone)/theDownload.totalSize);
-                        downloadView["downloaded"] = (whatsdone.toFixed(2)*100) + "%";
+                        downloadView["downloaded"] = (whatsdone*100).toFixed(2) + "%";
                         downloads.push(downloadView);
                     }
                     let prevDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
