@@ -600,7 +600,7 @@ let Fonera = {
             if (session != null)
                 req.setRequestHeader(Fonera.TRANSSESSION, session);
             else {
-                Application.console.log("No " + Fonera.TRANSSESSION + "found!");
+                Application.console.log("No " + Fonera.TRANSSESSION + " found!");
                 return;
             }
         }
