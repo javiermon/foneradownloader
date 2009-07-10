@@ -653,7 +653,7 @@ let Fonera = {
                     downloads = prevDownloads.concat(downloads);
                     Application.storage.set(Fonera.FONERADOWNLOADS, downloads);
                     Application.console.log("Updated downloads storage");
-                    Fonera.notify(Fonera.onDownloadsAvailable);
+                    // Fonera.notify(Fonera.onDownloadsAvailable);
                 }
         };
         let url = this.transmissionUrl();
@@ -704,9 +704,11 @@ let Fonera = {
                     }
                     let prevDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
                     downloads = prevDownloads.concat(downloads);
+                    Application.storage.set(Fonera.FONERADOWNLOADS, downloads);
                     Application.console.log("Updated downloads storage");
-                    Fonera.notify(Fonera.onDownloadsAvailable);
+
                 }
+            Fonera.notify(Fonera.onDownloadsAvailable);
         };
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
@@ -714,8 +716,11 @@ let Fonera = {
     },
 
     checkDownloads : function() {
+        Application.console.log("Cleaning downloads cache");
         Application.storage.set(Fonera.FONERADOWNLOADS, []);
+        Application.console.log("Checking torrents");
         Fonera.checkTorrentsItems();
+        Application.console.log("Checking downloads");
         Fonera.checkDownloadsItems();
     },
 
