@@ -653,7 +653,7 @@ let Fonera = {
                     downloads = prevDownloads.concat(downloads);
                     Application.storage.set(Fonera.FONERADOWNLOADS, downloads);
                     Application.console.log("Updated downloads storage");
-                    // Fonera.notify(Fonera.onDownloadsAvailable);
+                    Fonera.notify(Fonera.onDownloadsAvailable);
                 }
         };
         let url = this.transmissionUrl();
@@ -680,26 +680,13 @@ let Fonera = {
                         try {
                             downloadView["file"] = theDownload.file.replace( /.*\//, "" );
                         } catch (e) {
-                            // error
-                            downloadView["file"] = theDownload.uri;
+                            downloadView["file"] = theDownload.uri.replace( /.*\//, "" );
                         }
-                        try {
-                            //downloadView["status"] = FoneraFormat.stateName(theDownload.status);
-                            downloadView["status"] = theDownload.status;
-                            downloadView["type"] = theDownload.type;
-                            downloadView["size"] = theDownload.size;
-                            downloadView["id"] = theDownload.id;
-
-                            if (theDownload.status == "done")
-                                downloadView["downloaded"] = "100%";
-                            else if (theDownload.percent != null && theDownload.percent != "") {
-                                downloadView["downloaded"] = theDownload.percent;
-                            } else {
-                                downloadView["downloaded"] = "--";
-                            }
-                        } catch (e) {
-                            downloadView["downloaded"] = "0.0%";
-                        }
+                        downloadView["status"] = theDownload.status;
+                        downloadView["type"] = theDownload.type;
+                        downloadView["size"] = theDownload.size;
+                        downloadView["id"] = theDownload.id;
+                        downloadView["downloaded"] = theDownload.percent;
                         downloads.push(downloadView);
                     }
                     let prevDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
@@ -718,10 +705,10 @@ let Fonera = {
     checkDownloads : function() {
         Application.console.log("Cleaning downloads cache");
         Application.storage.set(Fonera.FONERADOWNLOADS, []);
-        Application.console.log("Checking torrents");
-        Fonera.checkTorrentsItems();
         Application.console.log("Checking downloads");
         Fonera.checkDownloadsItems();
+        Application.console.log("Checking torrents");
+        Fonera.checkTorrentsItems();
     },
 
     addAccount : function(provider, username,  password) {
