@@ -313,7 +313,6 @@ let Fonera = {
         let rpcCall = null; let callback = null;
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        id = parseInt(id);
 
         let downloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
         let download  = null; let url = null;
@@ -323,6 +322,7 @@ let Fonera = {
                 download = downloads[i];
         }
         if (download != null && download.type == "torrent") {
+            id = parseInt(id);
             rpcCall = {
                 "method":"torrent-stop",
                 "arguments": { "ids":[id] }
@@ -359,7 +359,6 @@ let Fonera = {
             .getService(Components.interfaces.fuelIApplication);
 
         let downloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
-        id = parseInt(id);
 
         let download  = null; let url = null;
         let rpcCall = null; let callback = null;
@@ -368,6 +367,7 @@ let Fonera = {
                 download = downloads[i];
         }
         if (download != null && download.type == "torrent") {
+            id = parseInt(id);
             callback = function(response) {
                 if (response.result == "success")
                     Fonera.notify(Fonera.onDownloadsAvailable);
@@ -402,7 +402,7 @@ let Fonera = {
         this.callRpcInFonera(rpcCall, callback, url);
     },
 
-    deleteCompletedDownloads : function(id) {
+    deleteCompletedDownloads : function() {
         // we do the same call as in deleteDownloadById, but
         // call the nofity at the end, not on every call
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
@@ -411,10 +411,11 @@ let Fonera = {
         let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
         for (let i in downloads) {
             if (downloads[i].status == "done") {
-                let id = parseInt(downloads[i].id);
-                let rpcCall = null; let callback = null; let url = null;
+                let rpcCall = null; let callback = null;
+                let url = null; let id = downloads[i].id;
 
                 if (downloads[i].type == "torrent") {
+                    id = parseInt(downloads[i].id);
                     rpcCall = {
                         "method" : "torrent-remove",
                         "arguments": { "ids": [id] }
@@ -452,13 +453,13 @@ let Fonera = {
     deleteDownloadById : function(id) {
         let rpcCall = null; let download = null;
         let callback = null; let url = null;
-        id = parseInt(id);
 
         for (let i in downloads) {
             if (downloads[i].id == id)
                 download = downloads[i];
         }
         if (download != null && download.type == "torrent") {
+            id = parseInt(id);
             callback = function(response) {
                 if (response.result == "success")
                     Fonera.notify(Fonera.onDownloadsAvailable);
