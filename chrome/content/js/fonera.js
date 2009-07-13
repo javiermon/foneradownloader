@@ -166,8 +166,6 @@ let Fonera = {
                      */
                     Fonera.authenticate(reAuth);
                     Fonera.authenticateInTransmission();
-                    Fonera.checkDisks();
-                    Fonera.checkAccountsSettings();
 	        } else {
                     Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
                     Application.console.log("Fonera NOT ready\n");
@@ -210,6 +208,10 @@ let Fonera = {
                     if (response.error == null && response.result != null) {
                         Application.console.log(Fonera.AUTHTOKEN + " : " + response.result);
                         Application.storage.set(Fonera.AUTHTOKEN, response.result);
+
+                        Fonera.checkDisks();
+                        Fonera.checkAccountsSettings();
+
                     } else {
                         Application.storage.set(Fonera.AUTHTOKEN, Fonera.authFailed);
                         Application.console.log("Authentication FAILED\n");
