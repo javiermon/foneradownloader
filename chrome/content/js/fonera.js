@@ -663,8 +663,8 @@ let Fonera = {
 
                     Application.storage.set(Fonera.FONERATORRENTS, downloads);
                     Application.console.log("Updated downloads storage");
-                    Fonera.notify(Fonera.onDownloadsAvailable);
                 }
+            Fonera.notify(Fonera.onDownloadsAvailable);
         };
         let url = this.transmissionUrl();
         Fonera.callRpcInFonera(rpcCall, callback, url);
@@ -708,7 +708,8 @@ let Fonera = {
                     Application.console.log("Updated downloads storage");
 
                 }
-            Fonera.notify(Fonera.onDownloadsAvailable);
+            // we do the callback on the torrents response
+            // Fonera.notify(Fonera.onDownloadsAvailable);
         };
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
