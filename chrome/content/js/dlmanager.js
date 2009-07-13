@@ -162,6 +162,9 @@ let FoneraDLManager = {
         // Example: http://www.nexgenmedia.net/mozilla/richlistbox/richlistbox-simple.xul
         let stringsBundle = document.getElementById("string-bundle");
         let foneraDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(Fonera.FONERATORRENTS, []);
+        foneraDownloads = foneraDownloads.concat(torrents);
+
         if (foneraDownloads != null && foneraDownloads.length != 0) {
             // populate
             for (let i in foneraDownloads) {

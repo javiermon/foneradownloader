@@ -98,6 +98,9 @@ let FoneraStatus = {
         panel.src = "chrome://global/skin/icons/information-16.png";
         let foneraStatus = document.getElementById("foneraDownloader-sbpanel");
         let foneradownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(Fonera.FONERATORRENTS, []);
+        foneradownloads = foneradownloads.concat(torrents);
+        
         let totaldownloads = foneradownloads.length;
         if (totaldownloads == 0)
             foneraStatus.tooltipText = stringsBundle.getString('noFilesFound');

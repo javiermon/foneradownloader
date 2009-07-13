@@ -47,7 +47,9 @@ let Fonera = {
     DISKS : "disks",
     noDisk : "NODISK", // no disk attached
 
+    // storage:
     FONERADOWNLOADS : "foneradownloads",
+    FONERATORRENTS : "foneratorrents",
     // Errors while sending urls:
     LASTERROR : "foneralasterror",
     // Events:
@@ -132,6 +134,7 @@ let Fonera = {
             Application.console.log("Disable session storage");
             Application.storage.set(this.AUTHTOKEN, null);
             Application.storage.set(this.FONERADOWNLOADS, []);
+            Application.storage.set(this.FONERATORRENTS, []);
             Application.storage.set(this.DISKS, null);
             Application.storage.set(this.TRANSSESSION, null);
             this.notify(this.onCheckFoneraAvailable);
@@ -315,6 +318,9 @@ let Fonera = {
             .getService(Components.interfaces.fuelIApplication);
 
         let downloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(Fonera.FONERATORRENTS, []);
+        downloads = downloads.concat(torrents);
+
         let download  = null; let url = null;
 
         for (let i in downloads) {
@@ -359,6 +365,8 @@ let Fonera = {
             .getService(Components.interfaces.fuelIApplication);
 
         let downloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(Fonera.FONERATORRENTS, []);
+        downloads = downloads.concat(torrents);
 
         let download  = null; let url = null;
         let rpcCall = null; let callback = null;
@@ -409,6 +417,9 @@ let Fonera = {
             .getService(Components.interfaces.fuelIApplication);
 
         let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(this.FONERATORRENTS, []);
+        downloads = downloads.concat(torrents);
+
         for (let i in downloads) {
             if (downloads[i].status == "done") {
                 let rpcCall = null; let callback = null;
@@ -649,9 +660,8 @@ let Fonera = {
                         downloadView["downloaded"] = (whatsdone*100).toFixed(2) + "%";
                         downloads.push(downloadView);
                     }
-                    let prevDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
-                    downloads = prevDownloads.concat(downloads);
-                    Application.storage.set(Fonera.FONERADOWNLOADS, downloads);
+
+                    Application.storage.set(Fonera.FONERATORRENTS, downloads);
                     Application.console.log("Updated downloads storage");
                     Fonera.notify(Fonera.onDownloadsAvailable);
                 }
@@ -686,11 +696,14 @@ let Fonera = {
                         downloadView["type"] = theDownload.type;
                         downloadView["size"] = theDownload.size;
                         downloadView["id"] = theDownload.id;
-                        downloadView["downloaded"] = theDownload.percent;
+                        // workaround for luci rpc bug
+                        if (theDownload.status == "done")
+                            downloadView["downloaded"] = "100%";
+                        else
+                            downloadView["downloaded"] = theDownload.percent;
                         downloads.push(downloadView);
                     }
-                    let prevDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
-                    downloads = prevDownloads.concat(downloads);
+
                     Application.storage.set(Fonera.FONERADOWNLOADS, downloads);
                     Application.console.log("Updated downloads storage");
 
@@ -705,6 +718,7 @@ let Fonera = {
     checkDownloads : function() {
         Application.console.log("Cleaning downloads cache");
         Application.storage.set(Fonera.FONERADOWNLOADS, []);
+        Application.storage.set(Fonera.FONERATORRENTS, []);
         Application.console.log("Checking downloads");
         Fonera.checkDownloadsItems();
         Application.console.log("Checking torrents");
