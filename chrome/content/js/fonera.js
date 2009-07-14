@@ -467,6 +467,10 @@ let Fonera = {
         let rpcCall = null; let download = null;
         let callback = null; let url = null;
 
+        let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(this.FONERATORRENTS, []);
+        downloads = downloads.concat(torrents);
+
         for (let i in downloads) {
             if (downloads[i].id == id)
                 download = downloads[i];
@@ -667,7 +671,7 @@ let Fonera = {
                     Application.console.log("Updated downloads storage");
                 }
             // we do the callback on the other rpc response
-            // Fonera.notify(Fonera.onDownloadsAvailable);
+            //Fonera.notify(Fonera.onDownloadsAvailable);
         };
         let url = this.transmissionUrl();
         Fonera.callRpcInFonera(rpcCall, callback, url);
