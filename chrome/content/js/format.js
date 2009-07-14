@@ -77,6 +77,8 @@ let FoneraFormat = {
             return 'load';
         else if (elmt == 16)
             return 'paused';
+        else if (elmt == 2)
+            return 'hashing'; // == verifying
         return 'waiting';
     },
 

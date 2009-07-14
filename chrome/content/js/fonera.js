@@ -564,7 +564,7 @@ let Fonera = {
         let basename = myUrl.replace( /.*\//, "" ).replace( ".torrent", "" );
         let rpcCall = {
             "method" : "torrent-add",
-            "arguments" : { "paused" : "true", "filename" : myUrl}
+            "arguments" : {"filename" : myUrl}
         };
 
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
