@@ -85,15 +85,19 @@ let FoneraAccountsPrefs = {
     },
 
     addAccount : function () {
-        this.startThrobbler();
-        let stringsBundle = document.getElementById("string-bundle");
-        let msglabel = document.getElementById("status-messages-text");
-        msglabel.value = stringsBundle.getString("addingAccount");
         let username = document.getElementById("account-username").value;
         let password = document.getElementById("account-password").value;
-        let accountsList = document.getElementById("accounts-names");
-        let provider = accountsList.getItemAtIndex(accountsList.selectedIndex).value;
-        Fonera.addAccount(provider, username, password);
+        // empty labels seem to appear with "" as the default text
+        if ((username != "") && (password != "")) {
+            this.startThrobbler();
+            let stringsBundle = document.getElementById("string-bundle");
+            let msglabel = document.getElementById("status-messages-text");
+            msglabel.value = stringsBundle.getString("addingAccount");
+
+            let accountsList = document.getElementById("accounts-names");
+            let provider = accountsList.getItemAtIndex(accountsList.selectedIndex).value;
+            Fonera.addAccount(provider, username, password);
+        }
     },
 
     deleteAccount : function () {
