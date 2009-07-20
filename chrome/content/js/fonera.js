@@ -662,8 +662,11 @@ let Fonera = {
                         downloadView["type"] = "torrent";
                         downloadView["size"] = theDownload.totalSize;
                         downloadView["id"] = theDownload.id;
-                        let whatsdone = ((theDownload.totalSize - theDownload.leftUntilDone)/theDownload.totalSize);
-                        downloadView["downloaded"] = (whatsdone*100).toFixed(2) + "%";
+                        let whatsdone = ((theDownload.totalSize - theDownload.leftUntilDone)/theDownload.totalSize).toFixed(2);
+                        // workaround no need for a 100.00 in the UI.
+                        if (whatsdone.toString() == "100.00")
+                            whatsdone = 100;
+                        downloadView["downloaded"] = whatsdone + "%";
                         downloads.push(downloadView);
                     }
 
