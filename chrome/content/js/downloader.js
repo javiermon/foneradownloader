@@ -122,7 +122,7 @@ let FoneraDownloader = {
                     Application.storage.set(FoneraDownloader.TRANSSESSION, session);
                 }
             }
-            // Fonera.notify(Fonera.onCheckFoneraAvailable);
+            // FoneraDownloader.notify(Fonera.onCheckFoneraAvailable);
         };
         req.send(null);
     },
