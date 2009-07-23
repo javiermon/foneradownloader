@@ -30,6 +30,7 @@ let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
     .getService(Components.interfaces.nsIPrefService);
 
 Components.utils.import("resource://modules/fonera.js");
+Components.utils.import("resource://modules/downloader.js");
 
 // STATUSBAR
 let FoneraStatus = {
@@ -41,12 +42,12 @@ let FoneraStatus = {
             Application.console.log("Last error found " + errors);
         let panel = document.getElementById('foneraDownloader-sbpanel-errors');
 
-        if (errors != null && errors.match(Fonera.NOACCOUNTERROR)) {
+        if (errors != null && errors.match(FoneraDownloader.NOACCOUNTERROR)) {
             panel.src = "chrome://global/skin/icons/warning-16.png";
             let error = errors.split(":")[0];
             let domain = errors.split(":")[1];
             panel.tooltipText = stringsBundle.getString(error) + ": " + domain;
-        } else if (errors != null && errors != Fonera.ACCOUNTERROR) {
+        } else if (errors != null && errors != FoneraDownloader.ACCOUNTERROR) {
             panel.src = "chrome://global/skin/icons/warning-16.png";
             panel.tooltipText = errors + " : "  + stringsBundle.getString('downloadFailed');
         } else {
@@ -97,10 +98,10 @@ let FoneraStatus = {
 
         panel.src = "chrome://global/skin/icons/information-16.png";
         let foneraStatus = document.getElementById("foneraDownloader-sbpanel");
-        let foneradownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
-        let torrents = Application.storage.get(Fonera.FONERATORRENTS, []);
+        let foneradownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         foneradownloads = foneradownloads.concat(torrents);
-        
+
         let totaldownloads = foneradownloads.length;
         if (totaldownloads == 0)
             foneraStatus.tooltipText = stringsBundle.getString('noFilesFound');
@@ -114,12 +115,12 @@ let FoneraStatus = {
     },
 
     loadEvents : function() {
-        Fonera.addEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
+        FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip);
     },
 
     unloadEvents : function() {
-        Fonera.removeEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
+        FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
         Fonera.removeEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip);
     }
 

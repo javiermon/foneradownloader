@@ -27,6 +27,7 @@ let Application = Components.classes["@mozilla.org/fuel/application;1"]
     .getService(Components.interfaces.fuelIApplication);
 
 Components.utils.import("resource://modules/fonera.js");
+Components.utils.import("resource://modules/downloader.js");
 Components.utils.import("resource://modules/format.js");
 
 // The Download Manager Window
@@ -161,8 +162,8 @@ let FoneraDLManager = {
         // FIXME: move styling to css
         // Example: http://www.nexgenmedia.net/mozilla/richlistbox/richlistbox-simple.xul
         let stringsBundle = document.getElementById("string-bundle");
-        let foneraDownloads = Application.storage.get(Fonera.FONERADOWNLOADS, []);
-        let torrents = Application.storage.get(Fonera.FONERATORRENTS, []);
+        let foneraDownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         foneraDownloads = foneraDownloads.concat(torrents);
 
         if (foneraDownloads != null && foneraDownloads.length != 0) {
@@ -187,19 +188,19 @@ let FoneraDLManager = {
         switch(action) {
         case "pause":
             FoneraDLManager.startThrobbler();
-            Fonera.pauseDownloadById(id);
+            FoneraDownloader.pauseDownloadById(id);
             // Force UI update:
             FoneraDLManager.refreshAction();
             break;
         case "delete":
             FoneraDLManager.startThrobbler();
-            Fonera.deleteDownloadById(id);
+            FoneraDownloader.deleteDownloadById(id);
             // Force UI update:
             FoneraDLManager.refreshAction();
             break;
         case "start":
             FoneraDLManager.startThrobbler();
-            Fonera.startDownloadById(id);
+            FoneraDownloader.startDownloadById(id);
             // Force UI update:
             FoneraDLManager.refreshAction();
             break;
@@ -239,7 +240,7 @@ let FoneraDLManager = {
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken)) {
             Fonera.checkDisks();
-            Fonera.checkDownloads();
+            FoneraDownloader.checkDownloads();
             // the throbbler should be updates async
         } else {
             FoneraDLManager.stopThrobbler();
@@ -262,7 +263,7 @@ let FoneraDLManager = {
 
     clearCompleted : function() {
         FoneraDLManager.startThrobbler();
-        Fonera.deleteCompletedDownloads();
+        FoneraDownloader.deleteCompletedDownloads();
         // Force UI update:
         FoneraDLManager.refreshAction();
     },
@@ -304,10 +305,10 @@ let FoneraDLManager = {
     },
 
     loadEvents : function() {
-        Fonera.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
+        FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
     },
 
     unloadEvents : function() {
-        Fonera.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
+        FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
     }
 };

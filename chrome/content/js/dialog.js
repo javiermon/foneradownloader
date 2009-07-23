@@ -24,6 +24,7 @@ let Application = Components.classes["@mozilla.org/fuel/application;1"]
     .getService(Components.interfaces.fuelIApplication);
 
 Components.utils.import("resource://modules/fonera.js");
+Components.utils.import("resource://modules/downloader.js");
 
 
 //let torrentDownloadObserver = {
@@ -49,9 +50,9 @@ let FoneraDialog = {
             let mimeInfo = dialog.mLauncher.MIMEInfo;
 
             if (mimeInfo.MIMEType == "application/x-bittorrent")
-                Fonera.sendTorrentUrlToFonera(url);
+                FoneraDownloader.sendTorrentUrlToFonera(url);
             else
-                Fonera.sendDownloadUrlToFonera(url);
+                FoneraDownloader.sendDownloadUrlToFonera(url);
             //Fonera.sendTorrentUrlToFonera(url);
             return true;
                 //// Download to tmp file and then send to fonera:

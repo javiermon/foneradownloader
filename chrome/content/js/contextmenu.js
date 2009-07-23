@@ -29,6 +29,7 @@ let Application = Components.classes["@mozilla.org/fuel/application;1"]
     .getService(Components.interfaces.fuelIApplication);
 
 Components.utils.import("resource://modules/fonera.js");
+Components.utils.import("resource://modules/downloader.js");
 
 let FoneraCxtxtMenu = {
 
@@ -90,15 +91,15 @@ let FoneraCxtxtMenu = {
             if (FoneraCxtxtMenu.parsedUrls.length != 0) {
                 for (let i in FoneraCxtxtMenu.parsedUrls) {
                     let url = FoneraCxtxtMenu.parsedUrls[i];
-                    Fonera.sendDownloadUrlToFonera(url);
+                    FoneraDownloader.sendDownloadUrlToFonera(url);
                 }
             } else {
                 // http://www.sitepoint.com/blogs/2007/08/10/dealing-with-unqualified-href-values/
                 let href = document.popupNode.href;
                 if (href.replace( /.*\//, "" ).lastIndexOf(".torrent") != -1)
-                    Fonera.sendTorrentUrlToFonera(href);
+                    FoneraDownloader.sendTorrentUrlToFonera(href);
                 else
-                    Fonera.sendDownloadUrlToFonera(href);
+                    FoneraDownloader.sendDownloadUrlToFonera(href);
             }
         } catch (e) {
             Application.console.log("send link failed :" + e);

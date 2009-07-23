@@ -64,12 +64,12 @@ var myListener = new PrefListener("extensions.foneradownloader.",
                              Fonera.checkFoneraAvailable(true);
                              break;
 
-                         case "rapidshareusername":
-                         case "rapidsharepassword":
-                         case "megauploadusername":
-                         case "megauploadpassword":
-                             Application.console.log("TODO: changes in accounts!");
-                             break;
+                         //case "rapidshareusername":
+                         //case "rapidsharepassword":
+                         //case "megauploadusername":
+                         //case "megauploadpassword":
+                         //    Application.console.log("TODO: changes in accounts!");
+                         //    break;
                          default:
                              break;
 		     }

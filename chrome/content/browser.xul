@@ -23,6 +23,7 @@
 <overlay id="foneraDownloader-status" 
          xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/fonera.js"/>    
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/downloader.js"/>    
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/status.js"/>
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dlmanager.js"/>    
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/preferences.js"/>    
@@ -34,7 +35,7 @@
 
   <script type="application/x-javascript">
     FoneraStatus.loadEvents();
-    Fonera.loadEvents();
+    FoneraDownloader.loadEvents();
 
     window.addEventListener("load", function(e) { Fonera.checkFoneraAvailable(); }, false);
     window.addEventListener("load", function(e) { FoneraCxtxtMenu.init(); }, false);
@@ -44,7 +45,7 @@
     // ugly workaround:
     window.setInterval(FoneraStatus.printErrors, 60*100);
 
-    window.setInterval(function() { Fonera.checkFoneraAvailable(); Fonera.checkDownloads(); }, 10*60*100); // 10*60*100
+    window.setInterval(function() { Fonera.checkFoneraAvailable(); FoneraDownloader.checkDownloads(); }, 10*60*100); // 10*60*100
     // we want to re-authenticate so sessions don't expire
     window.setInterval(function() { Fonera.checkFoneraAvailable(true); }, 1000*60*100);
   </script>
