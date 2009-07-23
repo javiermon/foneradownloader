@@ -123,7 +123,8 @@ let FoneraAccountsPrefs = {
     },
 
     enableAccountManager : function () {
-        let disabled = !Fonera.isPluginEnabled();
+        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        let disabled = !Fonera.authenticated(authToken);
         document.getElementById("accounts-tree").disabled = disabled;
         document.getElementById("accounts-names").disabled = disabled;
         document.getElementById("account-username").disabled = disabled;
