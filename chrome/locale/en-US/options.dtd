@@ -1,10 +1,10 @@
 <!ENTITY username "User Name">
 <!ENTITY password "Password">
 <!ENTITY fonera_ip "Fonera Address">
-<!ENTITY fonera_down_prefs "Fonera Downloader Preferences">
+<!ENTITY fonera_down_prefs "Preferences">
 <!ENTITY fonera_dash_setts "Fonera Dashboard Settings">
 <!ENTITY enabled "Addon enabled">
-<!ENTITY fonera_dwn_setts "Fonera Downloads Accounts Settings">
+<!ENTITY fonera_dwn_setts "Accounts Settings">
 <!ENTITY fonera_accounts_prefs "Accounts">
 <!ENTITY account_name "Account">
 <!ENTITY megaupload "Megaupload">
