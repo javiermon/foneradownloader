@@ -61,6 +61,7 @@ var myListener = new PrefListener("extensions.foneradownloader.",
                          case "password":
                          case "foneraip":
                          case "enabled":
+                         case "onwan":
                              Fonera.checkFoneraAvailable(true);
                              break;
 

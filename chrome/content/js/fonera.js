@@ -93,7 +93,13 @@ let Fonera = {
 
     // url for reaching the fonera.
     foneraURL : function () {
-        return "http://" + this.getUserPref("foneraip") + "/luci";
+        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        let onwan = prefs.getBoolPref("onwan");
+        if (!onwan)
+            return "http://" + this.getUserPref("foneraip") + "/luci";
+        else
+            return "http://" + this.getUserPref("username") + ":" + this.getUserPref("password") + "@"
+                + this.getUserPref("foneraip") + "/luci";
     },
 
     authenticated : function(authToken) {
