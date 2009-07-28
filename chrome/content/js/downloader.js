@@ -324,15 +324,10 @@ let FoneraDownloader = {
         this.callRpc(rpcCall, callback, url);
     },
 
-
-    sendDownloadUrlToFonera : function(myUrl) {
-        let rpcCall = {
-            "method" : "downloads_add",
-            "params" : [myUrl]
-        };
+    urlHandlerParser : function(myUrl) {
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
-        let errorStorage = this.LASTERROR;
+        let errorStorage = Fonera.LASTERROR;
         let basename = myUrl.replace( /.*\//, "" );
 
         // check for rapidshare / megaupload links and if there's an account setup:
@@ -353,9 +348,27 @@ let FoneraDownloader = {
             if (!found) {
                 Application.console.log("Found " + domain  + " link and no account associated");
                 Application.storage.set(errorStorage, this.NOACCOUNTERROR + ":" + domain);
-                return;
+                return null;
             }
         }
+        return myUrl;
+    },
+
+    sendDownloadUrlToFonera : function(myUrl) {
+        let rpcCall = {
+            "method" : "downloads_add",
+            "params" : [myUrl]
+        };
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+        let errorStorage = Fonera.LASTERROR;
+        let basename = myUrl.replace( /.*\//, "" );
+
+        // let the url handler parser check if we can download
+        // and/or prepare the download link
+        myUrl = this.urlHandlerParser(myUrl);
+        if (myUrl == null)
+            return;
 
         Application.console.log("My URL : " + myUrl + "\n");
         let callback = function(response) {
