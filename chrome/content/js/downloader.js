@@ -86,9 +86,11 @@ let FoneraDownloader = {
     },
 
     transmissionUrl : function () {
+        let ip = Fonera.getUserPref("foneraip").split(":")[0];
+
         let transCredentials = Fonera.getUserPref("username")
             + ":" + Fonera.getUserPref("password") + "@";
-        let url = "http://" + transCredentials + Fonera.getUserPref("foneraip")
+        let url = "http://" + transCredentials + ip
             + ":9091/transmission/rpc";
         return url;
     },
