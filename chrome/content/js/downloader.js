@@ -473,7 +473,8 @@ let FoneraDownloader = {
             return;
         }
         let rpcCall = { "method":"torrent-get",
-                        "arguments": { "fields": ["id", "name" ,"status","totalSize", "leftUntilDone","rateDownload","rateUpload" ] }
+                        "arguments": { "fields": ["id", "name" ,"status","totalSize", "leftUntilDone",
+                                                  "rateDownload","rateUpload","peersConnected","peersGettingFromUs","peersSendingToUs"] }
                       };
 
         let callback = function (response) {
@@ -496,7 +497,11 @@ let FoneraDownloader = {
                         if (whatsdone.toString() == "100.00")
                             whatsdone = 100;
                         downloadView["downloaded"] = whatsdone + "%";
-                        downloadView["moreinfo"] = "DL: " + theDownload.rateDownload + "b/s " + "UL: " + theDownload.rateUpload + "b/s";
+                        // TODO: translate:
+                        downloadView["moreinfo"] = { "rate" : "DL: " + theDownload.rateDownload + "b/s " + "UL: " + theDownload.rateUpload + "b/s",
+                                                     "peers" : "Peers - " + "DL: " + theDownload.peersGettingFromUs +
+                                                     " UL: " + theDownload.peersSendingToUs + " (Connected: " + theDownload.peersConnected + ")"
+                                                   };
                         downloads.push(downloadView);
                     }
 

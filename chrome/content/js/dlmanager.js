@@ -60,16 +60,19 @@ let FoneraDLManager = {
         image.setAttribute("src",icon);
 
         let dlName = downloadItem.file;
-        let dlMore = downloadItem.moreinfo;
+
         // TOOLTIP
         let tooltip = document.createElement("tooltip");
         let tooltipName = document.createElement("description");
         tooltipName.setAttribute("value", dlName);
         tooltip.appendChild(tooltipName);
 
-        let tooltipMore = document.createElement("description");
-        tooltipMore.setAttribute("value", dlMore);
-        tooltip.appendChild(tooltipMore);
+        let dlMore = downloadItem.moreinfo;
+        for (let x in dlMore) {
+            let tooltipMore = document.createElement("description");
+            tooltipMore.setAttribute("value", dlMore[x]);
+            tooltip.appendChild(tooltipMore);
+        }
 
         let tooltipId = dlName + "id";
         tooltip.setAttribute("id", tooltipId);
