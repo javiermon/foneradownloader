@@ -41,6 +41,13 @@ let FoneraDLManager = {
          * | image | ------------------| space  |             |
          * |       | type    | status  |        | play/cancel |
          *  --------------------------------------------------
+         * tooltip:
+         *  --------------------
+         * |       | name      |
+         * | image | --------- |
+         * |       | more data |
+         *  --------------------
+         *
          *
          */
         // IMAGE
@@ -48,11 +55,28 @@ let FoneraDLManager = {
         let image = document.createElement("image");
         let extension = downloadItem.file.substring(downloadItem.file.lastIndexOf("."),
                                                           downloadItem.file.length);
-        if (extension != "")
-            image.setAttribute("src","moz-icon://" + extension + "?size=32");
-        else
-            image.setAttribute("src","moz-icon://.file?size=32");
+
+        let icon = (extension != "") ? "moz-icon://" + extension + "?size=32" : "moz-icon://.file?size=32";
+        image.setAttribute("src",icon);
+
+        let dlName = downloadItem.file;
+        let dlMore = downloadItem.moreinfo;
+        // TOOLTIP
+        let tooltip = document.createElement("tooltip");
+        let tooltipName = document.createElement("description");
+        tooltipName.setAttribute("value", dlName);
+        tooltip.appendChild(tooltipName);
+
+        let tooltipMore = document.createElement("description");
+        tooltipMore.setAttribute("value", dlMore);
+        tooltip.appendChild(tooltipMore);
+
+        let tooltipId = dlName + "id";
+        tooltip.setAttribute("id", tooltipId);
         vboxImage.insertBefore(image,vboxImage.firstChild);
+
+        image.setAttribute("tooltip", tooltipId);
+        vboxImage.insertBefore(tooltip,vboxImage.firstChild);
 
         // DATA
         let vboxData = document.createElement("vbox");
@@ -61,7 +85,7 @@ let FoneraDLManager = {
         let hboxName = document.createElement("hbox");
         hboxName.setAttribute("flex", "1");
         let description = document.createElement("description");
-        let dlName = downloadItem.file;
+
         description.appendChild(document.createTextNode(dlName));
         description.setAttribute("style", "font-style: bold; font-size: 1.2em; text-align: center;");
         hboxName.insertBefore(description, hboxName.firstChild);

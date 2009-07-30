@@ -473,7 +473,7 @@ let FoneraDownloader = {
             return;
         }
         let rpcCall = { "method":"torrent-get",
-                          "arguments": { "fields": ["id", "name" ,"status","totalSize", "leftUntilDone" ] }
+                        "arguments": { "fields": ["id", "name" ,"status","totalSize", "leftUntilDone","rateDownload","rateUpload" ] }
                       };
 
         let callback = function (response) {
@@ -496,6 +496,7 @@ let FoneraDownloader = {
                         if (whatsdone.toString() == "100.00")
                             whatsdone = 100;
                         downloadView["downloaded"] = whatsdone + "%";
+                        downloadView["moreinfo"] = "DL: " + theDownload.rateDownload + "b/s " + "UL: " + theDownload.rateUpload + "b/s";
                         downloads.push(downloadView);
                     }
 
@@ -540,6 +541,7 @@ let FoneraDownloader = {
                             downloadView["downloaded"] = "100%";
                         else
                             downloadView["downloaded"] = theDownload.percent;
+                        downloadView["moreinfo"] = null;
                         downloads.push(downloadView);
                     }
 
