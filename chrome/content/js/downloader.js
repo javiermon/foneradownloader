@@ -499,8 +499,8 @@ let FoneraDownloader = {
                         downloadView["downloaded"] = whatsdone + "%";
                         // TODO: translate:
                         downloadView["moreinfo"] = { "rate" : "DL: " + theDownload.rateDownload + "b/s " + "UL: " + theDownload.rateUpload + "b/s",
-                                                     "peers" : "Peers - " + "DL: " + theDownload.peersGettingFromUs +
-                                                     " UL: " + theDownload.peersSendingToUs + " (Connected: " + theDownload.peersConnected + ")"
+                                                     "peers" : "Peers - " + "DL: " + theDownload.peersSendingToUs +
+                                                     " UL: " + theDownload.peersGettingFromUs + " (Connected: " + theDownload.peersConnected + ")"
                                                    };
                         downloads.push(downloadView);
                     }
