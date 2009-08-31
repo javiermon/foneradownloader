@@ -100,9 +100,8 @@ let FoneraStatus = {
         let foneraStatus = document.getElementById("foneraDownloader-sbpanel");
         let foneradownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
         let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
-        foneradownloads = foneradownloads.concat(torrents);
 
-        let totaldownloads = foneradownloads.length;
+        let totaldownloads = foneradownloads.length + torrents.length;
         if (totaldownloads == 0)
             foneraStatus.tooltipText = stringsBundle.getString('noFilesFound');
         else
