@@ -96,7 +96,7 @@ let FoneraStatus = {
             return;
         }
 
-        panel.src = "chrome://global/skin/icons/information-16.png";
+        panel.src = "chrome://foneradownloader/skin/information.png";
         let foneraStatus = document.getElementById("foneraDownloader-sbpanel");
         let foneradownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
         let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
