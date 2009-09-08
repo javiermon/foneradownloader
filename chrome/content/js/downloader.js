@@ -454,12 +454,20 @@ let FoneraDownloader = {
             }
         }
 
+	var thisself = this;
         req.onload = function (aEvt) {
             if (req.readyState == 4) {
                 Application.console.log("Response :" + req.responseText + "\n");
     	        if (req.status == 200) {
                     let response = nJSON.decode(req.responseText);
                     callback(response);
+                } else if (req.status == 409) {
+                    Application.console.log("Transmission session expired! Reauthenticating...");
+                    let session = req.getResponseHeader(FoneraDownloader.TRANSSESSION);
+                    Application.console.log(FoneraDownloader.TRANSSESSION + " : " +  session);
+                    Application.storage.set(FoneraDownloader.TRANSSESSION, session);
+                    Application.console.log("Restarting call...");
+                    thisself.callRpc(rpcCall, callback, url);
                 } else {
                     Application.console.log("Http Status Error :" + req.status + "\n");
                 }
