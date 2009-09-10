@@ -487,6 +487,7 @@ let FoneraDownloader = {
 
         let callback = function (response) {
                 if (response.result != null) {
+                    Application.storage.set(FoneraDownloader.FONERATORRENTS, []);
                     let items = response.arguments.torrents.length;
                     let downloads = [];
                     for (let i=0; i < items; i++) {
@@ -535,6 +536,7 @@ let FoneraDownloader = {
 
         let callback = function (response) {
                 if (response.result != null) {
+                    Application.storage.set(FoneraDownloader.FONERADOWNLOADS, []);
                     let items = response.result.length;
                     let downloads = [];
                     for (let i=0; i < items; i++) {
@@ -571,9 +573,7 @@ let FoneraDownloader = {
     },
 
     checkDownloads : function() {
-        Application.console.log("Cleaning downloads cache");
-        Application.storage.set(FoneraDownloader.FONERADOWNLOADS, []);
-        Application.storage.set(FoneraDownloader.FONERATORRENTS, []);
+        // Application.console.log("Cleaning downloads cache");
 
         Application.console.log("Checking torrents");
         FoneraDownloader.checkTorrentsItems();
