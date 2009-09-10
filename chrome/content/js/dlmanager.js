@@ -41,12 +41,6 @@ let FoneraDLManager = {
          * | image | ------------------| space  |             |
          * |       | type    | status  |        | play/cancel |
          *  --------------------------------------------------
-         * tooltip:
-         *  --------------------
-         * |       | name      |
-         * | image | --------- |
-         * |       | more data |
-         *  --------------------
          *
          *
          */
@@ -185,6 +179,62 @@ let FoneraDLManager = {
         dl.insertBefore(vboxImage,dl.firstChild);
     },
 
+    checkErrors : function() {
+        let icon = ""; let text = "";
+        let stringsBundle = document.getElementById("string-bundle");
+        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        if (authToken == Fonera.authFailed) {
+            text = stringsBundle.getString('authFailString');
+            icon = "chrome://global/skin/icons/Warning.png";
+        } else if (authToken == Fonera.authError) {
+            text = stringsBundle.getString('authErrorString');
+            icon = "chrome://global/skin/icons/Error.png";
+        }
+        // check disks:
+        let disksToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
+        if (disksToken == Fonera.noDisk) {
+            text = stringsBundle.getString('noDiskErrorString');
+            icon = "chrome://global/skin/icons/Warning.png";
+        }
+
+        let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
+        // remove childs
+        while (dialog.hasChildNodes()) {
+            dialog.removeChild(dialog.firstChild);
+        }
+        let ritem = document.createElement("richlistitem");
+        FoneraDLManager.drawErrorItem(ritem, icon, text);
+        dialog.insertBefore(ritem, dialog.firstChild);
+        FoneraDLManager.stripeifyList(dialog);
+
+    },
+
+    drawErrorItem : function(dl, icon, dlName) {
+        // IMAGE
+        let vboxImage = document.createElement("vbox");
+        let image = document.createElement("image");
+        image.setAttribute("src",icon);
+        vboxImage.insertBefore(image,vboxImage.firstChild);
+
+        // name
+        let hboxName = document.createElement("hbox");
+        hboxName.setAttribute("flex", "1");
+        hboxName.setAttribute("style", "text-align: center; min-width: 200px;");
+        let description = document.createElement("description");
+
+        description.appendChild(document.createTextNode(dlName));
+        description.setAttribute("style", "font-style: bold; font-size: 1.2em; text-align: center;");
+        let space = document.createElement("spacer");
+        hboxName.insertBefore(space, hboxName.firstChild);
+        hboxName.insertBefore(description, hboxName.firstChild);
+
+        // space.setAttribute("flex","1");
+
+        //dl.insertBefore(space,dl.firstChild);
+        dl.insertBefore(hboxName,dl.firstChild);
+        dl.insertBefore(vboxImage,dl.firstChild);
+    },
+
     drawDownloads : function(dialog) {
         // FIXME: move styling to css
         // Example: http://www.nexgenmedia.net/mozilla/richlistbox/richlistbox-simple.xul
@@ -263,6 +313,7 @@ let FoneraDLManager = {
     },
 
     refreshAction : function() {
+        Application.console.log("refreshing");
         FoneraDLManager.startThrobbler();
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken)) {
@@ -270,6 +321,8 @@ let FoneraDLManager = {
             FoneraDownloader.checkDownloads();
             // the throbbler should be updated async
         } else {
+            Application.console.log("errors found");
+            FoneraDLManager.checkErrors();
             FoneraDLManager.stopThrobbler();
         }
     },
@@ -280,9 +333,9 @@ let FoneraDLManager = {
         let i = 0;
         while (item) {
             if (item != list.selectedItem && (i % 2) != 0)
-                item.setAttribute("style", style + " background-color: Lavender;");
-            else
                 item.setAttribute("style", style);
+            else
+                item.setAttribute("style", style + " background-color: Lavender;");
             i++;
             item = item.nextSibling;
         }
@@ -333,9 +386,11 @@ let FoneraDLManager = {
 
     loadEvents : function() {
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
+        FoneraDownloader.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkErrors);
     },
 
     unloadEvents : function() {
+        FoneraDownloader.removeEventListener("onCheckFoneraAvailable", FoneraDLManager.checkErrors);
         FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
     }
 };
