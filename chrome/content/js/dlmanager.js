@@ -179,30 +179,35 @@ let FoneraDLManager = {
         dl.insertBefore(vboxImage,dl.firstChild);
     },
 
-    checkErrors : function() {
+    checkStatus : function() {
         let icon = ""; let text = "";
         let stringsBundle = document.getElementById("string-bundle");
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (!Fonera.isPluginEnabled()) {
             text = stringsBundle.getString('disabledString');
             icon = "chrome://foneradownloader/skin/disabled.png";
+            FoneraDLManager.stopThrobbler();
         } else {
             if (authToken == Fonera.authFailed) {
                 text = stringsBundle.getString('authFailString');
                 icon = "chrome://global/skin/icons/Warning.png";
+                FoneraDLManager.stopThrobbler();
             } else if (authToken == Fonera.authError) {
                 text = stringsBundle.getString('authErrorString');
                 icon = "chrome://global/skin/icons/Error.png";
+                FoneraDLManager.stopThrobbler();
             } else if (authToken == null ) {
                 // watiting for auth
                 text = stringsBundle.getString('loading') + "...";
                 icon = "chrome://global/skin/icons/loading_16.png";
+                // we don't stop the throbbler here!
             } else {
                 // check disks:
                 let disksToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
                 if (disksToken == Fonera.noDisk) {
                     text = stringsBundle.getString('noDiskErrorString');
                     icon = "chrome://global/skin/icons/Warning.png";
+                    FoneraDLManager.stopThrobbler();
                 }
             }
         }
@@ -213,13 +218,13 @@ let FoneraDLManager = {
             dialog.removeChild(dialog.firstChild);
         }
         let ritem = document.createElement("richlistitem");
-        FoneraDLManager.drawErrorItem(ritem, icon, text);
+        FoneraDLManager.drawStatusItem(ritem, icon, text);
         dialog.insertBefore(ritem, dialog.firstChild);
         FoneraDLManager.stripeifyList(dialog);
 
     },
 
-    drawErrorItem : function(dl, icon, dlName) {
+    drawStatusItem : function(dl, icon, dlName) {
         // IMAGE
         let vboxImage = document.createElement("vbox");
         let image = document.createElement("image");
@@ -325,16 +330,9 @@ let FoneraDLManager = {
     refreshAction : function() {
         Application.console.log("refreshing");
         FoneraDLManager.startThrobbler();
-        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
-        if (Fonera.authenticated(authToken)) {
-            Fonera.checkDisks();
-            FoneraDownloader.checkDownloads();
-            // the throbbler should be updated async
-        } else {
-            Application.console.log("errors found");
-            FoneraDLManager.checkErrors();
-            FoneraDLManager.stopThrobbler();
-        }
+        FoneraDLManager.checkStatus();
+        FoneraDownloader.checkDownloads();
+        // FoneraDLManager.stopThrobbler();
     },
 
     stripeifyList : function(list) {
@@ -395,12 +393,12 @@ let FoneraDLManager = {
     },
 
     loadEvents : function() {
-        Fonera.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkErrors);
+        Fonera.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
     },
 
     unloadEvents : function() {
-        Fonera.removeEventListener("onCheckFoneraAvailable", FoneraDLManager.checkErrors);
+        Fonera.removeEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
         FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
     }
 };
