@@ -189,13 +189,19 @@ let FoneraDLManager = {
         } else if (authToken == Fonera.authError) {
             text = stringsBundle.getString('authErrorString');
             icon = "chrome://global/skin/icons/Error.png";
+        } else if (authToken == null ) {
+            // watiting for auth
+            text = stringsBundle.getString('loading') + "...";
+            icon = "chrome://global/skin/icons/loading_16.png";
+        } else {
+            // check disks:
+            let disksToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
+            if (disksToken == Fonera.noDisk) {
+                text = stringsBundle.getString('noDiskErrorString');
+                icon = "chrome://global/skin/icons/Warning.png";
+            }
         }
-        // check disks:
-        let disksToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
-        if (disksToken == Fonera.noDisk) {
-            text = stringsBundle.getString('noDiskErrorString');
-            icon = "chrome://global/skin/icons/Warning.png";
-        }
+
 
         let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
         // remove childs
