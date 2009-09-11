@@ -391,12 +391,12 @@ let FoneraDLManager = {
     },
 
     loadEvents : function() {
+        Fonera.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkErrors);
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
-        FoneraDownloader.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkErrors);
     },
 
     unloadEvents : function() {
-        FoneraDownloader.removeEventListener("onCheckFoneraAvailable", FoneraDLManager.checkErrors);
+        Fonera.removeEventListener("onCheckFoneraAvailable", FoneraDLManager.checkErrors);
         FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
     }
 };
