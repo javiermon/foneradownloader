@@ -341,9 +341,9 @@ let FoneraDLManager = {
         let i = 0;
         while (item) {
             if (item != list.selectedItem && (i % 2) != 0)
-                item.setAttribute("style", style);
-            else
                 item.setAttribute("style", style + " background-color: Lavender;");
+            else
+                item.setAttribute("style", style);
             i++;
             item = item.nextSibling;
         }
