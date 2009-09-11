@@ -183,25 +183,29 @@ let FoneraDLManager = {
         let icon = ""; let text = "";
         let stringsBundle = document.getElementById("string-bundle");
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
-        if (authToken == Fonera.authFailed) {
-            text = stringsBundle.getString('authFailString');
-            icon = "chrome://global/skin/icons/Warning.png";
-        } else if (authToken == Fonera.authError) {
-            text = stringsBundle.getString('authErrorString');
-            icon = "chrome://global/skin/icons/Error.png";
-        } else if (authToken == null ) {
-            // watiting for auth
-            text = stringsBundle.getString('loading') + "...";
-            icon = "chrome://global/skin/icons/loading_16.png";
+        if (!Fonera.isPluginEnabled()) {
+            text = stringsBundle.getString('disabledString');
+            icon = "chrome://foneradownloader/skin/disabled.png";
         } else {
-            // check disks:
-            let disksToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
-            if (disksToken == Fonera.noDisk) {
-                text = stringsBundle.getString('noDiskErrorString');
+            if (authToken == Fonera.authFailed) {
+                text = stringsBundle.getString('authFailString');
                 icon = "chrome://global/skin/icons/Warning.png";
+            } else if (authToken == Fonera.authError) {
+                text = stringsBundle.getString('authErrorString');
+                icon = "chrome://global/skin/icons/Error.png";
+            } else if (authToken == null ) {
+                // watiting for auth
+                text = stringsBundle.getString('loading') + "...";
+                icon = "chrome://global/skin/icons/loading_16.png";
+            } else {
+                // check disks:
+                let disksToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
+                if (disksToken == Fonera.noDisk) {
+                    text = stringsBundle.getString('noDiskErrorString');
+                    icon = "chrome://global/skin/icons/Warning.png";
+                }
             }
         }
-
 
         let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
         // remove childs
