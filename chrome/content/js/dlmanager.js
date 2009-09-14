@@ -180,6 +180,7 @@ let FoneraDLManager = {
     },
 
     checkStatus : function() {
+        FoneraDLManager.startThrobbler();
         let stringsBundle = document.getElementById("string-bundle");
         let text = stringsBundle.getString('loading') + "...";
         let icon = "chrome://global/skin/icons/loading_16.png";
