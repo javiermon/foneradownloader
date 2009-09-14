@@ -44,7 +44,7 @@
     // refresh policies:
     window.setInterval(function() { Fonera.checkFoneraAvailable(); FoneraDownloader.checkDownloads(); Fonera.checkDisks();}, 10*60*100); // 10*60*100
     // we want to re-authenticate so sessions don't expire
-    window.setInterval(function() { Fonera.checkFoneraAvailable(true); }, 1000*1200*100);
+    window.setInterval(function() { Fonera.checkFoneraAvailable(true); }, 1000*60*100);
   </script>
 
   <!-- right click menu-->
