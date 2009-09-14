@@ -221,7 +221,6 @@ let FoneraDLManager = {
         FoneraDLManager.drawStatusItem(ritem, icon, text);
         dialog.insertBefore(ritem, dialog.firstChild);
         FoneraDLManager.stripeifyList(dialog);
-        FoneraDLManager.stopThrobbler();
     },
 
     drawStatusItem : function(dl, icon, dlName) {
