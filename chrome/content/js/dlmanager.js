@@ -324,7 +324,9 @@ let FoneraDLManager = {
 
     refreshAction : function() {
         FoneraDLManager.startThrobbler();
-        Fonera.checkDisks();
+        Fonera.checkFoneraAvailable();
+        // this is called from the previous call:
+        // Fonera.checkDisks();
         FoneraDownloader.checkDownloads();
         FoneraDLManager.checkStatus();
     },
