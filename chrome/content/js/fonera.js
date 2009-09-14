@@ -255,6 +255,11 @@ let Fonera = {
         req.send(stream);
     },
 
+    hasDisk : function() {
+        let disks = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
+        return (disks != Fonera.noDisk);
+    },
+
     loadEvents : function() {
         Fonera.addEventListener("onAuthenticate",
                                 Fonera.checkDisks);

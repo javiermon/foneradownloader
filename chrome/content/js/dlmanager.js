@@ -201,16 +201,11 @@ let FoneraDLManager = {
             } else if (authToken != null ) {
                 Application.console.log("authenticated");
                 // check disks:
-                let disksToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
-                if (disksToken == Fonera.noDisk) {
+                if (!Fonera.hasDisk()) {
                     Application.console.log("no disk available");
                     text = stringsBundle.getString('noDiskErrorString');
                     icon = "chrome://global/skin/icons/Warning.png";
                     FoneraDLManager.stopThrobbler();
-                } else {
-                    // everything is fine: check downloads!
-                    Application.console.log("check downloads");
-                    FoneraDownloader.checkDownloads();
                 }
             } else {
                 Application.console.log("not authenticated");
@@ -329,8 +324,9 @@ let FoneraDLManager = {
 
     refreshAction : function() {
         FoneraDLManager.startThrobbler();
+        Fonera.checkDisks();
+        FoneraDownloader.checkDownloads();
         FoneraDLManager.checkStatus();
-        // FoneraDLManager.stopThrobbler();
     },
 
     stripeifyList : function(list) {

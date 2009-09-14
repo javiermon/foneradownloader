@@ -94,8 +94,7 @@ let FoneraDialog = {
     openDownloaderHandler : function() {
         // launched by unknownContentType load event
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
-        let diskToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
-        if (Fonera.authenticated(authToken) && diskToken != Fonera.noDisk)
+        if (Fonera.authenticated(authToken) && Fonera.hasDisk())
             document.getElementById("foneraDownloader-option").disabled = false;
         else
             document.getElementById("foneraDownloader-option").disabled = true;

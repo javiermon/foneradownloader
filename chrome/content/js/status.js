@@ -89,8 +89,7 @@ let FoneraStatus = {
             return;
         }
         // check disks:
-        let disksToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
-        if (disksToken == Fonera.noDisk) {
+        if (!Fonera.hasDisk()) {
             panel.tooltipText = stringsBundle.getString('noDiskErrorString');
             panel.src = "chrome://global/skin/icons/warning-16.png";
             return;

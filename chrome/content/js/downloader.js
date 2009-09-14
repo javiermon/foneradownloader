@@ -417,20 +417,14 @@ let FoneraDownloader = {
     },
 
     callRpc : function (rpcCall, callback, url) {
-        if (!Fonera.isPluginEnabled()) {
-            Fonera.notify(Fonera.onCheckFoneraAvailable);
-            return;
-        }
-
         // for some reason I need to declare here Application
         // or else it won't be accesible in the onload function
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
 
-        // FIXME: this is not needed when going for transmission
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
-        if (!Fonera.authenticated(authToken)) {
-            Application.console.log("Not authenticated\n");
+        if (!Fonera.authenticated(authToken) || !Fonera.hasDisk()) {
+            Fonera.notify(Fonera.onCheckFoneraAvailable);
             return;
         }
 
@@ -683,16 +677,16 @@ let FoneraDownloader = {
 
 
     loadEvents : function() {
-        Fonera.addEventListener("onAuthenticate", FoneraDownloader.checkDownloads);
-        Fonera.addEventListener("onAuthenticate",
+        Fonera.addEventListener("onCheckDisks", FoneraDownloader.checkDownloads);
+        Fonera.addEventListener("onCheckDisks",
                                 FoneraDownloader.authenticateInTransmission);
         Fonera.addEventListener("onAuthenticate",
                                 FoneraDownloader.checkAccountsSettings);
     },
 
     unloadEvents : function() {
-        Fonera.removeEventListener("onAuthenticate", FoneraDownloader.checkDownloads);
-        Fonera.removeEventListener("onAuthenticate",
+        Fonera.removeEventListener("onCheckDisks", FoneraDownloader.checkDownloads);
+        Fonera.removeEventListener("onCheckDisks",
                                 FoneraDownloader.authenticateInTransmission);
         Fonera.removeEventListener("onAuthenticate",
                                 FoneraDownloader.checkAccountsSettings);
