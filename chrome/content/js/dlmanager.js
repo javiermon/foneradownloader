@@ -180,14 +180,16 @@ let FoneraDLManager = {
     },
 
     checkStatus : function() {
-        let icon = ""; let text = "";
         let stringsBundle = document.getElementById("string-bundle");
-        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        let text = stringsBundle.getString('loading') + "...";
+        let icon = "chrome://global/skin/icons/loading_16.png";
+
         if (!Fonera.isPluginEnabled()) {
             text = stringsBundle.getString('disabledString');
             icon = "chrome://foneradownloader/skin/disabled.png";
             FoneraDLManager.stopThrobbler();
         } else {
+            let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
             if (authToken == Fonera.authFailed) {
                 text = stringsBundle.getString('authFailString');
                 icon = "chrome://global/skin/icons/Warning.png";
@@ -196,19 +198,22 @@ let FoneraDLManager = {
                 text = stringsBundle.getString('authErrorString');
                 icon = "chrome://global/skin/icons/Error.png";
                 FoneraDLManager.stopThrobbler();
-            } else if (authToken == null ) {
-                // watiting for auth
-                text = stringsBundle.getString('loading') + "...";
-                icon = "chrome://global/skin/icons/loading_16.png";
-                // we don't stop the throbbler here!
-            } else {
+            } else if (authToken != null ) {
+                Application.console.log("authenticated");
                 // check disks:
                 let disksToken = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
                 if (disksToken == Fonera.noDisk) {
+                    Application.console.log("no disk available");
                     text = stringsBundle.getString('noDiskErrorString');
                     icon = "chrome://global/skin/icons/Warning.png";
                     FoneraDLManager.stopThrobbler();
+                } else {
+                    // everything is fine: check downloads!
+                    Application.console.log("check downloads");
+                    FoneraDownloader.checkDownloads();
                 }
+            } else {
+                Application.console.log("not authenticated");
             }
         }
 
@@ -221,7 +226,7 @@ let FoneraDLManager = {
         FoneraDLManager.drawStatusItem(ritem, icon, text);
         dialog.insertBefore(ritem, dialog.firstChild);
         FoneraDLManager.stripeifyList(dialog);
-
+        FoneraDLManager.stopThrobbler();
     },
 
     drawStatusItem : function(dl, icon, dlName) {
@@ -311,27 +316,20 @@ let FoneraDLManager = {
     },
 
     drawItems : function() {
-        // FIXME: the throbbler doesn't appear to work either because it's done too fast or on the same redraw
-        FoneraDLManager.startThrobbler();
         let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
         // remove childs
         while (dialog.hasChildNodes()) {
             dialog.removeChild(dialog.firstChild);
         }
 
-        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
-        if (Fonera.authenticated(authToken)) {
-            FoneraDLManager.drawDownloads(dialog);
-            FoneraDLManager.stripeifyList(dialog);
-        }
+        FoneraDLManager.drawDownloads(dialog);
+        FoneraDLManager.stripeifyList(dialog);
         FoneraDLManager.stopThrobbler();
     },
 
     refreshAction : function() {
-        Application.console.log("refreshing");
         FoneraDLManager.startThrobbler();
         FoneraDLManager.checkStatus();
-        FoneraDownloader.checkDownloads();
         // FoneraDLManager.stopThrobbler();
     },
 

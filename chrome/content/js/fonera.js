@@ -45,12 +45,9 @@ let Fonera = {
     // Errors:
     LASTERROR : "foneralasterror",
     // Events:
-    // called when CheckFoneraAvailable has finished:
     onCheckFoneraAvailable : [],
-    // cmd's queues: Same as events
-    // called when we can ping the fonera
-    foneraAvailableQueue : [],
-    foneraAuthenticatedQueue : [],
+    onAuthenticate : [],
+    onCheckDisks : [],
 
     addEventListener : function(event, callback) {
         try {
@@ -140,22 +137,12 @@ let Fonera = {
 	req.onreadystatechange = function (aEvt) {
             if (req.readyState == 4) {
 	        if(req.status == 200) {
-                    /**
-                     * Fonera.notify(Fonera.onCheckFoneraAvailable):
-                     * - We notify failures immediately to detect
-                     * errors as soon as posible.
-                     * - We notify success on the LAST call so final
-                     * status is correctly propagated.
-                     */
                     Fonera.authenticate(reAuth);
-                    // run all commands needed once the fonera is available:
-                    // for example: authentication in transmission, etc.
-                    Fonera.notify(Fonera.foneraAvailableQueue);
 	        } else {
                     Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
                     Application.console.log("Fonera NOT ready\n");
-                    Fonera.notify(Fonera.onCheckFoneraAvailable);
 	        }
+                Fonera.notify(Fonera.onCheckFoneraAvailable);
 	    }
 	};
 	req.send(null);
@@ -165,7 +152,7 @@ let Fonera = {
         let authToken = Application.storage.get(this.AUTHTOKEN, null);
         if (!reAuth && this.authenticated(authToken)) {
             Application.console.log("already authenticated\n");
-            this.notify(this.onCheckFoneraAvailable);
+            this.notify(this.onAuthenticate);
             return;
         }
 
@@ -193,16 +180,12 @@ let Fonera = {
                     if (response.error == null && response.result != null) {
                         Application.console.log(Fonera.AUTHTOKEN + " : " + response.result);
                         Application.storage.set(Fonera.AUTHTOKEN, response.result);
-
-                        Fonera.checkDisks();
-                        Fonera.notify(Fonera.foneraAuthenticatedQueue);
-                        //Fonera.checkAccountsSettings();
-
+                        // Fonera.checkDisks();
                     } else {
                         Application.storage.set(Fonera.AUTHTOKEN, Fonera.authFailed);
                         Application.console.log("Authentication FAILED\n");
-                        Fonera.notify(Fonera.onCheckFoneraAvailable);
                     }
+                    Fonera.notify(Fonera.onAuthenticate);
     	        }
             }
         };
@@ -213,8 +196,8 @@ let Fonera = {
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
 
-        let authToken = Application.storage.get(this.AUTHTOKEN, null);
-        if (!this.authenticated(authToken)) {
+        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        if (!Fonera.authenticated(authToken)) {
             Application.console.log("Not authenticated\n");
             return;
         }
@@ -229,7 +212,7 @@ let Fonera = {
             .createInstance(Components.interfaces.nsIXMLHttpRequest);
 
         //luci/fon_rpc/ff?auth=62BAAF5E1E2A16D78C31AEB7C5F8D9C8
-        let url =  this.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
+        let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
         let rpcCall = {"method": "get_discs"};
         let stream = nJSON.encode(rpcCall);
 
@@ -256,13 +239,23 @@ let Fonera = {
                     } else {
                         Application.console.log("Response Error: " + response.error + "\n");
                     }
+                    Fonera.notify(Fonera.onCheckDisks);
                 } else {
                     Application.console.log("Http Status Error :" + req.status + "\n");
                 }
             }
-            Fonera.notify(Fonera.onCheckFoneraAvailable);
         };
         req.send(stream);
+    },
+
+    loadEvents : function() {
+        Fonera.addEventListener("onAuthenticate",
+                                Fonera.checkDisks);
+    },
+
+    unloadEvents : function() {
+        Fonera.removeEventListener("onAuthenticate",
+                                Fonera.checkDisks);
     }
 
 };

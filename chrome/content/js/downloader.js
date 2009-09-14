@@ -99,6 +99,12 @@ let FoneraDownloader = {
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
 
+        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        if (!Fonera.authenticated(authToken)) {
+            Application.console.log("Not authenticated\n");
+            return;
+        }
+
         let url = FoneraDownloader.transmissionUrl();
         // https://developer.mozilla.org/En/Using_XMLHttpRequest
         // https://developer.mozilla.org/en/nsIJSON
@@ -573,7 +579,14 @@ let FoneraDownloader = {
     },
 
     checkDownloads : function() {
-        // Application.console.log("Cleaning downloads cache");
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+
+        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        if (!Fonera.authenticated(authToken)) {
+            Application.console.log("Not authenticated\n");
+            return;
+        }
 
         Application.console.log("Checking torrents");
         FoneraDownloader.checkTorrentsItems();
@@ -628,11 +641,18 @@ let FoneraDownloader = {
     },
 
     checkAccountsSettings : function() {
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
+
+        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        if (!Fonera.authenticated(authToken)) {
+            Application.console.log("Not authenticated\n");
+            return;
+        }
+
         let rpcCall = {
             "method" : "downloads_listcookies"
         };
-        let Application = Components.classes["@mozilla.org/fuel/application;1"]
-            .getService(Components.interfaces.fuelIApplication);
 
         let callback = function(response) {
             if (response.error != null) {
@@ -652,25 +672,25 @@ let FoneraDownloader = {
             }
             FoneraDownloader.notify(FoneraDownloader.onAccountsUpdates);
         };
-        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+
         let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
         FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
 
     loadEvents : function() {
-        Fonera.addEventListener("onCheckFoneraAvailable", FoneraDownloader.checkDownloads);
-        Fonera.addEventListener("foneraAvailableQueue",
+        Fonera.addEventListener("onAuthenticate", FoneraDownloader.checkDownloads);
+        Fonera.addEventListener("onAuthenticate",
                                 FoneraDownloader.authenticateInTransmission);
-        Fonera.addEventListener("foneraAvailableQueue",
+        Fonera.addEventListener("onAuthenticate",
                                 FoneraDownloader.checkAccountsSettings);
     },
 
     unloadEvents : function() {
-        Fonera.removeEventListener("onCheckFoneraAvailable", FoneraDownloader.checkDownloads);
-        Fonera.removeEventListener("foneraAvailableQueue",
+        Fonera.removeEventListener("onAuthenticate", FoneraDownloader.checkDownloads);
+        Fonera.removeEventListener("onAuthenticate",
                                 FoneraDownloader.authenticateInTransmission);
-        Fonera.removeEventListener("foneraAvailableQueue",
+        Fonera.removeEventListener("onAuthenticate",
                                 FoneraDownloader.checkAccountsSettings);
     }
 };

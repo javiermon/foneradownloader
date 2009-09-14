@@ -134,12 +134,12 @@ let FoneraAccountsPrefs = {
     },
 
     loadEvents : function() {
-        Fonera.addEventListener("onCheckFoneraAvailable", FoneraAccountsPrefs.enableAccountManager);
+        Fonera.addEventListener("onAuthenticate", FoneraAccountsPrefs.enableAccountManager);
         FoneraDownloader.addEventListener("onAccountsUpdates", FoneraAccountsPrefs.actionOnAccountCallback);
     },
 
     unloadEvents : function() {
-        Fonera.removeEventListener("onCheckFoneraAvailable", FoneraAccountsPrefs.enableAccountManager);
+        Fonera.removeEventListener("onAuthenticate", FoneraAccountsPrefs.enableAccountManager);
         FoneraDownloader.removeEventListener("onAccountsUpdates", FoneraAccountsPrefs.actionOnAccountCallback);
     }
 
