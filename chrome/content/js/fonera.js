@@ -106,6 +106,12 @@ let Fonera = {
                 && authToken != Fonera.authError);
     },
 
+    notifyAllEvents : function() {
+        this.notify(this.onCheckFoneraAvailable);
+        this.notify(this.onAuthenticate);
+        this.notify(this.onCheckDisks);
+    },
+
     checkFoneraAvailable: function() {
         // do we want to re-authenticate?
         let reAuth = false;
@@ -117,12 +123,13 @@ let Fonera = {
             Application.storage.set(this.FONERADOWNLOADS, []);
             Application.storage.set(this.FONERATORRENTS, []);
             Application.storage.set(this.DISKS, null);
-            this.notify(this.onCheckFoneraAvailable);
+            this.notifyAllEvents();
         }
 
         if (!this.isPluginEnabled()) {
-            if (!reAuth)
-                this.notify(this.onCheckFoneraAvailable);
+            if (!reAuth) {
+                this.notifyAllEvents();
+            }
             return;
         }
 
