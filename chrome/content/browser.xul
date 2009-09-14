@@ -41,11 +41,7 @@
     window.addEventListener("load", function(e) { Fonera.checkFoneraAvailable(); }, false);
     window.addEventListener("load", function(e) { FoneraCxtxtMenu.init(); }, false);
 
-    // This doesn't work as the dialog that triggers the event is closed and we cannot access the Fonera or FoneraStatus objects
-    // window.addEventListener("load", function(e) { Fonera.addEventListener("onSendUrl", FoneraStatus.printErrors); }, false);
-    // ugly workaround:
-    window.setInterval(FoneraStatus.printErrors, 60*100);
-
+    // refresh policies:
     window.setInterval(function() { Fonera.checkFoneraAvailable(); FoneraDownloader.checkDownloads(); }, 10*60*100); // 10*60*100
     // we want to re-authenticate so sessions don't expire
     window.setInterval(function() { Fonera.checkFoneraAvailable(true); }, 1000*1200*100);

@@ -43,6 +43,7 @@ let FoneraDownloader = {
     // Events:
     onDownloadsAvailable : [],
     onAccountsUpdates : [],
+    onSendUrl : [],
 
     // storage:
     FONERADOWNLOADS : "foneradownloads",
@@ -356,6 +357,7 @@ let FoneraDownloader = {
             if (!found) {
                 Application.console.log("Found " + domain  + " link and no account associated");
                 Application.storage.set(errorStorage, this.NOACCOUNTERROR + ":" + domain);
+                this.notify(this.onSendUrl);
                 return null;
             }
         }
@@ -375,8 +377,9 @@ let FoneraDownloader = {
         // let the url handler parser check if we can download
         // and/or prepare the download link
         myUrl = this.urlHandlerParser(myUrl);
-        if (myUrl == null)
+        if (myUrl == null) {
             return;
+        }
 
         Application.console.log("My URL : " + myUrl + "\n");
         let callback = function(response) {
@@ -387,6 +390,7 @@ let FoneraDownloader = {
                 Application.storage.set(Fonera.LASTERROR, null);
             }
             FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
+            FoneraDownloader.notify(FoneraDownloader.onSendUrl);
         };
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
