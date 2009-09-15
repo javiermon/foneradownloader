@@ -282,6 +282,17 @@ let FoneraDLManager = {
             document.getElementById("clearButton").disabled = false;
         } else {
             // disable clear downloads
+            let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
+            // remove childs
+            while (dialog.hasChildNodes()) {
+                dialog.removeChild(dialog.firstChild);
+            }
+            let ritem = document.createElement("richlistitem");
+            let text = stringsBundle.getString("noFilesFound");
+            let icon = "chrome://foneradownloader/skin/context.png";
+            FoneraDLManager.drawStatusItem(ritem, icon, text);
+            dialog.insertBefore(ritem, dialog.firstChild);
+            FoneraDLManager.stripeifyList(dialog);
             document.getElementById("clearButton").disabled = true;
         }
     },
