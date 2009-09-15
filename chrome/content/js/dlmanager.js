@@ -207,11 +207,18 @@ let FoneraDLManager = {
                     text = stringsBundle.getString('noDiskErrorString');
                     icon = "chrome://global/skin/icons/Warning.png";
                     FoneraDLManager.stopThrobbler();
-                }
-                // remove this piece of code to show the loading throbbler
-                // on every update:
-                else {
-                    return;
+                } else {
+                    let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+                    let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+                    if (torrents.length == 0 && downloads.length == 0) {
+                        text = stringsBundle.getString("noFilesFound");
+                        icon = "chrome://foneradownloader/skin/context.png";
+                    }
+                    // remove this piece of code to show the loading throbbler
+                    // on every update:
+                    else {
+                        return;
+                    }
                 }
             } else {
                 Application.console.log("not authenticated");
@@ -276,6 +283,10 @@ let FoneraDLManager = {
 
         foneraDownloads.sort(sortFunction);
         if (foneraDownloads != null && foneraDownloads.length != 0) {
+            // remove childs
+            while (dialog.hasChildNodes()) {
+                dialog.removeChild(dialog.firstChild);
+            }
             // populate
             for (let i in foneraDownloads) {
                 let dl = document.createElement("richlistitem");
@@ -285,20 +296,6 @@ let FoneraDLManager = {
             }
             // enable clear downloads
             document.getElementById("clearButton").disabled = false;
-        } else {
-            // disable clear downloads
-            let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
-            // remove childs
-            while (dialog.hasChildNodes()) {
-                dialog.removeChild(dialog.firstChild);
-            }
-            let ritem = document.createElement("richlistitem");
-            let text = stringsBundle.getString("noFilesFound");
-            let icon = "chrome://foneradownloader/skin/context.png";
-            FoneraDLManager.drawStatusItem(ritem, icon, text);
-            dialog.insertBefore(ritem, dialog.firstChild);
-            FoneraDLManager.stripeifyList(dialog);
-            document.getElementById("clearButton").disabled = true;
         }
     },
 
@@ -340,11 +337,6 @@ let FoneraDLManager = {
 
     drawItems : function() {
         let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
-        // remove childs
-        while (dialog.hasChildNodes()) {
-            dialog.removeChild(dialog.firstChild);
-        }
-
         FoneraDLManager.drawDownloads(dialog);
         FoneraDLManager.stripeifyList(dialog);
         FoneraDLManager.stopThrobbler();
