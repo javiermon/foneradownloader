@@ -50,7 +50,7 @@
   <!-- right click menu-->
   <popup id="contentAreaContextMenu">
     <menuitem id="send-link-to-fonera" label="&sendLinkToFonera;"
-	      insertafter="context-stop" oncommand="FoneraCxtxtMenu.sendLinkToFonera();"/>
+	      insertbefore="context-openlink" oncommand="FoneraCxtxtMenu.sendLinkToFonera();"/>
   </popup>
 
   <!-- tools menu -->
