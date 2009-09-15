@@ -411,6 +411,7 @@ let FoneraDownloader = {
         let callback = function(response) {
             // apparently transmission doesn't respond to this call
             FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
+            FoneraDownloader.notify(FoneraDownloader.onSendUrl);
         };
         let url = this.transmissionUrl();
         this.callRpc(rpcCall, callback, url);

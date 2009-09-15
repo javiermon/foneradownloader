@@ -208,6 +208,11 @@ let FoneraDLManager = {
                     icon = "chrome://global/skin/icons/Warning.png";
                     FoneraDLManager.stopThrobbler();
                 }
+                // remove this piece of code to show the loading throbbler
+                // on every update:
+                else {
+                    return;
+                }
             } else {
                 Application.console.log("not authenticated");
             }
@@ -414,10 +419,12 @@ let FoneraDLManager = {
     loadEvents : function() {
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
+        FoneraDownloader.addEventListener("onSendUrl", FoneraDLManager.drawItems);
     },
 
     unloadEvents : function() {
         Fonera.removeEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
         FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
+        FoneraDownloader.removeEventListener("onSendUrl", FoneraDLManager.drawItems);
     }
 };
