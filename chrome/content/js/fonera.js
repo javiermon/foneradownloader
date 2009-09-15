@@ -83,6 +83,10 @@ let Fonera = {
         return prefs.getCharPref(preference);
     },
 
+    getUsername : function() {
+        return "fonero";
+    },
+
     isPluginEnabled : function() {
         let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
         return prefs.getBoolPref("enabled");
@@ -95,7 +99,7 @@ let Fonera = {
         if (!onwan)
             return "http://" + this.getUserPref("foneraip") + "/luci";
         else
-            return "http://" + this.getUserPref("username") + ":" + this.getUserPref("password") + "@"
+            return "http://" + this.getUsername() + ":" + this.getUserPref("password") + "@"
                 + this.getUserPref("foneraip") + "/luci";
     },
 
@@ -170,7 +174,7 @@ let Fonera = {
             .createInstance(Components.interfaces.nsIXMLHttpRequest);
         let url =  this.foneraURL() + "/fon_rpc/ff/auth";
         let stream = nJSON.encode({"method": "plain",
-            "params" : [this.getUserPref("username"), this.getUserPref("password")] });
+            "params" : [this.getUsername(), this.getUserPref("password")] });
 
         Application.console.log("Authenticating to URL : " + url + "\n");
         Application.console.log("POST : " + stream + "\n");

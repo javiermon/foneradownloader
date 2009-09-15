@@ -29,7 +29,6 @@
   <!-- general preferences -->
   <prefpane id="fonera-prefs" label="&fonera_down_prefs;" image="chrome://foneradownloader/skin/logofonosfera.png" onclick="showPane(this);">
     <preferences>
-      <preference id="foneradownloader-username" name="extensions.foneradownloader.username" type="string"/>
       <preference id="foneradownloader-password" name="extensions.foneradownloader.password" type="string"/>
       <preference id="foneradownloader-foneraip" name="extensions.foneradownloader.foneraip" type="string"/>
       <preference id="foneradownloader-enabled" name="extensions.foneradownloader.enabled" type="bool"/>
@@ -44,7 +43,7 @@
 	<rows>
 	  <row>
 	    <label control="username" align="left" value="&username;"/>
-	    <textbox id="username" align="right" preference="foneradownloader-username"/>
+	    <label id="username" align="right" value="fonero"/>
 	  </row>
 	  <row>
 	    <label control="password" align="left" value="&password;"/>

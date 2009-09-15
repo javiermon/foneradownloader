@@ -89,7 +89,7 @@ let FoneraDownloader = {
     transmissionUrl : function () {
         let ip = Fonera.getUserPref("foneraip").split(":")[0];
 
-        let transCredentials = Fonera.getUserPref("username")
+        let transCredentials = Fonera.getUsername()
             + ":" + Fonera.getUserPref("password") + "@";
         let url = "http://" + transCredentials + ip
             + ":9091/transmission/rpc";
@@ -698,7 +698,7 @@ let FoneraDownloader = {
 //    try {
 //
 //	// https://developer.mozilla.org/En/Using_XMLHttpRequest
-//	let user = getUserPref("username");
+//	let user = getUsername();
 //	let password = getUserPref("password");
 //
 //	// Make a stream from a file.
