@@ -70,7 +70,7 @@ let FoneraCxtxtMenu = {
             try {
                 if (FoneraCxtxtMenu.parsedUrls.length != 0) {
                     hide = false;
-                } else if (document.popupNode.localName == "A") {
+                } else if (gContextMenu.onLink) {
                     // check if it's a link, if it is, unhide
                     hide = false;
                 /* youtube hack:
