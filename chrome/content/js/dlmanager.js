@@ -258,6 +258,18 @@ let FoneraDLManager = {
         let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         foneraDownloads = foneraDownloads.concat(torrents);
 
+        // sort:
+        let sortFunction = function (a, b) {
+            if (a.status == "load")
+                if (b.status == "load")
+                    return 0;
+                else
+                    return 1;
+            else
+                return -1;
+        };
+
+        foneraDownloads.sort(sortFunction);
         if (foneraDownloads != null && foneraDownloads.length != 0) {
             // populate
             for (let i in foneraDownloads) {
