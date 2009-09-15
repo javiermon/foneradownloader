@@ -64,6 +64,7 @@ let FoneraCxtxtMenu = {
     showHideItems : function (event) {
         let hide = true;
         let show = document.getElementById("send-link-to-fonera");
+        let showSeparator = document.getElementById("send-link-to-fonera-separator");
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken) && Fonera.hasDisk()) {
             FoneraCxtxtMenu.parsedUrls = FoneraCxtxtMenu.parseSelectedText();
@@ -94,6 +95,7 @@ let FoneraCxtxtMenu = {
             }
         }
         show.hidden = hide;
+        showSeparator.hidden = hide;
     },
 
     sendLinkToFonera: function () {
