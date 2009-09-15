@@ -66,11 +66,15 @@ let FoneraCxtxtMenu = {
         let show = document.getElementById("send-link-to-fonera");
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken) && Fonera.hasDisk()) {
+            FoneraCxtxtMenu.parsedUrls = FoneraCxtxtMenu.parseSelectedText();
             try {
-                if (document.popupNode.localName == "A") {
+                if (FoneraCxtxtMenu.parsedUrls.length != 0) {
+                    hide = false;
+                } else if (document.popupNode.localName == "A") {
                     // check if it's a link, if it is, unhide
                     hide = false;
-                /* } else if (gBrowser.currentURI.spec.match(/http:\/\/[a-zA-Z\.]*youtube\.com\/watch/)) {
+                /* youtube hack:
+                 *  } else if (gBrowser.currentURI.spec.match(/http:\/\/[a-zA-Z\.]*youtube\.com\/watch/)) {
                     // http://forums.mozillazine.org/viewtopic.php?f=19&t=907465
                     let contentWinWrapper = new XPCNativeWrapper(content, "document").document.defaultView;
                     contentWinWrapper = new XPCSafeJSObjectWrapper(contentWinWrapper.wrappedJSObject);
@@ -84,12 +88,6 @@ let FoneraCxtxtMenu = {
                         FoneraCxtxtMenu.parsedUrls = [youtubeLink];
                         hide = false;
                     } */
-                } else {
-                    // selected text? regex it and if we find urls unhide
-                    FoneraCxtxtMenu.parsedUrls = FoneraCxtxtMenu.parseSelectedText();
-                    if (FoneraCxtxtMenu.parsedUrls.length != 0) {
-                        hide = false;
-                    }
                 }
             } catch (e) {
                 Application.console.log("showHideItem failed :" + e);
