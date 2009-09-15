@@ -350,7 +350,7 @@ let FoneraDLManager = {
         Fonera.checkFoneraAvailable();
         // this is called from the previous call:
         // Fonera.checkDisks();
-        FoneraDownloader.checkDownloads();
+        // FoneraDownloader.checkDownloads();
         FoneraDLManager.checkStatus();
     },
 
