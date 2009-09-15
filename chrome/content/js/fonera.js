@@ -99,7 +99,7 @@ let Fonera = {
         if (!onwan)
             return "http://" + this.getUserPref("foneraip") + "/luci";
         else
-            return "https://" + this.getUsername() + ":" + this.getUserPref("password") + "@"
+            return "http://" + this.getUsername() + ":" + this.getUserPref("password") + "@"
                 + this.getUserPref("foneraip") + "/luci";
     },
 
