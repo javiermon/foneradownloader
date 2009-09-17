@@ -49,6 +49,7 @@ let Fonera = {
     onAuthenticate : [],
     onCheckDisks : [],
 
+    // FIXME: remove this HACK
     onWanProtocol : "onwan-protocol",
 
     addEventListener : function(event, callback) {
@@ -101,7 +102,8 @@ let Fonera = {
         if (!onwan)
             return "http://" + this.getUserPref("foneraip") + "/luci";
         else {
-            let proto = Application.storage.get(this.onWanProtocol,"http://");
+            // FIXME: remove this HACK
+            let proto = Application.storage.get(this.onWanProtocol,"https://");
             return proto + this.getUsername() + ":" + this.getUserPref("password") + "@"
                 + this.getUserPref("foneraip") + "/luci";
         }
@@ -127,7 +129,8 @@ let Fonera = {
         // disable sessions:
         if (reAuth) {
             Application.console.log("Disable session storage");
-            Application.storage.set(Fonera.onWanProtocol,"http://");
+            // FIXME: remove this HACK
+            Application.storage.set(Fonera.onWanProtocol,"https://");
             Application.storage.set(this.AUTHTOKEN, null);
             Application.storage.set(this.FONERADOWNLOADS, []);
             Application.storage.set(this.FONERATORRENTS, []);
@@ -155,8 +158,9 @@ let Fonera = {
 	        if(req.status == 200) {
                     Fonera.authenticate(reAuth);
 	        } else {
-                    // retry https:
-                    Application.storage.set(Fonera.onWanProtocol,"https://");
+                    // FIXME: remove this HACK
+                    // retry http:
+                    Application.storage.set(Fonera.onWanProtocol,"http://");
                     Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
                     Application.console.log("Fonera NOT ready\n");
 	        }
