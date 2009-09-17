@@ -127,6 +127,7 @@ let Fonera = {
         // disable sessions:
         if (reAuth) {
             Application.console.log("Disable session storage");
+            Application.storage.set(Fonera.onWanProtocol,"http://");
             Application.storage.set(this.AUTHTOKEN, null);
             Application.storage.set(this.FONERADOWNLOADS, []);
             Application.storage.set(this.FONERATORRENTS, []);
