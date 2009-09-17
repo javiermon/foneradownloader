@@ -49,6 +49,8 @@ let Fonera = {
     onAuthenticate : [],
     onCheckDisks : [],
 
+    onWanProtocol : "onwan-protocol",
+
     addEventListener : function(event, callback) {
         try {
             // example: event == onCheckFoneraAvailable
@@ -98,9 +100,11 @@ let Fonera = {
         let onwan = prefs.getBoolPref("onwan");
         if (!onwan)
             return "http://" + this.getUserPref("foneraip") + "/luci";
-        else
-            return "https://" + this.getUsername() + ":" + this.getUserPref("password") + "@"
+        else {
+            let proto = Application.storage.get(this.onWanProtocol,"http://");
+            return proto + this.getUsername() + ":" + this.getUserPref("password") + "@"
                 + this.getUserPref("foneraip") + "/luci";
+        }
     },
 
     authenticated : function(authToken) {
@@ -150,6 +154,8 @@ let Fonera = {
 	        if(req.status == 200) {
                     Fonera.authenticate(reAuth);
 	        } else {
+                    // retry https:
+                    Application.storage.set(Fonera.onWanProtocol,"https://");
                     Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
                     Application.console.log("Fonera NOT ready\n");
 	        }
