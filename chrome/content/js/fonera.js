@@ -160,7 +160,11 @@ let Fonera = {
 	        } else {
                     // FIXME: remove this HACK
                     // retry http:
-                    Application.storage.set(Fonera.onWanProtocol,"http://");
+                    let old = Application.storage.get(Fonera.onWanProtocol,"http://");
+                    if (old == "https://")
+                        Application.storage.set(Fonera.onWanProtocol,"https://");
+                    else
+                        Application.storage.set(Fonera.onWanProtocol,"http://");
                     Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
                     Application.console.log("Fonera NOT ready\n");
 	        }
