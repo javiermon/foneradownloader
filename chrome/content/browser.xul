@@ -51,7 +51,7 @@
   <popup id="contentAreaContextMenu">
     <menuitem id="send-link-to-fonera" label="&sendLinkToFonera;" image="chrome://foneradownloader/skin/context.png"
 	      insertbefore="context-openlink" oncommand="FoneraCxtxtMenu.sendLinkToFonera();"/>
-    <menuitem id="get-links-for-fonera" label="find links for fonera..." image="chrome://foneradownloader/skin/context.png"
+    <menuitem id="get-links-for-fonera" label="&get-links;" image="chrome://foneradownloader/skin/context.png"
 	      insertbefore="context-openlink" oncommand="FoneraCxtxtMenu.getLinksForFonera();"/>
     <menuseparator id="send-link-to-fonera-separator" insertbefore="context-openlink"/>
   </popup>

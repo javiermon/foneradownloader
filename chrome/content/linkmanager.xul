@@ -24,7 +24,7 @@
 <!DOCTYPE window SYSTEM "chrome://foneradownloader/locale/linkmanager.dtd">
 
 <window id="foneradownloader-linkmanager" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-	windowtype="foneradownloader:linkmanager" title="Select Links" class="dlmanager-window"
+	windowtype="foneradownloader:linkmanager" title="&select-links;" class="dlmanager-window"
 	screenX="10" screenY="10"
 	persist="width height screenX screenY sizemode" orient="vertical">
 
@@ -41,7 +41,7 @@
   <richlistbox id="foneradownloader-link-list" flex="1" seltype="single"/>
   <statusbar id="status-bar">
     <button id="clearButton" oncommand="FoneraLinkManager.sendSelectedLinks()"
-            label="send links"/>
+            label="&send-links;"/>
     <!-- TODO: add quickfilter toolbox -->
   <spacer flex="1"/>
   </statusbar>
