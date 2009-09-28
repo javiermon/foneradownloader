@@ -1,1 +1,283 @@
-Changes go here...
+cyrus (1):
+      Foneradownloader: Catch 409 status and restart session if required
+
+javier (278):
+      initial import from local git
+      check for error in authToken
+      sendtorrenturl async! thanks to CyrusFF
+      Use ip address instead of the URL, since it's more userfriendly
+      fix error
+      typo
+      use IP instead of URL: done
+      inital design playground for dlmanager window
+      show the new download status bar
+      inital refactor
+      you cannot use this in a closure
+      refactor fonera.js code into a 'class'
+      more refactoring, dont use var since its evil
+      statusbar launches new dlmanager window
+      be more robust on importing external modules to avoid redefinitions
+      remove notify and use Application storage; populate the download window
+      fix error in for..in usage
+      add more properties of torrents in the download window
+      add status and resize window
+      format list
+      add overflow style
+      small UI fixes; icons for statsbar
+      add empty element and fix some styling; add elements for skin (not yet finished)
+      remove unnecesary code
+      don't use evil vbox so the refresh button appears on button of the window
+      fix tooltip
+      comment image not  loading
+      change default username
+      refresh works; it's oncommand
+      1 minute checks
+      do first check on authentication with a subscriber/notifier pattern
+      don't log the callback
+      Makefile thanks to pablo
+      remove unnecesary code
+      another refactor, use eventlistener for updating torrents list
+      bump version
+      comment bug
+      fix strings
+      fix status msg when errors occurr; add preferences listener
+      missing file
+      comment weird behaviour
+      add event listener for the dlmanager window and function to remove event listeners
+      add a tools menu item and rename files now that they do more stuff
+      remove unnecesary code
+      fix tooltip
+      remove uploaded from tooltip
+      license gplv2
+      exclude some files
+      add context menu on .torrent links
+      add timer to reauthenticate and throbbler to dlmanager window
+      make refresh button act more sane in the dl window
+      refactor to support other downloads
+      add downloads support
+      fixes
+      add type to the download item; sort them by type
+      small fixes
+      check if fonera is available
+      if fonera is not working, dont roll throbbler
+      fix wording
+      small fixes
+      rename to a more descriptive name
+      update how to install the rpc in the fonera
+      info on creating a ffx new profile for testing
+      add icon and fix skin url
+      check for usb disks attached to the fonera and act accordingly
+      be more agressive on checking fonera available; remove checkdisks as it is called from checkFoneraAvailable
+      remove too much verbose log, check disk even if we're already authenticated
+      call eventListeners more appropiately
+      remove too verbose logs
+      force reauthenticate on change of preferences; fix corner case of notification
+      re add the response logging for debugging errors
+      disable progress info as it does not work properly
+      check for auth error
+      remove unnecesary logging
+      fix description of status
+      add pending
+      localize
+      refactor sendUrl and add todos about errors
+      error checking
+      show errors in statusbar
+      bump version
+      don't log
+      change icon and refresh more frecuently
+      wording
+      fixes in closures
+      show errors in the downloads window
+      add support for selecting urls
+      fixes
+      don't use global matching as it's evil
+      remove traces
+      remove stuff completed
+      format and fix bug of triple authentication on startup
+      rename for clarity
+      remove unsupported protocols for now
+      todos
+      new torrent status
+      works with ffx 3.5 beta
+      remove tooltip since it's gets unbereable with too many downloads
+      fix downloaded percentages
+      ui fixes
+      wording
+      show 100% on downloads finished
+      fix 0.0% bug
+      deal with js suckage
+      more polish
+      show a title bar for download window
+      downloads also use pid to indicate progress
+      add active string
+      torrents states fixes
+      clean build process
+      update readme with build instructions
+      initial mv to svn repo structure
+      tag for 1st release 0.0.9
+      delete empty trash left by git mv
+      remove
+      finish layout
+      bump version
+      refactor to new api for downloads listing, needs r912 at least to work
+      wording
+      oops wrong change in previous refactoring
+      translate
+      option to disable the plugin. Doesn't work very well, recursion errors
+      fix double call to onCheckFoneraAvailable notification that caused recursion error; disable session storage on re-authentication and update UI
+      new version released
+      begin better downloader manager window
+      post release bump
+      new download layout, needs more polish style, etc
+      prettify
+      relase
+      post relase bump
+      no extension found
+      backport fix
+      add dummy buttons
+      put actions into buttons and use better alignment
+      fix the pause/play code
+      remove unnecesary log
+      some callback fixes
+      add clear completed button
+      call notify more more imediate response
+      add context menu for quick enable/disable of plugin
+      small fixes
+      clean
+      add buttons since they do not seem to be bundled in osx
+      change icon again...
+      use local icon
+      remove play button on finished downloads
+      no play icon on hashing state
+      tooltipText in play/pause/cancel buttons
+      show size of download
+      un-refactor delete complete downloads: needs to call the notify on the last delete, not on every single one
+      working
+      rightclick -> preferences instead of just disabling extension
+      empty space
+      wording
+      wording
+      remove .torrent extension since it will be appended by the fonera's torrent backend
+      format
+      remove unnecesary attributes
+      tweak UI to be a bit more faster on the dlmanager window
+      remove unnecesary js include
+      tweak UI throbbler as much as it's possible
+      spit the labels from text in dlmanager so we can tweak strings better
+      add colors
+      separate case for future reference
+      the return of the stripes
+      invert style stripes and change color
+      format & colors
+      doc
+      small refactor; disable clear completed when there are no downloads
+      fix typo
+      release and tag 0.0.12
+      post release bump
+      add some todo's
+      begin integration of mu/rs account settings
+      begin integrating downloading accounts in plugin
+      todos
+      megaupload/rapidshare integration: add accounts
+      add detection of rapidshare/megaupload links when no account is set up and alert the user. Fixes & translations
+      remove unncesary event
+      more space
+      chain a checkAccountsSettings call when adding a new account so we have the cached storage updated. Translation fixes
+      if plugin is disabled, do not let the user add accounts
+      self. fixes in closures, better to use Objetc.property; add delete download account
+      fix cleaning lasterror storage when nobody has read the error yet
+      fixes while checking links
+      tag new release: 0.0.13. Megaupload/rapishare accounts integration
+      post release bump
+      more todo's
+      initial support for transmission torrents. Not fully tested yet, so very likely to not work.
+      authentication needs to not check for missin token; show transmission session id
+      authenticate cannot use callRpcInFonera as it will set the authtoken. Dont remove the authToken, its the downloads
+      small fixes
+      more fixes
+      more small fixes
+      fix rpc call
+      string format
+      send integers not strings as expected by transmission rpc
+      format percentage
+      fix id's mess
+      add downloads to storage, traces
+      simplify code
+      fix double listing of downloads in download window
+      make download refresh slower
+      make UI updates on the last call to avoid speed differences between both rpcs
+      undo slow refresh
+      better to update on downloads as they are the slowest rpc call right now
+      do the update calls once we are authenticated, to avoid not authenticated errors and speed up things
+      small fix
+      let transmission decide on start or enqueue / add verify state as hashing
+      release
+      post release bump
+      remove todos already implemented
+      remove english words
+      dont try to add an empty account
+      workaround a small UI glitch
+      major refactor: remove all downloads code into its own js
+      fix comments
+      dont allow manipulation of accounts when we are not authenticated
+      new bugfix release
+      post release version bump
+      string fixes
+      remove xpi
+      add onwan option
+      refactor & fix bugs
+      split ip/port from fonera ip so transmission works
+      missing *100
+      add download youtube video feature commented, needs work on the fonera
+      release 0.0.16
+      fix % in torrents and backport fix
+      more info on tooltips
+      more info in tooltips
+      fix incorrect values
+      release
+      format fix and backport fix
+      more format fixes
+      performance fix: no need to concat
+      use custom info icon
+      new release
+      new release
+      fix torrents/downloads disappearing from download window + backport the fix
+      add error indication in the download manager window
+      fixes
+      remove errors on registration and update the dlwindow on the fly
+      case: plugin disabled
+      small fixes
+      change stripe ordering
+      fix events all over the place; more fine grained based on the fonera different status
+      small refactor
+      remove ugly hack to print errors on send url with an event queue
+      include method to check for disks (locally) and use it
+      let throbbler run, if needed it was already stopped
+      start throbbler as this action is called on events too
+      faster and more frecuent checks
+      corner cases
+      hardcode fonera username
+      parsed text more prioritary
+      to top
+      menu separators & use  gContextMenu.onLink
+      add an icon to the context menu
+      add separators properly
+      also hide menuseparator
+      sort downloads by status: downloading first
+      versioning
+      release 0.0.20
+      show something when there are no downloads. Backport
+      oops, should backported this
+      avoid double refresh
+      use onsendurl; remove loading throbbler if there's downloads available
+      tweak previous commit
+      remove https since its not tested yet
+      backport fixes
+      use https in remote access
+      bump release
+      HACK: try to get if its http or https
+      reset protocol
+      first https, then http. Mark this as a HACK for a later removal
+      HACK: alternate in case of failure
+      initial stub
+
