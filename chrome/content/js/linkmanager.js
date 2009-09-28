@@ -83,20 +83,33 @@ let FoneraLinkManager = {
     drawLinks : function() {
         let dialog = document.getElementById("foneradownloader-link-list"); // richlistbox
         let links = Application.storage.get(FoneraLinkManager.links, []);
-        Application.console.log("Drawing " + links.length + " links");
         // remove childs
         while (dialog.hasChildNodes()) {
             dialog.removeChild(dialog.firstChild);
         }
 
-        for(let i in links) {
+        if (links.length == 0) {
             let dl = document.createElement("richlistitem");
-            // checkbox | link string
-            let item = document.createElement("checkbox");
-            item.setAttribute("label", links[i].toString());
+            let stringsBundle = document.getElementById("string-bundle");
+            let item = document.createElement("description");
+            item.appendChild(document.createTextNode(stringsBundle.getString("noLinksFound")));
+
             dl.insertBefore(item, dl.firstChild);
             dialog.insertBefore(dl, dialog.firstChild);
+        } else {
+            for (let i in links) {
+                let urlRegexp = /http:\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+                if (urlRegexp.test(links[i].href)) {
+                    let dl = document.createElement("richlistitem");
+                    // checkbox | link string
+                    let item = document.createElement("checkbox");
+                    item.setAttribute("label", links[i]);
+                    dl.insertBefore(item, dl.firstChild);
+                    dialog.insertBefore(dl, dialog.firstChild);
+                }
+            }
         }
+
         FoneraLinkManager.stripeifyList(dialog);
     },
 
@@ -118,7 +131,7 @@ let FoneraLinkManager = {
         //   <richlistitem/>
         //  ...
         // <richlistbox/>
-        // 
+        //
         let links = document.getElementById("foneradownloader-link-list").children;
         for (let i in links) {
             let link = links[i].firstChild;

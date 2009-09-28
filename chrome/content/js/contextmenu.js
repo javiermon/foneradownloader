@@ -108,6 +108,7 @@ let FoneraCxtxtMenu = {
     getLinksForFonera: function() {
         try {
             let pageLinks = gBrowser.selectedBrowser.contentDocument.links;
+            
             Application.console.log("Found " + pageLinks.length + " links");
             Application.storage.set(FoneraLinkManager.links, pageLinks);
             FoneraLinkManager.showLinksWindow();
