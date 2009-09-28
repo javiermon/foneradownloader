@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+
+ (C) Fon
+ Author: Javier Monteagudo (Javier.monteagudo@fon.com)
+
+ This program is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the
+ Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful, but
+ WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along
+ with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://foneradownloader/skin/skin.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://foneradownloader/locale/linkmanager.dtd">
+
+<window id="foneradownloader-linkmanager" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
+	windowtype="foneradownloader:linkmanager" title="Select Links" class="dlmanager-window"
+	screenX="10" screenY="10"
+	persist="width height screenX screenY sizemode" orient="vertical">
+
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/linkmanager.js" />    
+  <script type="application/x-javascript">
+
+    window.addEventListener("load", FoneraLinkManager.drawLinks, false);
+  </script>
+
+  <stringbundleset id="stringbundleset">
+    <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
+  </stringbundleset>
+
+  <richlistbox id="foneradownloader-link-list" flex="1" seltype="single"/>
+  <statusbar id="status-bar">
+    <button id="clearButton" oncommand="FoneraLinkManager.sendSelectedLinks()"
+            label="send links"/>
+    <!-- TODO: add quickfilter toolbox -->
+  <spacer flex="1"/>
+  </statusbar>
+</window>

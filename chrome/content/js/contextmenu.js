@@ -30,6 +30,7 @@ let Application = Components.classes["@mozilla.org/fuel/application;1"]
 
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
+Components.utils.import("resource://modules/linkmanager.js");
 
 let FoneraCxtxtMenu = {
 
@@ -64,9 +65,13 @@ let FoneraCxtxtMenu = {
     showHideItems : function (event) {
         let hide = true;
         let show = document.getElementById("send-link-to-fonera");
+        let links = document.getElementById("get-links-for-fonera");
         let showSeparator = document.getElementById("send-link-to-fonera-separator");
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken) && Fonera.hasDisk()) {
+            // we want this option visible:
+            links.hidden = false;
+            showSeparator.hidden = false;
             FoneraCxtxtMenu.parsedUrls = FoneraCxtxtMenu.parseSelectedText();
             try {
                 if (FoneraCxtxtMenu.parsedUrls.length != 0) {
@@ -93,9 +98,22 @@ let FoneraCxtxtMenu = {
             } catch (e) {
                 Application.console.log("showHideItem failed :" + e);
             }
+        } else {
+            links.hidden = true;
+            showSeparator.hidden = true;
         }
         show.hidden = hide;
-        showSeparator.hidden = hide;
+    },
+
+    getLinksForFonera: function() {
+        try {
+            let pageLinks = gBrowser.selectedBrowser.contentDocument.links;
+            Application.console.log("Found " + pageLinks.length + " links");
+            Application.storage.set(FoneraLinkManager.links, pageLinks);
+            FoneraLinkManager.showLinksWindow();
+        } catch (e) {
+            Application.console.log("Error finding links in page: " + e);
+        }
     },
 
     sendLinkToFonera: function () {
