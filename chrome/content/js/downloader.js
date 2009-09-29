@@ -57,6 +57,9 @@ let FoneraDownloader = {
     EMPTY_ACCOUNTS : [],
     DOMAINS : "megaupload|rapidshare",
 
+    // http://snippets.dzone.com/posts/show/452
+    urlRegexp : /http:\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
+
     addEventListener : function(event, callback) {
         try {
             // example: event == onCheckFoneraAvailable
@@ -365,6 +368,17 @@ let FoneraDownloader = {
     },
 
     sendDownloadUrlToFonera : function(myUrl) {
+        if (myUrl.replace( /.*\//, "" ).lastIndexOf(".torrent") != -1) {
+            this.sendTorrentToFonera(myUrl);
+        } else {
+            this.sendDownloadToFonera(myUrl);
+        }
+    },
+
+    /**
+     * Private: use sendDownloadUrlToFonera istead
+     */
+    sendDownloadToFonera : function(myUrl) {
         let rpcCall = {
             "method" : "downloads_add",
             "params" : [myUrl]
@@ -397,7 +411,10 @@ let FoneraDownloader = {
         this.callRpc(rpcCall, callback, url);
     },
 
-    sendTorrentUrlToFonera : function(myUrl) {
+    /**
+     * Private: use sendDownloadUrlToFonera istead
+     */
+    sendTorrentToFonera : function(myUrl) {
         // get basename and strip the .torrent in the end as the fonera will add it eventually
         let basename = myUrl.replace( /.*\//, "" ).replace( ".torrent", "" );
         let rpcCall = {

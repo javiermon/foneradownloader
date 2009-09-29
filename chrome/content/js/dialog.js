@@ -47,12 +47,9 @@ let FoneraDialog = {
 
             // send link directly to fonera:
             let url = dialog.mLauncher.source.spec;
-            let mimeInfo = dialog.mLauncher.MIMEInfo;
-
-            if (mimeInfo.MIMEType == "application/x-bittorrent")
-                FoneraDownloader.sendTorrentUrlToFonera(url);
-            else
-                FoneraDownloader.sendDownloadUrlToFonera(url);
+            // let mimeInfo = dialog.mLauncher.MIMEInfo;
+            // if (mimeInfo.MIMEType == "application/x-bittorrent")
+            FoneraDownloader.sendDownloadUrlToFonera(url);
             //Fonera.sendTorrentUrlToFonera(url);
             return true;
                 //// Download to tmp file and then send to fonera:

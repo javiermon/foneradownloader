@@ -97,8 +97,8 @@ let FoneraLinkManager = {
             dl.insertBefore(item, dl.firstChild);
             dialog.insertBefore(dl, dialog.firstChild);
         } else {
+            let urlRegexp = FoneraDownloader.urlRegexp;
             for (let i in links) {
-                let urlRegexp = /http:\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
                 if (urlRegexp.test(links[i].href)) {
                     let dl = document.createElement("richlistitem");
                     // checkbox | link string

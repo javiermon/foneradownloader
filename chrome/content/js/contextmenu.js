@@ -44,8 +44,7 @@ let FoneraCxtxtMenu = {
 
     parseSelectedText: function () {
         // http://snippets.dzone.com/posts/show/452
-        let urlRegexp = /http:\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-        // let urlRegexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+        let urlRegexp = FoneraDownloader.urlRegexp;
 
         let text = document.commandDispatcher.focusedWindow.getSelection();
         let matches = [];
@@ -108,7 +107,7 @@ let FoneraCxtxtMenu = {
     getLinksForFonera: function() {
         try {
             let pageLinks = gBrowser.selectedBrowser.contentDocument.links;
-            
+
             Application.console.log("Found " + pageLinks.length + " links");
             Application.storage.set(FoneraLinkManager.links, pageLinks);
             FoneraLinkManager.showLinksWindow();
@@ -127,10 +126,7 @@ let FoneraCxtxtMenu = {
             } else {
                 // http://www.sitepoint.com/blogs/2007/08/10/dealing-with-unqualified-href-values/
                 let href = document.popupNode.href;
-                if (href.replace( /.*\//, "" ).lastIndexOf(".torrent") != -1)
-                    FoneraDownloader.sendTorrentUrlToFonera(href);
-                else
-                    FoneraDownloader.sendDownloadUrlToFonera(href);
+                FoneraDownloader.sendDownloadUrlToFonera(href);
             }
         } catch (e) {
             Application.console.log("send link failed :" + e);
