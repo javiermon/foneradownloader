@@ -28,7 +28,6 @@ let Application = Components.classes["@mozilla.org/fuel/application;1"]
 
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
-Components.utils.import("resource://modules/format.js");
 
 // The Download Manager Window
 let FoneraLinkManager = {
