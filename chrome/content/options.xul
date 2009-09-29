@@ -61,6 +61,13 @@
 	    <label control="enabled" align="left" value="&enabled;"/>
 	    <checkbox id="enabled" align="right" preference="foneradownloader-enabled"/>
 	  </row>
+	  <row>
+	    <separator class="groove-thin"/>
+	  </row>
+	  <row>
+	    <spacer flex="1"/>
+	    <button id="save-settings" onclick="Fonera.checkFoneraAvailable(true);" label="&apply;"/>
+	  </row>
 	</rows>
       </grid>
     </groupbox>			
@@ -86,8 +93,8 @@
   	  </treechildren>
   	</tree>
 	<hbox>
-  	<button id="delete-account" onclick="FoneraAccountsPrefs.deleteAccount();" label="&delete;" disabled="true"/>
-  	<spacer flex="1"/>
+  	  <spacer flex="1"/>
+  	  <button id="delete-account" onclick="FoneraAccountsPrefs.deleteAccount();" label="&delete;" disabled="true"/>
 	</hbox>
         </vbox>
       </groupbox>
@@ -121,7 +128,6 @@
   	    <button id="submit-account" onclick="FoneraAccountsPrefs.addAccount();" label="&submitAccount;" disabled="true"/>
   	    <spacer flex="1"/>
   	  </row>
-  
   	</rows>
         </grid>
       </groupbox>
@@ -131,7 +137,6 @@
 	<spacer flex="1" />
 	<image id="status-throbbler" src="chrome://global/skin/icons/loading_16.png"/>
       </hbox>
-
   </prefpane>	
 
   <stringbundleset id="stringbundleset">

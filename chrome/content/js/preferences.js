@@ -62,7 +62,7 @@ var myListener = new PrefListener("extensions.foneradownloader.",
                          case "foneraip":
                          case "enabled":
                          case "onwan":
-                             Fonera.checkFoneraAvailable(true);
+                             // Fonera.checkFoneraAvailable(true);
                              break;
 
                          //case "rapidshareusername":
