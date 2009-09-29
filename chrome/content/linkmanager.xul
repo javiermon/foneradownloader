@@ -40,9 +40,10 @@
 
   <richlistbox id="foneradownloader-link-list" flex="1" seltype="single"/>
   <statusbar id="status-bar">
-    <button id="clearButton" oncommand="FoneraLinkManager.sendSelectedLinks()"
-            label="&send-links;"/>
     <!-- TODO: add quickfilter toolbox -->
-  <spacer flex="1"/>
+    <button id="sendLinks" oncommand="FoneraLinkManager.sendSelectedLinks()"
+            label="&send-links;"/>
+    <spacer flex="1"/>
+    <textbox id="filterTxt" emptytext="Enter your filter" onchange="FoneraLinkManager.filterLinks()"/>
   </statusbar>
 </window>

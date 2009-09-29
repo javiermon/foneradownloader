@@ -173,6 +173,35 @@ let FoneraLinkManager = {
 
     },
 
+    filterLinks : function() {
+        //
+        // <richlistbox>
+        //   <richlistitem>
+        //    <checkbox>
+        //   <richlistitem/>
+        //  ...
+        // <richlistbox/>
+        //
+        let links = document.getElementById("foneradownloader-link-list").children;
+        let filter = document.getElementById("filterTxt").value;
+        if (filter == "") {
+            for (let i in links) {
+                let link = links[i].firstChild;
+                link.checked = false;
+            }
+        } else {
+            filter = new RegExp(filter);
+            Application.console.log("Filter: " + filter);
+            for (let i in links) {
+                let link = links[i].firstChild;
+                if (filter.test(link.label)) {
+                    link.checked = true;
+                    FoneraDownloader.sendDownloadUrlToFonera(link.label);
+                }
+            }
+        }
+    },
+
     loadEvents : function() {
 
     },
