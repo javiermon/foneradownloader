@@ -133,12 +133,26 @@ let FoneraLinkManager = {
         // <richlistbox/>
         //
         let links = document.getElementById("foneradownloader-link-list").children;
+        let selected = false;
         for (let i in links) {
             let link = links[i].firstChild;
             if (link.checked) {
+                selected = true;
                 FoneraDownloader.sendDownloadUrlToFonera(link.label);
             }
         }
+
+        if (!selected) {
+            let stringsBundle = document.getElementById("string-bundle");
+            let msg = stringsBundle.getString("noLinksSelected");
+            let name = stringsBundle.getString("error");
+
+            let prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                .getService(Components.interfaces.nsIPromptService);
+            prompts.alert(window, name, msg);
+            return;
+        }
+
 
         // https://developer.mozilla.org/en/Working_with_windows_in_chrome_code
         let name = "chrome://foneradownloader/content/linkmanager.xul";
