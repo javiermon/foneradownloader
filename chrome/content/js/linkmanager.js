@@ -215,7 +215,6 @@ let FoneraLinkManager = {
                 let item = links[i].firstChild;
                 if (filter.test(item.label)) {
                     item.checked = true;
-                    FoneraDownloader.sendDownloadUrlToFonera(item.label);
                 } else // remove from dialog to actually filter
                     dialog.removeChild(links[i]);
             }
