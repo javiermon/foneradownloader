@@ -189,7 +189,13 @@ let FoneraLinkManager = {
                 link.checked = false;
             }
         } else {
-            filter = new RegExp(filter);
+            try {
+                filter = new RegExp(filter);
+            } catch (e) {
+                Application.console.log("could not parse filter: " + filter);
+                return;
+            }
+
             Application.console.log("Filter: " + filter);
             for (let i in links) {
                 let link = links[i].firstChild;
