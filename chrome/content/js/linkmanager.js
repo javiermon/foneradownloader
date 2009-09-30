@@ -35,7 +35,7 @@ let FoneraLinkManager = {
     links : "FONERAPAGELINKS",
 
     stripeifyList : function(list) {
-        let style = "display:-moz-grid-line; -moz-box-orient:horizontal;";
+        let style = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 4px;";
         let item = list.firstChild;
         let i = 0;
         while (item) {
@@ -91,9 +91,13 @@ let FoneraLinkManager = {
             let dl = document.createElement("richlistitem");
             let stringsBundle = document.getElementById("string-bundle");
             let item = document.createElement("description");
+            let image = document.createElement("image");
+            let icon = "chrome://foneradownloader/skin/context.png";
             item.appendChild(document.createTextNode(stringsBundle.getString("noLinksFound")));
+            image.setAttribute("src",icon);
 
             dl.insertBefore(item, dl.firstChild);
+            dl.insertBefore(image, dl.firstChild);
             dialog.insertBefore(dl, dialog.firstChild);
         } else {
             let urlRegexp = FoneraDownloader.urlRegexp;
