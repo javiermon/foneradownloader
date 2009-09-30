@@ -118,8 +118,8 @@ let FoneraLinkManager = {
                 }
             }
         }
-
         FoneraLinkManager.stripeifyList(dialog);
+        document.getElementById("filterTxt").focus();
     },
 
     processClick : function(event) {
@@ -201,6 +201,7 @@ let FoneraLinkManager = {
             //    link.checked = false;
             //}
             this.drawLinks();
+            return;
         } else {
             try {
                 filter = new RegExp(filter);
@@ -219,6 +220,8 @@ let FoneraLinkManager = {
                     dialog.removeChild(links[i]);
             }
         }
+        FoneraLinkManager.stripeifyList(dialog);
+        document.getElementById("filterTxt").focus();
     },
 
     loadEvents : function() {
