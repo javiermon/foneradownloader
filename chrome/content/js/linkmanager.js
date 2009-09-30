@@ -80,8 +80,13 @@ let FoneraLinkManager = {
     },
 
     drawLinks : function() {
-        let dialog = document.getElementById("foneradownloader-link-list"); // richlistbox
         let links = Application.storage.get(FoneraLinkManager.links, []);
+        FoneraLinkManager.drawLinksList(links);
+    },
+
+    drawLinksList : function(links) {
+        let dialog = document.getElementById("foneradownloader-link-list"); // richlistbox
+
         // remove childs
         while (dialog.hasChildNodes()) {
             dialog.removeChild(dialog.firstChild);
@@ -222,7 +227,7 @@ let FoneraLinkManager = {
                     dialog.removeChild(links[i]);
             }
             if (!filtered)
-                this.drawLinks();
+                this.drawLinksList([]);
         }
         FoneraLinkManager.stripeifyList(dialog);
         document.getElementById("filterTxt").focus();
