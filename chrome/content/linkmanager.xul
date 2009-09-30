@@ -44,6 +44,6 @@
     <button id="sendLinks" oncommand="FoneraLinkManager.sendSelectedLinks()"
             label="&send-links;"/>
     <spacer flex="1"/>
-    <textbox id="filterTxt" emptytext="&enter-filter;" onchange="FoneraLinkManager.filterLinks()"/>
+    <textbox id="filterTxt" emptytext="&enter-filter;" onchange="FoneraLinkManager.filterLinks()" accesskey="f"/>
   </statusbar>
 </window>

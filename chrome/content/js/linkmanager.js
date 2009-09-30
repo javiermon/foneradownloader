@@ -124,7 +124,6 @@ let FoneraLinkManager = {
             }
         }
         FoneraLinkManager.stripeifyList(dialog);
-        document.getElementById("filterTxt").focus();
     },
 
     processClick : function(event) {
@@ -230,7 +229,6 @@ let FoneraLinkManager = {
                 this.drawLinksList([]);
         }
         FoneraLinkManager.stripeifyList(dialog);
-        document.getElementById("filterTxt").focus();
     },
 
     loadEvents : function() {
