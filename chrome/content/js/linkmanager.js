@@ -200,6 +200,7 @@ let FoneraLinkManager = {
             //    let link = links[i].firstChild;
             //    link.checked = false;
             //}
+            // redraw:
             this.drawLinks();
             return;
         } else {
@@ -211,13 +212,17 @@ let FoneraLinkManager = {
             }
 
             Application.console.log("Filter: " + filter);
+            let filtered = false;
             for (let i in links) {
                 let item = links[i].firstChild;
                 if (filter.test(item.label)) {
                     item.checked = true;
+                    filtered = true;
                 } else // remove from dialog to actually filter
                     dialog.removeChild(links[i]);
             }
+            if (!filtered)
+                this.drawLinks();
         }
         FoneraLinkManager.stripeifyList(dialog);
         document.getElementById("filterTxt").focus();
