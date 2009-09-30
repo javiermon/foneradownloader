@@ -181,13 +181,16 @@ let FoneraLinkManager = {
         //  ...
         // <richlistbox/>
         //
-        let links = document.getElementById("foneradownloader-link-list").children;
+        let dialog = document.getElementById("foneradownloader-link-list");
+        let links = dialog.children;
         let filter = document.getElementById("filterTxt").value;
         if (filter == "") {
-            for (let i in links) {
-                let link = links[i].firstChild;
-                link.checked = false;
-            }
+            // unselect:
+            //for (let i in links) {
+            //    let link = links[i].firstChild;
+            //    link.checked = false;
+            //}
+            this.drawLinks();
         } else {
             try {
                 filter = new RegExp(filter);
@@ -198,11 +201,12 @@ let FoneraLinkManager = {
 
             Application.console.log("Filter: " + filter);
             for (let i in links) {
-                let link = links[i].firstChild;
-                if (filter.test(link.label)) {
-                    link.checked = true;
-                    FoneraDownloader.sendDownloadUrlToFonera(link.label);
-                }
+                let item = links[i].firstChild;
+                if (filter.test(item.label)) {
+                    item.checked = true;
+                    FoneraDownloader.sendDownloadUrlToFonera(item.label);
+                } else // remove from dialog to actually filter
+                    dialog.removeChild(links[i]);
             }
         }
     },
