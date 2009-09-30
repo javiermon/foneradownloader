@@ -195,17 +195,12 @@ let FoneraLinkManager = {
         //  ...
         // <richlistbox/>
         //
+        // always redraw since the textbox filters oninput!
+        this.drawLinks();
         let dialog = document.getElementById("foneradownloader-link-list");
         let links = dialog.children;
         let filter = document.getElementById("filterTxt").value;
         if (filter == "") {
-            // unselect:
-            //for (let i in links) {
-            //    let link = links[i].firstChild;
-            //    link.checked = false;
-            //}
-            // redraw:
-            this.drawLinks();
             return;
         } else {
             try {
