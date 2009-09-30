@@ -63,10 +63,14 @@
 	  </row>
 	  <row>
 	    <separator class="groove-thin"/>
+	    <separator class="groove-thin"/>
 	  </row>
 	  <row>
 	    <spacer flex="1"/>
-	    <button id="save-settings" onclick="Fonera.checkFoneraAvailable(true);" label="&apply;"/>
+	    <hbox>
+	      <spacer flex="1"/>
+	      <button id="save-settings" onclick="Fonera.checkFoneraAvailable(true);" label="&apply;"/>
+	    </hbox>
 	  </row>
 	</rows>
       </grid>

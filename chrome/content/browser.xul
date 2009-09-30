@@ -26,7 +26,6 @@
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/downloader.js"/>    
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/status.js"/>
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dlmanager.js"/>    
-  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/preferences.js"/>    
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/contextmenu.js"/>    
 
   <stringbundleset id="stringbundleset">
