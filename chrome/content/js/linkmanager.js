@@ -100,8 +100,14 @@ let FoneraLinkManager = {
             for (let i in links) {
                 if (urlRegexp.test(links[i].href)) {
                     let dl = document.createElement("richlistitem");
-                    // checkbox | link string
                     let item = document.createElement("checkbox");
+
+                    let extension = links[i].href.substring(links[i].href.lastIndexOf("."),
+                                                          links[i].href.length);
+
+                    let icon = (extension != "") ? "moz-icon://" + extension + "?size=16" : "moz-icon://.file?size=16";
+                    item.setAttribute("src",icon);
+
                     item.setAttribute("label", links[i]);
                     dl.insertBefore(item, dl.firstChild);
                     dialog.insertBefore(dl, dialog.firstChild);
