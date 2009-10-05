@@ -85,7 +85,7 @@ let FoneraPrefs = {
             let enabled = document.getElementById("enabled");
             let enabledPref = "enabled";
 
-            enabled.checked = PreferencesBranch.setBoolPref(enabledPref);
+            enabled.checked = PreferencesBranch.getBoolPref(enabledPref);
 
         } catch(e) {
             Application.console.log(e);
