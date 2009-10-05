@@ -1,3 +1,7 @@
 <!ENTITY select-links "Select links">
 <!ENTITY send-links "Send selected links">
 <!ENTITY enter-filter "Enter your filter">
+<!ENTITY images "images">
+<!ENTITY movies "movies">
+<!ENTITY music "music">
+<!ENTITY torrents "torrents">
