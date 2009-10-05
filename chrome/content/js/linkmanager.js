@@ -107,12 +107,12 @@ let FoneraLinkManager = {
         } else {
             let urlRegexp = FoneraDownloader.urlRegexp;
             for (let i in links) {
-                if (urlRegexp.test(links[i].href)) {
+                if (urlRegexp.test(links[i])) {
                     let dl = document.createElement("richlistitem");
                     let item = document.createElement("checkbox");
 
-                    let extension = links[i].href.substring(links[i].href.lastIndexOf("."),
-                                                          links[i].href.length);
+                    let extension = links[i].substring(links[i].lastIndexOf("."),
+                                                          links[i].length);
 
                     let icon = (extension != "") ? "moz-icon://" + extension + "?size=16" : "moz-icon://.file?size=16";
                     item.setAttribute("src",icon);
@@ -186,7 +186,41 @@ let FoneraLinkManager = {
 
     },
 
-    filterLinks : function() {
+    quickFilter : function() {
+        let filters = {
+            "images": "\.jpg$|\.png$|\.gif$",
+            "movies": "\.avi$|\.mov$|\.mkv$|\.ogv$",
+            "music": "\.mp3$|\.wma$|\.ogg$|\.acc$|\.flac$",
+            "torrents": "\.torrent$",
+            "megaupload": "megaupload",
+            "rapidshare": "rapidshare"
+        };
+
+        let myFilter = "";
+        // magic id:
+        for (let type in filters) {
+            let toolbarbutton = document.getElementById(type + '-quickfilter');
+            if (toolbarbutton.checked) {
+                if (myFilter == "") // first iteration: avoid creating a | empty
+                    myFilter = filters[type];
+                else
+                    myFilter = filters[type] + "|" + myFilter;
+            }
+        }
+        if (myFilter != "") {
+            Application.console.log("toolbar filter: " + myFilter);
+            this.filterLinks(myFilter, false);
+        }
+    },
+
+    filterLinksAction : function() {
+        this.drawLinks();
+        this.quickFilter();
+        let filter = document.getElementById("filterTxt").value;
+        this.filterLinks(filter, true);
+    },
+
+    filterLinks : function(filter, hide) {
         //
         // <richlistbox>
         //   <richlistitem>
@@ -196,10 +230,9 @@ let FoneraLinkManager = {
         // <richlistbox/>
         //
         // always redraw since the textbox filters oninput!
-        this.drawLinks();
+        // this.drawLinks();
         let dialog = document.getElementById("foneradownloader-link-list");
         let links = dialog.children;
-        let filter = document.getElementById("filterTxt").value;
         if (filter == "") {
             return;
         } else {
@@ -217,10 +250,12 @@ let FoneraLinkManager = {
                 if (filter.test(item.label)) {
                     item.checked = true;
                     filtered = true;
-                } else // remove from dialog to actually filter
-                    dialog.removeChild(links[i]);
+                } else {
+                    if (hide) // remove from dialog to actually filter
+                        dialog.removeChild(links[i]);    
+                }
             }
-            if (!filtered)
+            if (!filtered && hide)
                 this.drawLinksList([]);
         }
         FoneraLinkManager.stripeifyList(dialog);

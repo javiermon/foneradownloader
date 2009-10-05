@@ -38,12 +38,21 @@
     <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
   </stringbundleset>
 
+  <toolbar id="toolbar">
+    <toolbarbutton id="images-quickfilter" label="images" type="checkbox" image="moz-icon://.jpg?size=16" oncommand="FoneraLinkManager.filterLinksAction()"/>
+    <toolbarbutton id="movies-quickfilter" label="movies" type="checkbox" image="moz-icon://.avi?size=16" oncommand="FoneraLinkManager.filterLinksAction()"/>
+    <toolbarbutton id="music-quickfilter" label="music" type="checkbox" image="moz-icon://.mp3?size=16" oncommand="FoneraLinkManager.filterLinksAction()"/>
+    <toolbarbutton id="torrents-quickfilter" label="torrents" type="checkbox" image="moz-icon://.torrent?size=16" oncommand="FoneraLinkManager.filterLinksAction()"/>
+    <toolbarbutton id="megaupload-quickfilter" label="megaupload" type="checkbox" image="moz-icon://.html?size=16" oncommand="FoneraLinkManager.filterLinksAction()"/>
+    <toolbarbutton id="rapidshare-quickfilter" label="rapidshare" type="checkbox" image="moz-icon://.html?size=16" oncommand="FoneraLinkManager.filterLinksAction()"/>
+  </toolbar>
+
   <richlistbox id="foneradownloader-link-list" flex="1" seltype="single"/>
   <statusbar id="status-bar">
     <!-- TODO: add quickfilter toolbox -->
     <button id="sendLinks" oncommand="FoneraLinkManager.sendSelectedLinks()"
             label="&send-links;"/>
     <spacer flex="1"/>
-    <textbox id="filterTxt" emptytext="&enter-filter;" oninput="FoneraLinkManager.filterLinks()" accesskey="f"/>
+    <textbox id="filterTxt" emptytext="&enter-filter;" oninput="FoneraLinkManager.filterLinksAction()" accesskey="statusbar"/>
   </statusbar>
 </window>

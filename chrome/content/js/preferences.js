@@ -37,24 +37,16 @@ let FoneraPrefs = {
         try {
 
             let password = document.getElementById("password");
-            let passwordPref = "password";
-
-            PreferencesBranch.setCharPref(passwordPref, password.value);
+            PreferencesBranch.setCharPref("password", password.value);
 
             let foneraip = document.getElementById("foneraip");
-            let foneraipPref = "foneraip";
-
-            PreferencesBranch.setCharPref(foneraipPref, foneraip.value);
+            PreferencesBranch.setCharPref("foneraip", foneraip.value);
 
             let onwan = document.getElementById("onwan");
-            let onwanPref = "onwan";
-
-            PreferencesBranch.setBoolPref(onwanPref, onwan.checked);
+            PreferencesBranch.setBoolPref("onwan", onwan.checked);
 
             let enabled = document.getElementById("enabled");
-            let enabledPref = "enabled";
-
-            PreferencesBranch.setBoolPref(enabledPref, enabled.checked);
+            PreferencesBranch.setBoolPref("enabled", enabled.checked);
 
             Fonera.checkFoneraAvailable(true);
 
@@ -68,24 +60,16 @@ let FoneraPrefs = {
         try {
 
             let password = document.getElementById("password");
-            let passwordPref = "password";
-
-            password.value = PreferencesBranch.getCharPref(passwordPref);
+            password.value = PreferencesBranch.getCharPref("password");
 
             let foneraip = document.getElementById("foneraip");
-            let foneraipPref = "foneraip";
-
-            foneraip.value = PreferencesBranch.getCharPref(foneraipPref);
+            foneraip.value = PreferencesBranch.getCharPref("foneraip");
 
             let onwan = document.getElementById("onwan");
-            let onwanPref = "onwan";
-
-            onwan.checked = PreferencesBranch.getBoolPref(onwanPref);
+            onwan.checked = PreferencesBranch.getBoolPref("onwan");
 
             let enabled = document.getElementById("enabled");
-            let enabledPref = "enabled";
-
-            enabled.checked = PreferencesBranch.getBoolPref(enabledPref);
+            enabled.checked = PreferencesBranch.getBoolPref("enabled");
 
         } catch(e) {
             Application.console.log(e);

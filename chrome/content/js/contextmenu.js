@@ -106,10 +106,36 @@ let FoneraCxtxtMenu = {
 
     getLinksForFonera: function() {
         try {
-            let pageLinks = gBrowser.selectedBrowser.contentDocument.links;
 
-            Application.console.log("Found " + pageLinks.length + " links");
-            Application.storage.set(FoneraLinkManager.links, pageLinks);
+            let unique = function(a) {
+                tmp = new Array(0);
+                for (i=0;i<a.length;i++) {
+                    if (!contains(tmp, a[i])) {
+                        tmp.length+=1;
+                        tmp[tmp.length-1]=a[i];
+                    }
+                }
+                return tmp;
+            };
+
+            let contains = function(a, e) {
+                for (j=0;j<a.length;j++) if (a[j]==e) return true;
+                return false;
+            };
+
+            let links = [];
+            let pageLinks = gBrowser.selectedBrowser.contentDocument.links;
+            for (let i in pageLinks)
+                links.push(pageLinks[i].href);
+
+            let images = gBrowser.selectedBrowser.contentDocument.images;
+            for (let i in images)
+                links.push(images[i].src);
+
+            // remove duplicates
+            links = unique(links);
+            Application.console.log("found " + links.length + " links");
+            Application.storage.set(FoneraLinkManager.links, links);
             FoneraLinkManager.showLinksWindow();
         } catch (e) {
             Application.console.log("Error finding links in page: " + e);
