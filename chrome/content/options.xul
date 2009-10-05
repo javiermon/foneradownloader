@@ -47,19 +47,19 @@
 	  </row>
 	  <row>
 	    <label control="password" align="left" value="&password;"/>
-	    <textbox id="password" align="right" type="password" preference="foneradownloader-password"/>
+	    <textbox id="password" align="right" type="password"/> <!-- preference="foneradownloader-password"/-->
 	  </row>
 	  <row>
 	    <label control="foneraip" align="left" value="&fonera_ip;"/>
-	    <textbox id="foneraip" align="right" preference="foneradownloader-foneraip"/>
+	    <textbox id="foneraip" align="right"/> <!-- preference="foneradownloader-foneraip"/-->
 	  </row>
 	  <row>
 	    <label control="onwan" align="left" value="&onwan;"/>
-	    <checkbox id="onwan" align="right" preference="foneradownloader-onwan"/>
+	    <checkbox id="onwan" align="right"/> <!--preference="foneradownloader-onwan"/-->
 	  </row>
 	  <row>
 	    <label control="enabled" align="left" value="&enabled;"/>
-	    <checkbox id="enabled" align="right" preference="foneradownloader-enabled"/>
+	    <checkbox id="enabled" align="right"/> <!--preference="foneradownloader-enabled"/-->
 	  </row>
 	  <row>
 	    <separator class="groove-thin"/>
@@ -69,7 +69,7 @@
 	    <spacer flex="1"/>
 	    <hbox>
 	      <spacer flex="1"/>
-	      <button id="save-settings" onclick="Fonera.checkFoneraAvailable(true);" label="&apply;"/>
+	      <button id="save-settings" onclick="FoneraPrefs.applyAction();" label="&apply;"/>
 	    </hbox>
 	  </row>
 	</rows>
@@ -148,7 +148,9 @@
   </stringbundleset>
 
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/accprefs.js"/>    
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/preferences.js"/>    
   <script type="application/x-javascript">    
+    window.addEventListener("load", FoneraPrefs.loadValues, false);
     window.addEventListener("load", FoneraAccountsPrefs.fillAccountsIntoTree, false);
     window.addEventListener("load", FoneraAccountsPrefs.enableAccountManager, false);
     window.addEventListener("load", FoneraAccountsPrefs.loadEvents, false);
