@@ -237,7 +237,8 @@ let FoneraLinkManager = {
             return;
         } else {
             try {
-                filter = new RegExp(filter);
+                // case insensitive:
+                filter = new RegExp(filter,'i');
             } catch (e) {
                 Application.console.log("could not parse filter: " + filter);
                 return;
@@ -252,7 +253,7 @@ let FoneraLinkManager = {
                     filtered = true;
                 } else {
                     if (hide) // remove from dialog to actually filter
-                        dialog.removeChild(links[i]);    
+                        dialog.removeChild(links[i]);
                 }
             }
             if (!filtered && hide)
