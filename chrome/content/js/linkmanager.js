@@ -26,6 +26,9 @@ let EXPORTED_SYMBOLS = ["FoneraLinkManager"];
 let Application = Components.classes["@mozilla.org/fuel/application;1"]
     .getService(Components.interfaces.fuelIApplication);
 
+let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
+			.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
+
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
 
@@ -188,12 +191,12 @@ let FoneraLinkManager = {
 
     quickFilter : function() {
         let filters = {
-            "images": "\.jpg$|\.png$|\.gif$",
-            "movies": "\.avi$|\.mov$|\.mkv$|\.ogv$",
-            "music": "\.mp3$|\.wma$|\.ogg$|\.acc$|\.flac$",
-            "torrents": "\.torrent$",
-            "megaupload": "megaupload",
-            "rapidshare": "rapidshare"
+            "images": PreferencesBranch.getCharPref("filters.images"),
+            "movies": PreferencesBranch.getCharPref("filters.movies"),
+            "music": PreferencesBranch.getCharPref("filters.music"),
+            "torrents": PreferencesBranch.getCharPref("filters.torrents"),
+            "megaupload": PreferencesBranch.getCharPref("filters.megaupload"),
+            "rapidshare": PreferencesBranch.getCharPref("filters.rapidshare")
         };
 
         let myFilter = "";
