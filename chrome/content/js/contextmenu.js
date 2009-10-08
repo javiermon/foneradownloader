@@ -128,9 +128,9 @@ let FoneraCxtxtMenu = {
             for (let i in pageLinks)
                 links.push(pageLinks[i].href);
 
-            let images = gBrowser.selectedBrowser.contentDocument.images;
-            for (let i in images)
-                links.push(images[i].src);
+            //let images = gBrowser.selectedBrowser.contentDocument.images;
+            //for (let i in images)
+            //    links.push(images[i].src);
 
             // remove duplicates
             links = unique(links);
