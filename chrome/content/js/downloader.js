@@ -426,7 +426,12 @@ let FoneraDownloader = {
             .getService(Components.interfaces.fuelIApplication);
 
         let callback = function(response) {
-            // apparently transmission doesn't respond to this call
+            if (response.result != "success") {
+                Application.storage.set(Fonera.LASTERROR, basename);
+                Application.console.log("Response Error");
+            } else {
+                Application.storage.set(Fonera.LASTERROR, null);
+            }
             FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             FoneraDownloader.notify(FoneraDownloader.onSendUrl);
         };
