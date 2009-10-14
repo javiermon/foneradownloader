@@ -51,7 +51,7 @@
     <spacer flex="1"/>
     <toolbarbutton id="sort-criteria" label="&sort;" type="menu">
       <menupopup id="sort-menu">
-        <menuitem id="load" label="&downloading-first;" type="radio" oncommand="FoneraDLManager.drawItems()"/>
+        <menuitem id="load" label="&downloading-first;" type="radio" oncommand="FoneraDLManager.drawItems()" checked="true"/>
         <menuitem id="done" label="&completed-first;" type="radio" oncommand="FoneraDLManager.drawItems()"/>
         <menuitem id="paused" label="&paused-first;" type="radio" oncommand="FoneraDLManager.drawItems()"/>
       </menupopup>
