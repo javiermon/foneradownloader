@@ -6,3 +6,7 @@
 <!ENTITY refresh "Refrescar">
 <!ENTITY clear-complete "Limpiar completados">
 <!ENTITY no-torrents "No se encontraron torrents">
+<!ENTITY sort "Ordenar primero:">
+<!ENTITY downloading-first "Descargando">
+<!ENTITY completed-first "Completados">
+<!ENTITY paused-first "Pausados">

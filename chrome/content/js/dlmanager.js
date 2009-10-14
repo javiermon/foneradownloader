@@ -262,12 +262,6 @@ let FoneraDLManager = {
         dl.insertBefore(vboxImage,dl.firstChild);
     },
 
-    drawFilteredDownloads : function(filter) {
-        let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
-        FoneraDLManager.drawDownloads(dialog, filter);
-        FoneraDLManager.stripeifyList(dialog);
-    },
-
     drawDownloads : function(dialog, filter) {
         // FIXME: move styling to css
         // Example: http://www.nexgenmedia.net/mozilla/richlistbox/richlistbox-simple.xul
@@ -285,9 +279,23 @@ let FoneraDLManager = {
         let stringsBundle = document.getElementById("string-bundle");
 
         // sort:
+        let sortCriteria = "load";
+        let children = document.getElementById("sort-menu").children;
+        for (let j = 0; j < children.length; j++) {
+            try {
+                // can't seem to get attributes directly from the object, need getAttribute
+                if (children[j].getAttribute('type') == 'radio' && children[j].getAttribute('checked') == 'true') {
+                    sortCriteria = children[j].id;
+                    Application.console.log(children[j].id + " selected");
+                }
+            } catch (e) {
+                Application.console.log(e);
+            }
+        };
+        Application.console.log(sortCriteria + " sorting selected");
         let sortFunction = function (a, b) {
-            if (a.status == "load")
-                if (b.status == "load")
+            if (a.status == sortCriteria)
+                if (b.status == sortCriteria)
                     return 0;
                 else
                     return 1;
