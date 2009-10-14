@@ -40,6 +40,17 @@
     <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
   </stringbundleset>
 
+  <toolbar id="toolbar">
+    <toolbarbutton id="all" label="all" type="radio" group="RadioGroup" image="chrome://global/skin/console/console-toolbar.png"
+		   oncommand="FoneraDLManager.drawFilteredDownloads('all')" checked="true"/>
+    <toolbarbutton id="downloads" label="downloads" type="radio" group="RadioGroup" image="chrome://foneradownloader/skin/context.png"
+		   oncommand="FoneraDLManager.drawFilteredDownloads('downloads')"/>
+    <toolbarbutton id="torrents" label="torrents" type="radio" group="RadioGroup" image="moz-icon://.torrent?size=16"
+		   oncommand="FoneraDLManager.drawFilteredDownloads('torrents')"/>
+    <!--toolbarbutton id="errors" label="errors" type="radio" group="RadioGroup" image="chrome://global/skin/icons/error-16.png" 
+		   oncommand=""/-->
+  </toolbar>
+
   <richlistbox id="foneradownloader-downloads-list" flex="1" onselect="FoneraDLManager.stripeifyList(this)"/>
 
   <statusbar id="status-bar">

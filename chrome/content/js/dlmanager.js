@@ -262,13 +262,28 @@ let FoneraDLManager = {
         dl.insertBefore(vboxImage,dl.firstChild);
     },
 
-    drawDownloads : function(dialog) {
+    drawFilteredDownloads : function(filter) {
+        let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
+        FoneraDLManager.drawDownloads(dialog, filter);
+        FoneraDLManager.stripeifyList(dialog);
+    },
+
+    drawDownloads : function(dialog, filter) {
         // FIXME: move styling to css
         // Example: http://www.nexgenmedia.net/mozilla/richlistbox/richlistbox-simple.xul
+        let foneraDownloads = [];
+        if (filter == 'all') {
+            foneraDownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+            let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+            foneraDownloads = foneraDownloads.concat(torrents);
+        } else if (filter == 'torrents') {
+            let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+            foneraDownloads = foneraDownloads.concat(torrents);
+        } else {
+            foneraDownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        }
+
         let stringsBundle = document.getElementById("string-bundle");
-        let foneraDownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
-        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
-        foneraDownloads = foneraDownloads.concat(torrents);
 
         // sort:
         let sortFunction = function (a, b) {
@@ -337,7 +352,7 @@ let FoneraDLManager = {
 
     drawItems : function() {
         let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
-        FoneraDLManager.drawDownloads(dialog);
+        FoneraDLManager.drawDownloads(dialog, 'all');
         FoneraDLManager.stripeifyList(dialog);
         FoneraDLManager.stopThrobbler();
     },
