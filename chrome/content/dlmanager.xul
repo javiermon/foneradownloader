@@ -41,14 +41,14 @@
   </stringbundleset>
 
   <toolbar id="filter-toolbar">
-    <toolbarbutton id="filter-all" label="&all-tab;" type="radio" group="RadioGroup" image="chrome://global/skin/console/console-toolbar.png"
+    <toolbarbutton id="filter-all" label="&all-tab;" type="radio" group="RadioGroup" image="chrome://mozapps/skin/downloads/downloadIcon.png"
 		   oncommand="FoneraDLManager.drawFilteredDownloads('filter-all')" checked="true"/>
+    <toolbarseparator />
     <toolbarbutton id="filter-downloads" label="&downloads-tab;" type="radio" group="RadioGroup" image="chrome://foneradownloader/skin/context.png"
 		   oncommand="FoneraDLManager.drawFilteredDownloads('filter-downloads')"/>
     <toolbarbutton id="filter-torrents" label="&torrents-tab;" type="radio" group="RadioGroup" image="moz-icon://.torrent?size=16"
 		   oncommand="FoneraDLManager.drawFilteredDownloads('filter-torrents')"/>
-    <!--toolbarbutton id="errors" label="errors" type="radio" group="RadioGroup" image="chrome://global/skin/icons/error-16.png" 
-		   oncommand=""/-->
+    <!--spacer flex="1"/-->
   </toolbar>
 
   <richlistbox id="foneradownloader-downloads-list" flex="1" onselect="FoneraDLManager.stripeifyList(this)"/>
