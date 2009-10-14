@@ -277,8 +277,7 @@ let FoneraDLManager = {
             let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
             foneraDownloads = foneraDownloads.concat(torrents);
         } else if (filter == 'filter-torrents') {
-            let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
-            foneraDownloads = foneraDownloads.concat(torrents);
+            foneraDownloads = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         } else {
             foneraDownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
         }
@@ -297,11 +296,12 @@ let FoneraDLManager = {
         };
 
         foneraDownloads.sort(sortFunction);
+        // remove childs
+        while (dialog.hasChildNodes()) {
+            dialog.removeChild(dialog.firstChild);
+        }
+
         if (foneraDownloads != null && foneraDownloads.length != 0) {
-            // remove childs
-            while (dialog.hasChildNodes()) {
-                dialog.removeChild(dialog.firstChild);
-            }
             // populate
             for (let i in foneraDownloads) {
                 let dl = document.createElement("richlistitem");
@@ -356,8 +356,14 @@ let FoneraDLManager = {
         let filter = 'filter-all';
         let children = document.getElementById("filter-toolbar").childNodes;
         for (let i = 0; i < children.length; i++) {
-            if (children[i].checked)
-                filter = children[i].id;
+            try {
+                if (children[i].type == 'radio' && children[i].checked) {
+                    filter = children[i].id;
+                    Application.console.log(children[i].id + " selected");
+                }
+            } catch (e) {
+                Application.console.log(e);
+            }
         };
         FoneraDLManager.drawDownloads(dialog, filter);
         FoneraDLManager.stripeifyList(dialog);
