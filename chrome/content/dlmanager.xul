@@ -40,13 +40,13 @@
     <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
   </stringbundleset>
 
-  <toolbar id="toolbar">
-    <toolbarbutton id="all" label="all" type="radio" group="RadioGroup" image="chrome://global/skin/console/console-toolbar.png"
-		   oncommand="FoneraDLManager.drawFilteredDownloads('all')" checked="true"/>
-    <toolbarbutton id="downloads" label="downloads" type="radio" group="RadioGroup" image="chrome://foneradownloader/skin/context.png"
-		   oncommand="FoneraDLManager.drawFilteredDownloads('downloads')"/>
-    <toolbarbutton id="torrents" label="torrents" type="radio" group="RadioGroup" image="moz-icon://.torrent?size=16"
-		   oncommand="FoneraDLManager.drawFilteredDownloads('torrents')"/>
+  <toolbar id="filter-toolbar">
+    <toolbarbutton id="filter-all" label="&all-tab;" type="radio" group="RadioGroup" image="chrome://global/skin/console/console-toolbar.png"
+		   oncommand="FoneraDLManager.drawFilteredDownloads('filter-all')" checked="true"/>
+    <toolbarbutton id="filter-downloads" label="&downloads-tab;" type="radio" group="RadioGroup" image="chrome://foneradownloader/skin/context.png"
+		   oncommand="FoneraDLManager.drawFilteredDownloads('filter-downloads')"/>
+    <toolbarbutton id="filter-torrents" label="&torrents-tab;" type="radio" group="RadioGroup" image="moz-icon://.torrent?size=16"
+		   oncommand="FoneraDLManager.drawFilteredDownloads('filter-torrents')"/>
     <!--toolbarbutton id="errors" label="errors" type="radio" group="RadioGroup" image="chrome://global/skin/icons/error-16.png" 
 		   oncommand=""/-->
   </toolbar>

@@ -272,11 +272,11 @@ let FoneraDLManager = {
         // FIXME: move styling to css
         // Example: http://www.nexgenmedia.net/mozilla/richlistbox/richlistbox-simple.xul
         let foneraDownloads = [];
-        if (filter == 'all') {
+        if (filter == 'filter-all') {
             foneraDownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
             let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
             foneraDownloads = foneraDownloads.concat(torrents);
-        } else if (filter == 'torrents') {
+        } else if (filter == 'filter-torrents') {
             let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
             foneraDownloads = foneraDownloads.concat(torrents);
         } else {
@@ -352,7 +352,14 @@ let FoneraDLManager = {
 
     drawItems : function() {
         let dialog = document.getElementById("foneradownloader-downloads-list"); // richlistbox
-        FoneraDLManager.drawDownloads(dialog, 'all');
+
+        let filter = 'filter-all';
+        let children = document.getElementById("filter-toolbar").childNodes;
+        for (let i = 0; i < children.length; i++) {
+            if (children[i].checked)
+                filter = children[i].id;
+        };
+        FoneraDLManager.drawDownloads(dialog, filter);
         FoneraDLManager.stripeifyList(dialog);
         FoneraDLManager.stopThrobbler();
     },
