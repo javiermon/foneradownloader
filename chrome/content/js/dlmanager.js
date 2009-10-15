@@ -280,7 +280,7 @@ let FoneraDLManager = {
 
         // sort:
         let sortCriteria = "load";
-        let children = document.getElementById("sort-menu").children;
+        let children = document.getElementById("sort-menu").childNodes;
         for (let j = 0; j < children.length; j++) {
             try {
                 // can't seem to get attributes directly from the object, need getAttribute
