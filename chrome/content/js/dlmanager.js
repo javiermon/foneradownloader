@@ -188,7 +188,6 @@ let FoneraDLManager = {
         if (!Fonera.isPluginEnabled()) {
             text = stringsBundle.getString('disabledString');
             icon = "chrome://foneradownloader/skin/disabled.png";
-            FoneraDLManager.stopThrobbler();
         } else {
             let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
             if (authToken == Fonera.authFailed) {
@@ -198,7 +197,6 @@ let FoneraDLManager = {
             } else if (authToken == Fonera.authError) {
                 text = stringsBundle.getString('authErrorString');
                 icon = "chrome://global/skin/icons/Error.png";
-                FoneraDLManager.stopThrobbler();
             } else if (authToken != null ) {
                 Application.console.log("authenticated");
                 // check disks:
@@ -206,17 +204,14 @@ let FoneraDLManager = {
                     Application.console.log("no disk available");
                     text = stringsBundle.getString('noDiskErrorString');
                     icon = "chrome://global/skin/icons/Warning.png";
-                    FoneraDLManager.stopThrobbler();
                 } else {
                     let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
                     let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
                     if (torrents.length == 0 && downloads.length == 0) {
                         text = stringsBundle.getString("noFilesFound");
                         icon = "chrome://foneradownloader/skin/context.png";
-                    }
-                    // remove this piece of code to show the loading throbbler
-                    // on every update:
-                    else {
+                    } else {
+                        FoneraDLManager.drawItems();
                         return;
                     }
                 }
@@ -234,6 +229,7 @@ let FoneraDLManager = {
         FoneraDLManager.drawStatusItem(ritem, icon, text);
         dialog.insertBefore(ritem, dialog.firstChild);
         FoneraDLManager.stripeifyList(dialog);
+        FoneraDLManager.stopThrobbler();
     },
 
     drawStatusItem : function(dl, icon, dlName) {
@@ -384,7 +380,7 @@ let FoneraDLManager = {
         // this is called from the previous call:
         // Fonera.checkDisks();
         // FoneraDownloader.checkDownloads();
-        FoneraDLManager.checkStatus();
+        // FoneraDLManager.checkStatus();
     },
 
     stripeifyList : function(list) {
@@ -446,13 +442,13 @@ let FoneraDLManager = {
 
     loadEvents : function() {
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
-        FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
-        FoneraDownloader.addEventListener("onSendUrl", FoneraDLManager.drawItems);
+        FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.checkStatus);
+        FoneraDownloader.addEventListener("onSendUrl", FoneraDLManager.checkStatus);
     },
 
     unloadEvents : function() {
         Fonera.removeEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
-        FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraDLManager.drawItems);
-        FoneraDownloader.removeEventListener("onSendUrl", FoneraDLManager.drawItems);
+        FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraDLManager.checkStatus);
+        FoneraDownloader.removeEventListener("onSendUrl", FoneraDLManager.checkStatus);
     }
 };

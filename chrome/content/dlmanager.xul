@@ -42,18 +42,18 @@
 
   <toolbar id="filter-toolbar">
     <toolbarbutton id="filter-all" label="&all-tab;" type="radio" group="RadioGroup" image="chrome://mozapps/skin/downloads/downloadIcon.png"
-		   oncommand="FoneraDLManager.drawItems()" checked="true"/>
+		   oncommand="FoneraDLManager.checkStatus()" checked="true"/>
     <toolbarseparator />
     <toolbarbutton id="filter-downloads" label="&downloads-tab;" type="radio" group="RadioGroup" image="chrome://foneradownloader/skin/context.png"
-		   oncommand="FoneraDLManager.drawItems()"/>
+		   oncommand="FoneraDLManager.checkStatus()"/>
     <toolbarbutton id="filter-torrents" label="&torrents-tab;" type="radio" group="RadioGroup" image="moz-icon://.torrent?size=16"
-		   oncommand="FoneraDLManager.drawItems()"/>
+		   oncommand="FoneraDLManager.checkStatus()"/>
     <spacer flex="1"/>
     <toolbarbutton id="sort-criteria" label="&sort;" type="menu">
       <menupopup id="sort-menu">
-        <menuitem id="load" label="&downloading-first;" type="radio" oncommand="FoneraDLManager.drawItems()" checked="true"/>
-        <menuitem id="done" label="&completed-first;" type="radio" oncommand="FoneraDLManager.drawItems()"/>
-        <menuitem id="paused" label="&paused-first;" type="radio" oncommand="FoneraDLManager.drawItems()"/>
+        <menuitem id="load" label="&downloading-first;" type="radio" oncommand="FoneraDLManager.checkStatus()" checked="true"/>
+        <menuitem id="done" label="&completed-first;" type="radio" oncommand="FoneraDLManager.checkStatus()"/>
+        <menuitem id="paused" label="&paused-first;" type="radio" oncommand="FoneraDLManager.checkStatus()"/>
       </menupopup>
 
     </toolbarbutton>
