@@ -30,6 +30,11 @@ Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
 Components.utils.import("resource://modules/format.js");
 
+const styleB12C = "font-style: bold; font-size: 1.2em; text-align: center;";
+const styleDMGLH = "display:-moz-grid-line; -moz-box-orient:horizontal";
+const styleC200 = "text-align: center; min-width: 200px;";
+const style15I09 = "margin-left:15px; font-style: italic; font-size: 0.9em;";
+
 // The Download Manager Window
 let FoneraDLManager = {
 
@@ -77,21 +82,21 @@ let FoneraDLManager = {
 
         // DATA
         let vboxData = document.createElement("vbox");
-        vboxData.setAttribute("style", "text-align: center; min-width: 200px;");
+        vboxData.setAttribute("style", styleC200);
         // name
         let hboxName = document.createElement("hbox");
         hboxName.setAttribute("flex", "1");
         let description = document.createElement("description");
 
         description.appendChild(document.createTextNode(dlName));
-        description.setAttribute("style", "font-style: bold; font-size: 1.2em; text-align: center;");
+        description.setAttribute("style", styleB12C);
         hboxName.insertBefore(description, hboxName.firstChild);
         // data
         let hboxData = document.createElement("hbox");
-        hboxData.setAttribute("style","display:-moz-grid-line; -moz-box-orient:horizontal");
+        hboxData.setAttribute("style",styleDMGLH);
         let type = document.createElement("label");
         type.setAttribute("value", stringsBundle.getString('type'));
-        type.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
+        type.setAttribute("style", style15I09);
 
         let typeString = document.createElement("label");
         typeString.setAttribute("value", stringsBundle.getString(downloadItem.type));
@@ -99,7 +104,7 @@ let FoneraDLManager = {
 
         let status = document.createElement("label");
         status.setAttribute("value", stringsBundle.getString('status'));
-        status.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
+        status.setAttribute("style", style15I09);
 
         let statusString = document.createElement("label");
         statusString.setAttribute("value", FoneraFormat.stateName(downloadItem.status));
@@ -108,7 +113,7 @@ let FoneraDLManager = {
 
         let size = document.createElement("label");
         size.setAttribute("value", stringsBundle.getString('size'));
-        size.setAttribute("style", "margin-left:15px; font-style: italic; font-size: 0.9em;");
+        size.setAttribute("style", style15I09);
 
         let sizeString = document.createElement("label");
         sizeString.setAttribute("value", FoneraFormat.bytesToSize(downloadItem.size, 2));
@@ -242,11 +247,11 @@ let FoneraDLManager = {
         // name
         let hboxName = document.createElement("hbox");
         hboxName.setAttribute("flex", "1");
-        hboxName.setAttribute("style", "text-align: center; min-width: 200px;");
+        hboxName.setAttribute("style", styleC200);
         let description = document.createElement("description");
 
         description.appendChild(document.createTextNode(dlName));
-        description.setAttribute("style", "font-style: bold; font-size: 1.2em; text-align: center;");
+        description.setAttribute("style", styleB12C);
         let space = document.createElement("spacer");
         hboxName.insertBefore(space, hboxName.firstChild);
         hboxName.insertBefore(description, hboxName.firstChild);

@@ -167,6 +167,8 @@ let FoneraLinkManager = {
                 .getService(Components.interfaces.nsIPromptService);
             prompts.alert(window, name, msg);
             return;
+        } else {
+            FoneraDownloader.checkDownloads();
         }
 
 

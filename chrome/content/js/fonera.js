@@ -122,8 +122,9 @@ let Fonera = {
         // do we want to re-authenticate?
         let reAuth = false;
         reAuth = (arguments.length == 1 && arguments[0] == true);
-        // disable sessions:
+        let authToken = Application.storage.get(this.AUTHTOKEN, null);
         if (reAuth) {
+            // disable sessions:
             Application.console.log("Disable session storage");
             Application.storage.set(this.AUTHTOKEN, null);
             Application.storage.set(this.FONERADOWNLOADS, []);
@@ -139,6 +140,12 @@ let Fonera = {
             return;
         }
 
+        if (!reAuth && this.authenticated(authToken)) {
+            Application.console.log("already authenticated\n");
+            this.notify(this.onAuthenticate);
+            return;
+        }
+        
 	// checks if we can reach the luci interface
 	let req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
 	    .createInstance(Components.interfaces.nsIXMLHttpRequest);
