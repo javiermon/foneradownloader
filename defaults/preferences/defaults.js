@@ -9,3 +9,4 @@ pref("extensions.foneradownloader.filters.torrents", "\.torrent$");
 pref("extensions.foneradownloader.filters.megaupload", "megaupload");
 pref("extensions.foneradownloader.filters.rapidshare", "rapidshare");
 pref("extensions.foneradownloader.dlview", "icon-view"); // icon-view | list-view
+pref("extensions.foneradownloader.dlsort", "load"); // load | done | paused

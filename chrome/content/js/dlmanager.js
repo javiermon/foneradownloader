@@ -39,7 +39,7 @@ const styleC200 = "text-align: center; min-width: 200px;";
 const style15I09 = "margin-left:15px; font-style: italic; font-size: 0.9em;";
 
 const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
-const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 4px;";
+const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 5px;";
 
 // The Download Manager Window
 let FoneraDLManager = {
@@ -342,7 +342,7 @@ let FoneraDLManager = {
         let stringsBundle = document.getElementById("string-bundle");
 
         // sort:
-        let sortCriteria = "load";
+        let sortCriteria = prefs.getCharPref('dlsort');
         let children = document.getElementById("sort-menu").childNodes;
         for (let j = 0; j < children.length; j++) {
             try {
@@ -356,6 +356,8 @@ let FoneraDLManager = {
             }
         };
         Application.console.log(sortCriteria + " sorting selected");
+        // save status:
+        prefs.setCharPref('dlsort', sortCriteria);
         let sortFunction = function (a, b) {
             if (a.status == sortCriteria)
                 if (b.status == sortCriteria)
@@ -461,6 +463,36 @@ let FoneraDLManager = {
         FoneraDLManager.refreshAction();
     },
 
+    loadDefaults : function() {
+        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        let sortCriteria = prefs.getCharPref('dlsort');
+
+        let children = document.getElementById("sort-menu").childNodes;
+        for (let j = 0; j < children.length; j++) {
+            try {
+                // can't seem to get attributes directly from the object, need getAttribute
+                if (children[j].getAttribute('type') == 'radio' && children[j].id == sortCriteria) {
+                    children[j].setAttribute('checked', true);
+                }
+            } catch (e) {
+                Application.console.log(e);
+            }
+        }
+
+        let view = prefs.getCharPref('dlview');
+        children = document.getElementById("filter-toolbar").childNodes;
+        for (let i = 0; i < children.length; i++) {
+            try {
+                if (children[i].type == 'radio' && children[i].group == 'ViewGroup' && children[i].id == view) {
+                    children[i].checked = true;
+                }
+            } catch (e) {
+                Application.console.log(e);
+            }
+        };
+
+    },
+
     showDownloadsWindow : function() {
         if (!Fonera.isPluginEnabled())
             return;
@@ -501,6 +533,7 @@ let FoneraDLManager = {
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.checkStatus);
         FoneraDownloader.addEventListener("onSendUrl", FoneraDLManager.checkStatus);
+        FoneraDLManager.loadDefaults();
     },
 
     unloadEvents : function() {

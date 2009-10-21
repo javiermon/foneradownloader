@@ -41,6 +41,7 @@
   </stringbundleset>
 
   <toolbar id="filter-toolbar">
+    <!-- filters -->
     <toolbarbutton id="filter-all" label="&all-tab;" type="radio" group="FilterGroup" image="chrome://mozapps/skin/downloads/downloadIcon.png"
 		   oncommand="FoneraDLManager.checkStatus()" checked="true"/>
     <toolbarseparator />
@@ -48,15 +49,18 @@
 		   oncommand="FoneraDLManager.checkStatus()"/>
     <toolbarbutton id="filter-torrents" label="&torrents-tab;" type="radio" group="FilterGroup" image="moz-icon://.torrent?size=16"
 		   oncommand="FoneraDLManager.checkStatus()"/>
+
     <spacer flex="1"/>
+    <!-- select view -->
     <toolbarbutton id="icon-view" type="radio" group="ViewGroup" image="chrome://foneradownloader/skin/icon.png"
-		   oncommand="FoneraDLManager.checkStatus()" checked="true"/>
+		   oncommand="FoneraDLManager.checkStatus()"/>
     <toolbarbutton id="list-view" type="radio" group="ViewGroup" image="chrome://foneradownloader/skin/list.png"
 		   oncommand="FoneraDLManager.checkStatus()"/>
     <toolbarseparator />
+    <!-- sorting -->
     <toolbarbutton id="sort-criteria" label="&sort;" type="menu">
       <menupopup id="sort-menu">
-        <menuitem id="load" label="&downloading-first;" type="radio" oncommand="FoneraDLManager.checkStatus()" checked="true"/>
+        <menuitem id="load" label="&downloading-first;" type="radio" oncommand="FoneraDLManager.checkStatus()"/>
         <menuitem id="done" label="&completed-first;" type="radio" oncommand="FoneraDLManager.checkStatus()"/>
         <menuitem id="paused" label="&paused-first;" type="radio" oncommand="FoneraDLManager.checkStatus()"/>
       </menupopup>
