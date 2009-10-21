@@ -52,9 +52,9 @@
 
     <spacer flex="1"/>
     <!-- select view -->
-    <toolbarbutton id="icon-view" type="radio" group="ViewGroup" image="chrome://foneradownloader/skin/icon.png"
+    <toolbarbutton id="icon-view" tooltiptext="&icon-view;" type="radio" group="ViewGroup" image="chrome://foneradownloader/skin/icon.png"
 		   oncommand="FoneraDLManager.checkStatus()"/>
-    <toolbarbutton id="list-view" type="radio" group="ViewGroup" image="chrome://foneradownloader/skin/list.png"
+    <toolbarbutton id="list-view" tooltiptext="&list-view;" type="radio" group="ViewGroup" image="chrome://foneradownloader/skin/list.png"
 		   oncommand="FoneraDLManager.checkStatus()"/>
     <toolbarseparator />
     <!-- sorting -->

@@ -10,3 +10,5 @@
 <!ENTITY downloading-first "Downloading">
 <!ENTITY completed-first "Completed">
 <!ENTITY paused-first "Paused">
+<!ENTITY list-view "List View">
+<!ENTITY icon-view "Icon View">
