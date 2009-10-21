@@ -39,7 +39,7 @@ const styleC200 = "text-align: center; min-width: 200px;";
 const style15I09 = "margin-left:15px; font-style: italic; font-size: 0.9em;";
 
 const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
-const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 5px;";
+const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 6px;";
 
 // The Download Manager Window
 let FoneraDLManager = {
