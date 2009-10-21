@@ -73,6 +73,47 @@ let FoneraDLManager = {
         dl.insertBefore(space, dl.firstChild);
         dl.insertBefore(item, dl.firstChild);
         dl.insertBefore(image, dl.firstChild);
+        // rightclick:
+        let id = downloadItem.id;
+        // dl.setAttribute('onclick', "FoneraDLManager.listViewAction(event,'" + id + "')");
+        let context = document.createElement('popupset');
+        let contextmenupopup = document.createElement('menupopup');
+        contextmenupopup.setAttribute('id', 'cxtpopup-' + id);
+        context.insertBefore(contextmenupopup, context.firstChild);
+
+        if (downloadItem.status == "done" || downloadItem.status == "hashing") {
+            // we do nothing
+        } else if (downloadItem.status == "load") {
+            let menuPause = document.createElement('menuitem');
+            // FIXME: translate:
+            menuPause.setAttribute('label', stringsBundle.getString("pause"));
+            menuPause.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'pause')");
+            contextmenupopup.insertBefore(menuPause, contextmenupopup.firstChild);
+        } else {
+            let menuPlay = document.createElement('menuitem');
+            // FIXME: translate:
+            menuPlay.setAttribute('label', stringsBundle.getString("start"));
+            menuPlay.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'start')");
+            contextmenupopup.insertBefore(menuPlay, contextmenupopup.firstChild);
+        }
+
+        let menuCancel = document.createElement('menuitem');
+        // FIXME: translate:
+        menuCancel.setAttribute('label', stringsBundle.getString("cancel"));
+        menuCancel.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'cancel')");
+        contextmenupopup.insertBefore(menuCancel, contextmenupopup.firstChild);
+
+        dl.setAttribute('context', 'cxtpopup-' + id);
+        dl.insertBefore(context, dl.firstChild);
+    },
+
+    listViewAction : function(event, id) {
+        // create a menupopup
+        let button = event.button; // 0: left 1: middle 2: right
+        if (button == 2) {
+            Application.console.log("right click");
+
+        }
     },
 
     drawDownloadItem : function(downloadItem, dl, stringsBundle) {
@@ -110,8 +151,8 @@ let FoneraDLManager = {
             tooltip.appendChild(tooltipMore);
         }
 
-        let tooltipId = dlName + "id";
-        tooltip.setAttribute("id", tooltipId);
+        let tooltipId = downloadItem.id;
+        tooltip.setAttribute("id", 'tooltip' + tooltipId);
         vboxImage.insertBefore(image,vboxImage.firstChild);
 
         image.setAttribute("tooltip", tooltipId);
