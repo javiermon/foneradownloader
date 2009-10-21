@@ -26,7 +26,6 @@ let EXPORTED_SYMBOLS = ["FoneraFormat"];
 let strBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"].
     getService(Components.interfaces.nsIStringBundleService);
 
-// STATUSBAR
 let FoneraFormat = {
 
     /**
@@ -80,6 +79,19 @@ let FoneraFormat = {
         else if (elmt == 2)
             return 'hashing'; // == verifying
         return 'waiting';
+    },
+
+    stripeifyList : function(list, style) {
+        let item = list.firstChild;
+        let i = 0;
+        while (item) {
+            if (item != list.selectedItem && (i % 2) != 0)
+                item.setAttribute("style", style + " background-color: Lavender;");
+            else
+                item.setAttribute("style", style);
+            i++;
+            item = item.nextSibling;
+        }
     },
 
     colorPicker : function(item) {

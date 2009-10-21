@@ -30,26 +30,15 @@ let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
 			.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
 
 Components.utils.import("resource://modules/fonera.js");
+Components.utils.import("resource://modules/format.js");
 Components.utils.import("resource://modules/downloader.js");
+
+const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 4px;";
 
 // The Download Manager Window
 let FoneraLinkManager = {
 
     links : "FONERAPAGELINKS",
-
-    stripeifyList : function(list) {
-        let style = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 4px;";
-        let item = list.firstChild;
-        let i = 0;
-        while (item) {
-            if (item != list.selectedItem && (i % 2) != 0)
-                item.setAttribute("style", style + " background-color: Lavender;");
-            else
-                item.setAttribute("style", style);
-            i++;
-            item = item.nextSibling;
-        }
-    },
 
     showLinksWindow : function() {
         if (!Fonera.isPluginEnabled())
@@ -126,7 +115,7 @@ let FoneraLinkManager = {
                 }
             }
         }
-        FoneraLinkManager.stripeifyList(dialog);
+        FoneraFormat.stripeifyList(dialog, listStyle);
     },
 
     processClick : function(event) {
@@ -264,7 +253,7 @@ let FoneraLinkManager = {
             if (!filtered && hide)
                 this.drawLinksList([]);
         }
-        FoneraLinkManager.stripeifyList(dialog);
+        FoneraFormat.stripeifyList(dialog, listStyle);
     },
 
     loadEvents : function() {

@@ -26,6 +26,9 @@ let EXPORTED_SYMBOLS = ["FoneraDLManager"];
 let Application = Components.classes["@mozilla.org/fuel/application;1"]
     .getService(Components.interfaces.fuelIApplication);
 
+let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
+    .getService(Components.interfaces.nsIPrefService);
+
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
 Components.utils.import("resource://modules/format.js");
@@ -35,8 +38,38 @@ const styleDMGLH = "display:-moz-grid-line; -moz-box-orient:horizontal";
 const styleC200 = "text-align: center; min-width: 200px;";
 const style15I09 = "margin-left:15px; font-style: italic; font-size: 0.9em;";
 
+const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
+const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 4px;";
+
 // The Download Manager Window
 let FoneraDLManager = {
+
+    drawDownloadItemSmall : function(downloadItem, dl, stringsBundle) {
+        let item = document.createElement("label");
+        let image = document.createElement("image");
+        let extension = downloadItem.file.substring(downloadItem.file.lastIndexOf("."),
+                                                          downloadItem.file.length);
+
+        let icon = (extension != "") ? "moz-icon://" + extension + "?size=16" : "moz-icon://.file?size=16";
+        image.setAttribute("src", icon);
+        item.setAttribute("value", downloadItem.file);
+        let space = document.createElement("spacer");
+        space.setAttribute("flex","1");
+
+        let statusString = document.createElement("label");
+        statusString.setAttribute("value", FoneraFormat.stateName(downloadItem.status));
+        statusString.setAttribute("style", "font-size: 0.9em; "
+                                  + "color: " + FoneraFormat.colorPicker(downloadItem.status) + ";");
+
+        let sizeString = document.createElement("label");
+        sizeString.setAttribute("value", FoneraFormat.bytesToSize(downloadItem.size, 2));
+
+        dl.insertBefore(sizeString, dl.firstChild);
+        dl.insertBefore(statusString, dl.firstChild);
+        dl.insertBefore(space, dl.firstChild);
+        dl.insertBefore(item, dl.firstChild);
+        dl.insertBefore(image, dl.firstChild);
+    },
 
     drawDownloadItem : function(downloadItem, dl, stringsBundle) {
         /*
@@ -184,6 +217,29 @@ let FoneraDLManager = {
         dl.insertBefore(vboxImage,dl.firstChild);
     },
 
+    toggleListView : function() {
+        let filters = {
+            'icon-view' : listStyle,
+            'list-view' : listStyleSmall
+        };
+        let children = document.getElementById("filter-toolbar").childNodes;
+        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        let filter = prefs.getCharPref('dlview');
+        for (let i = 0; i < children.length; i++) {
+            try {
+                if (children[i].type == 'radio' && children[i].checked && children[i].group == 'ViewGroup') {
+                    filter = children[i].id;
+                }
+            } catch (e) {
+                Application.console.log(e);
+            }
+        };
+        // re-set
+        Application.console.log(filters[filter] + " selected");
+        prefs.setCharPref('dlview', filter);
+        return filters[filter];
+    },
+
     checkStatus : function() {
         FoneraDLManager.startThrobbler();
         let stringsBundle = document.getElementById("string-bundle");
@@ -194,6 +250,8 @@ let FoneraDLManager = {
             text = stringsBundle.getString('disabledString');
             icon = "chrome://foneradownloader/skin/disabled.png";
         } else {
+            FoneraDLManager.toggleListView();
+
             let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
             if (authToken == Fonera.authFailed) {
                 text = stringsBundle.getString('authFailString');
@@ -277,6 +335,10 @@ let FoneraDLManager = {
             foneraDownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
         }
 
+        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        let filter = prefs.getCharPref('dlview');
+        let drawFunction = (filter == 'icon-view') ? FoneraDLManager.drawDownloadItem : FoneraDLManager.drawDownloadItemSmall;
+
         let stringsBundle = document.getElementById("string-bundle");
 
         // sort:
@@ -314,8 +376,7 @@ let FoneraDLManager = {
             // populate
             for (let i in foneraDownloads) {
                 let dl = document.createElement("richlistitem");
-                FoneraDLManager.drawDownloadItem(foneraDownloads[i], dl, stringsBundle);
-                // ...
+                drawFunction(foneraDownloads[i], dl, stringsBundle);
                 dialog.insertBefore(dl, dialog.firstChild);
             }
             // enable clear downloads
@@ -366,7 +427,7 @@ let FoneraDLManager = {
         let children = document.getElementById("filter-toolbar").childNodes;
         for (let i = 0; i < children.length; i++) {
             try {
-                if (children[i].type == 'radio' && children[i].checked) {
+                if (children[i].type == 'radio' && children[i].checked && children[i].group == 'FilterGroup') {
                     filter = children[i].id;
                     Application.console.log(children[i].id + " selected");
                 }
@@ -379,6 +440,11 @@ let FoneraDLManager = {
         FoneraDLManager.stopThrobbler();
     },
 
+    stripeifyList : function(dialog) {
+        let style = FoneraDLManager.toggleListView(); // choose
+        FoneraFormat.stripeifyList(dialog, style);
+    },
+
     refreshAction : function() {
         FoneraDLManager.startThrobbler();
         Fonera.checkFoneraAvailable();
@@ -386,20 +452,6 @@ let FoneraDLManager = {
         // Fonera.checkDisks();
         // FoneraDownloader.checkDownloads();
         // FoneraDLManager.checkStatus();
-    },
-
-    stripeifyList : function(list) {
-        let style = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
-        let item = list.firstChild;
-        let i = 0;
-        while (item) {
-            if (item != list.selectedItem && (i % 2) != 0)
-                item.setAttribute("style", style + " background-color: Lavender;");
-            else
-                item.setAttribute("style", style);
-            i++;
-            item = item.nextSibling;
-        }
     },
 
     clearCompleted : function() {
