@@ -64,6 +64,10 @@ let FoneraDLManager = {
         let sizeString = document.createElement("label");
         sizeString.setAttribute("value", FoneraFormat.bytesToSize(downloadItem.size, 2));
 
+        let dwSize = document.createElement("label");
+        dwSize.setAttribute("value", downloadItem.downloaded);
+
+        dl.insertBefore(dwSize, dl.firstChild);
         dl.insertBefore(sizeString, dl.firstChild);
         dl.insertBefore(statusString, dl.firstChild);
         dl.insertBefore(space, dl.firstChild);
