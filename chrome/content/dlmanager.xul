@@ -42,7 +42,7 @@
 
   <toolbar id="filter-toolbar">
     <!-- filters -->
-    <toolbarbutton id="filter-all" label="&all-tab;" type="radio" group="FilterGroup" image="chrome://mozapps/skin/downloads/downloadIcon.png"
+    <toolbarbutton id="filter-all" label="&all-tab;" type="radio" group="FilterGroup" image="chrome://foneradownloader/skin/alldls.png"
 		   oncommand="FoneraDLManager.checkStatus()" checked="true"/>
     <toolbarseparator />
     <toolbarbutton id="filter-downloads" label="&downloads-tab;" type="radio" group="FilterGroup" image="chrome://foneradownloader/skin/context.png"
