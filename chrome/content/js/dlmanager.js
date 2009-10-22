@@ -58,14 +58,16 @@ let FoneraDLManager = {
 
         let statusString = document.createElement("label");
         statusString.setAttribute("value", FoneraFormat.stateName(downloadItem.status));
-        statusString.setAttribute("style", "font-size: 0.9em; "
+        statusString.setAttribute("style", "font-size: 0.9em; text-align: right;"
                                   + "color: " + FoneraFormat.colorPicker(downloadItem.status) + ";");
 
         let sizeString = document.createElement("label");
         sizeString.setAttribute("value", FoneraFormat.bytesToSize(downloadItem.size, 2));
+        sizeString.setAttribute("style", "font-size: 0.9em; text-align: right;");
 
         let dwSize = document.createElement("label");
         dwSize.setAttribute("value", downloadItem.downloaded);
+        dwSize.setAttribute("style", "font-size: 0.9em; text-align: right;");
 
         dl.insertBefore(dwSize, dl.firstChild);
         dl.insertBefore(sizeString, dl.firstChild);
@@ -75,7 +77,6 @@ let FoneraDLManager = {
         dl.insertBefore(image, dl.firstChild);
         // rightclick:
         let id = downloadItem.id;
-
         let context = document.createElement('popupset');
         let contextmenupopup = document.createElement('menupopup');
         contextmenupopup.setAttribute('id', 'cxtpopup-' + id);
@@ -85,20 +86,17 @@ let FoneraDLManager = {
             // we do nothing
         } else if (downloadItem.status == "load") {
             let menuPause = document.createElement('menuitem');
-            // FIXME: translate:
             menuPause.setAttribute('label', stringsBundle.getString("pause"));
             menuPause.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'pause')");
             contextmenupopup.insertBefore(menuPause, contextmenupopup.firstChild);
         } else {
             let menuPlay = document.createElement('menuitem');
-            // FIXME: translate:
             menuPlay.setAttribute('label', stringsBundle.getString("start"));
             menuPlay.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'start')");
             contextmenupopup.insertBefore(menuPlay, contextmenupopup.firstChild);
         }
 
         let menuCancel = document.createElement('menuitem');
-        // FIXME: translate:
         menuCancel.setAttribute('label', stringsBundle.getString("cancel"));
         menuCancel.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'delete')");
         contextmenupopup.insertBefore(menuCancel, contextmenupopup.firstChild);
@@ -350,9 +348,6 @@ let FoneraDLManager = {
         hboxName.insertBefore(space, hboxName.firstChild);
         hboxName.insertBefore(description, hboxName.firstChild);
 
-        // space.setAttribute("flex","1");
-
-        //dl.insertBefore(space,dl.firstChild);
         dl.insertBefore(hboxName,dl.firstChild);
         dl.insertBefore(vboxImage,dl.firstChild);
     },
