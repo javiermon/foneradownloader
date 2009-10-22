@@ -524,7 +524,7 @@ let FoneraDownloader = {
                         downloadView["file"] = theDownload.name;
                         // FIXME: get status:
                         // 8 -> seeding | 4 -> downloading | 16 -> paused
-                        downloadView["status"] = FoneraFormat.transmissionStateName(theDownload.status);
+                        downloadView["status"] = FoneraFormat.transmissionToHumanStateName(theDownload.status);
                         downloadView["type"] = "torrent";
                         downloadView["size"] = theDownload.totalSize;
                         downloadView["id"] = theDownload.id;
@@ -576,7 +576,7 @@ let FoneraDownloader = {
                         } catch (e) {
                             downloadView["file"] = theDownload.uri.replace( /.*\//, "" );
                         }
-                        downloadView["status"] = theDownload.status;
+                        downloadView["status"] = FoneraFormat.foneraToHumanStateName(theDownload.status);
                         downloadView["type"] = theDownload.type;
                         downloadView["size"] = theDownload.size;
                         downloadView["id"] = theDownload.id;

@@ -67,7 +67,7 @@ let FoneraFormat = {
         }
     },
 
-    transmissionStateName : function(elmt) {
+    transmissionToHumanStateName : function(elmt) {
         // translate state to internal string, similar to how the fonera shows downloads
         // TODO: there are more states, find them
         if (elmt == 8)
@@ -79,6 +79,16 @@ let FoneraFormat = {
         else if (elmt == 2)
             return 'hashing'; // == verifying
         return 'waiting';
+    },
+
+    foneraToHumanStateName : function(elmt) {
+        // translate state to internal string, similar to how the fonera shows downloads
+        // TODO: there are more states, find them
+        if (elmt == 'suspended')
+            return 'paused';
+        else if (elmt == 'loading')
+            return 'load';
+        return elmt;
     },
 
     stripeifyList : function(list, style) {
