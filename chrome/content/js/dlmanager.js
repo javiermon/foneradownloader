@@ -88,17 +88,29 @@ let FoneraDLManager = {
             let menuPause = document.createElement('menuitem');
             menuPause.setAttribute('label', stringsBundle.getString("pause"));
             menuPause.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'pause')");
+            menuPause.setAttribute('class', 'menuitem-iconic');
+            menuPause.setAttribute("style",
+                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
+                           + "-moz-image-region: rect(0px, 48px, 16px, 32px);");
             contextmenupopup.insertBefore(menuPause, contextmenupopup.firstChild);
         } else {
             let menuPlay = document.createElement('menuitem');
             menuPlay.setAttribute('label', stringsBundle.getString("start"));
             menuPlay.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'start')");
+            menuPlay.setAttribute('class', 'menuitem-iconic');
+            menuPlay.setAttribute("style",
+                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
+                           + "-moz-image-region: rect(32px, 16px, 48px, 0px);");
             contextmenupopup.insertBefore(menuPlay, contextmenupopup.firstChild);
         }
 
         let menuCancel = document.createElement('menuitem');
         menuCancel.setAttribute('label', stringsBundle.getString("cancel"));
         menuCancel.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'delete')");
+        menuCancel.setAttribute('class', 'menuitem-iconic');
+        menuCancel.setAttribute("style",
+                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
+                             + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
         contextmenupopup.insertBefore(menuCancel, contextmenupopup.firstChild);
 
         dl.setAttribute('context', 'cxtpopup-' + id);
