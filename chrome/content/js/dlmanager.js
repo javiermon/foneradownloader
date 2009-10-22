@@ -40,6 +40,10 @@ const style15I09 = "margin-left:15px; font-style: italic; font-size: 0.9em;";
 
 const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
 const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 6px;";
+const miniActionButtons = "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); ";
+const playActionOffset = "-moz-image-region: rect(32px, 16px, 48px, 0px);";
+const pauseActionOffset = "-moz-image-region: rect(0px, 48px, 16px, 32px);";
+const cancelActionOffset = "-moz-image-region: rect(0px, 32px, 16px, 16px);";
 
 // The Download Manager Window
 let FoneraDLManager = {
@@ -90,8 +94,8 @@ let FoneraDLManager = {
             menuPause.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'pause')");
             menuPause.setAttribute('class', 'menuitem-iconic');
             menuPause.setAttribute("style",
-                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
-                           + "-moz-image-region: rect(0px, 48px, 16px, 32px);");
+                           miniActionButtons
+                           + pauseActionOffset);
             contextmenupopup.insertBefore(menuPause, contextmenupopup.firstChild);
         } else {
             let menuPlay = document.createElement('menuitem');
@@ -99,8 +103,8 @@ let FoneraDLManager = {
             menuPlay.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'start')");
             menuPlay.setAttribute('class', 'menuitem-iconic');
             menuPlay.setAttribute("style",
-                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
-                           + "-moz-image-region: rect(32px, 16px, 48px, 0px);");
+                           miniActionButtons
+                           + playActionOffset);
             contextmenupopup.insertBefore(menuPlay, contextmenupopup.firstChild);
         }
 
@@ -109,8 +113,8 @@ let FoneraDLManager = {
         menuCancel.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'delete')");
         menuCancel.setAttribute('class', 'menuitem-iconic');
         menuCancel.setAttribute("style",
-                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
-                             + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
+                           miniActionButtons
+                             + cancelActionOffset);
         contextmenupopup.insertBefore(menuCancel, contextmenupopup.firstChild);
 
         dl.setAttribute('context', 'cxtpopup-' + id);
@@ -221,22 +225,22 @@ let FoneraDLManager = {
         } else if (downloadItem.status == "load") {
             action = "pause";
             playb.setAttribute("style",
-                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
-                           + "-moz-image-region: rect(0px, 48px, 16px, 32px);");
+                           miniActionButtons
+                           + pauseActionOffset);
             playb.tooltipText = stringsBundle.getString("pause");
         } else {
             action = "start";
             playb.setAttribute("style",
-                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
-                           + "-moz-image-region: rect(32px, 16px, 48px, 0px);");
+                           miniActionButtons
+                           + playActionOffset);
             playb.tooltipText = stringsBundle.getString("start");
         }
         playb.setAttribute("onclick","FoneraDLManager.downloadAction('" + downloadItem.id + "','" + action  + "')");
 
         let cancelb = document.createElement("image");
         cancelb.setAttribute("style",
-                           "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); "
-                             + "-moz-image-region: rect(0px, 32px, 16px, 16px);");
+                           miniActionButtons
+                             + cancelActionOffset);
 
         cancelb.setAttribute("onclick","FoneraDLManager.downloadAction('" + downloadItem.id + "','delete')");
         cancelb.tooltipText = stringsBundle.getString("cancel");
