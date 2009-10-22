@@ -75,7 +75,7 @@ let FoneraDLManager = {
         dl.insertBefore(image, dl.firstChild);
         // rightclick:
         let id = downloadItem.id;
-        // dl.setAttribute('onclick', "FoneraDLManager.listViewAction(event,'" + id + "')");
+
         let context = document.createElement('popupset');
         let contextmenupopup = document.createElement('menupopup');
         contextmenupopup.setAttribute('id', 'cxtpopup-' + id);
@@ -100,20 +100,11 @@ let FoneraDLManager = {
         let menuCancel = document.createElement('menuitem');
         // FIXME: translate:
         menuCancel.setAttribute('label', stringsBundle.getString("cancel"));
-        menuCancel.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'cancel')");
+        menuCancel.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'delete')");
         contextmenupopup.insertBefore(menuCancel, contextmenupopup.firstChild);
 
         dl.setAttribute('context', 'cxtpopup-' + id);
         dl.insertBefore(context, dl.firstChild);
-    },
-
-    listViewAction : function(event, id) {
-        // create a menupopup
-        let button = event.button; // 0: left 1: middle 2: right
-        if (button == 2) {
-            Application.console.log("right click");
-
-        }
     },
 
     drawDownloadItem : function(downloadItem, dl, stringsBundle) {
