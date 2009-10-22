@@ -412,12 +412,14 @@ let FoneraDLManager = {
         // save status:
         prefs.setCharPref('dlsort', sortCriteria);
         let sortFunction = function (a, b) {
-            if (a.status == sortCriteria)
+            if (a.status == sortCriteria) {
                 if (b.status == sortCriteria)
                     return 0;
                 else
                     return 1;
-            else
+            } else if (a.status == b.status) {
+                return 1;
+            } else
                 return -1;
         };
 
