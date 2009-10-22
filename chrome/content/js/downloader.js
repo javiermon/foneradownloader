@@ -274,7 +274,7 @@ let FoneraDownloader = {
                         "params" : [id]
                     };
 
-                    let callback = function(response) {
+                    callback = function(response) {
                         if (response.error != null) {
                             Application.console.log("Response Error");
                         } else {
@@ -291,6 +291,9 @@ let FoneraDownloader = {
     deleteDownloadById : function(id) {
         let rpcCall = null; let download = null;
         let callback = null; let url = null;
+
+        let Application = Components.classes["@mozilla.org/fuel/application;1"]
+            .getService(Components.interfaces.fuelIApplication);
 
         let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
         let torrents = Application.storage.get(this.FONERATORRENTS, []);
@@ -318,8 +321,6 @@ let FoneraDownloader = {
                 "method" : "dl_delete",
                 "params" : [id]
             };
-            let Application = Components.classes["@mozilla.org/fuel/application;1"]
-                .getService(Components.interfaces.fuelIApplication);
 
             callback = function(response) {
                 if (response.error != null) {
