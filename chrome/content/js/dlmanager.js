@@ -41,7 +41,7 @@ const style15I09 = "margin-left:15px; font-style: italic; font-size: 0.9em;";
 const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
 const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 6px;";
 const miniActionButtons = "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); ";
-const playActionOffset = "-moz-image-region: rect(32px, 16px, 48px, 0px);";
+const playActionOffset = "-moz-image-region: rect(0px, 16px, 16px, 0px);";
 const pauseActionOffset = "-moz-image-region: rect(0px, 48px, 16px, 32px);";
 const cancelActionOffset = "-moz-image-region: rect(0px, 32px, 16px, 16px);";
 
@@ -86,9 +86,7 @@ let FoneraDLManager = {
         contextmenupopup.setAttribute('id', 'cxtpopup-' + id);
         context.insertBefore(contextmenupopup, context.firstChild);
 
-        if (downloadItem.status == "done" || downloadItem.status == "hashing") {
-            // we do nothing
-        } else if (downloadItem.status == "load") {
+        if (downloadItem.status == "load") {
             let menuPause = document.createElement('menuitem');
             menuPause.setAttribute('label', stringsBundle.getString("pause"));
             menuPause.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'pause')");
@@ -97,7 +95,7 @@ let FoneraDLManager = {
                            miniActionButtons
                            + pauseActionOffset);
             contextmenupopup.insertBefore(menuPause, contextmenupopup.firstChild);
-        } else {
+        } else if (downloadItem.status != "done" && downloadItem.status != "hashing") {
             let menuPlay = document.createElement('menuitem');
             menuPlay.setAttribute('label', stringsBundle.getString("start"));
             menuPlay.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'start')");
@@ -115,7 +113,8 @@ let FoneraDLManager = {
         menuCancel.setAttribute("style",
                            miniActionButtons
                              + cancelActionOffset);
-        contextmenupopup.insertBefore(menuCancel, contextmenupopup.firstChild);
+        // we want this action to be the last one:
+        contextmenupopup.appendChild(menuCancel);
 
         dl.setAttribute('context', 'cxtpopup-' + id);
         dl.insertBefore(context, dl.firstChild);
@@ -220,20 +219,20 @@ let FoneraDLManager = {
         let playb = document.createElement("image");
         let action = "none";
 
-        if (downloadItem.status == "done" || downloadItem.status == "hashing") {
-            playb.setAttribute("style","");
-        } else if (downloadItem.status == "load") {
+        if (downloadItem.status == "load") {
             action = "pause";
             playb.setAttribute("style",
                            miniActionButtons
                            + pauseActionOffset);
             playb.tooltipText = stringsBundle.getString("pause");
-        } else {
+        } else if (downloadItem.status != "done" && downloadItem.status != "hashing") {
             action = "start";
             playb.setAttribute("style",
                            miniActionButtons
                            + playActionOffset);
             playb.tooltipText = stringsBundle.getString("start");
+        } else {
+            playb.setAttribute("style","");
         }
         playb.setAttribute("onclick","FoneraDLManager.downloadAction('" + downloadItem.id + "','" + action  + "')");
 
