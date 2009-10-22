@@ -118,6 +118,27 @@ let FoneraDLManager = {
 
         dl.setAttribute('context', 'cxtpopup-' + id);
         dl.insertBefore(context, dl.firstChild);
+        let tooltip = FoneraDLManager.drawDownloadTooltip(downloadItem);
+        dl.setAttribute("tooltip", tooltip.id);
+        dl.insertBefore(tooltip, dl.firstChild);
+    },
+
+    drawDownloadTooltip : function(downloadItem) {
+        let tooltip = document.createElement("tooltip");
+        let tooltipName = document.createElement("description");
+        tooltipName.setAttribute("value", downloadItem.file);
+        tooltip.appendChild(tooltipName);
+
+        let dlMore = downloadItem.moreinfo;
+        for (let x in dlMore) {
+            let tooltipMore = document.createElement("description");
+            tooltipMore.setAttribute("value", dlMore[x]);
+            tooltip.appendChild(tooltipMore);
+        }
+
+        let tooltipId = 'tooltip' + downloadItem.id;
+        tooltip.setAttribute("id", tooltipId);
+        return tooltip;
     },
 
     drawDownloadItem : function(downloadItem, dl, stringsBundle) {
@@ -143,23 +164,9 @@ let FoneraDLManager = {
         let dlName = downloadItem.file;
 
         // TOOLTIP
-        let tooltip = document.createElement("tooltip");
-        let tooltipName = document.createElement("description");
-        tooltipName.setAttribute("value", dlName);
-        tooltip.appendChild(tooltipName);
-
-        let dlMore = downloadItem.moreinfo;
-        for (let x in dlMore) {
-            let tooltipMore = document.createElement("description");
-            tooltipMore.setAttribute("value", dlMore[x]);
-            tooltip.appendChild(tooltipMore);
-        }
-
-        let tooltipId = downloadItem.id;
-        tooltip.setAttribute("id", 'tooltip' + tooltipId);
+        let tooltip = FoneraDLManager.drawDownloadTooltip(downloadItem);
+        image.setAttribute("tooltip", tooltip.id);
         vboxImage.insertBefore(image,vboxImage.firstChild);
-
-        image.setAttribute("tooltip", tooltipId);
         vboxImage.insertBefore(tooltip,vboxImage.firstChild);
 
         // DATA
