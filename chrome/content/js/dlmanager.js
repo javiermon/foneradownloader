@@ -331,6 +331,7 @@ let FoneraDLManager = {
                         icon = "chrome://foneradownloader/skin/context.png";
                     } else {
                         FoneraDLManager.drawItems();
+                        FoneraDLManager.updateCounterLabels();
                         return;
                     }
                 }
@@ -348,6 +349,7 @@ let FoneraDLManager = {
         FoneraDLManager.drawStatusItem(ritem, icon, text);
         dialog.insertBefore(ritem, dialog.firstChild);
         FoneraDLManager.stripeifyList(dialog);
+        FoneraDLManager.updateCounterLabels();
         FoneraDLManager.stopThrobbler();
     },
 
@@ -516,6 +518,28 @@ let FoneraDLManager = {
         FoneraDownloader.deleteCompletedDownloads();
         // Force UI update:
         FoneraDLManager.refreshAction();
+    },
+
+    updateCounterLabels : function() {
+        let allLabel = document.getElementById("filter-all");
+        let downloadsLabel = document.getElementById("filter-downloads");
+        let torrentsLabel = document.getElementById("filter-torrents");
+
+        let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+        let total = downloads.length + torrents.length;
+        let separator = ' (';
+        let close = ')';
+        if (total != 0) {
+            Application.console.log('Updating counters');
+            allLabel.label = allLabel.label.split(separator)[0] + separator + total + close;
+            downloadsLabel.label = downloadsLabel.label.split(separator)[0] + separator + downloads.length + close;
+            torrentsLabel.label = torrentsLabel.label.split(separator)[0] + separator + torrents.length + close;
+        } else {
+            allLabel.label = allLabel.label.split(separator)[0];
+            downloadsLabel.label = downloadsLabel.label.split(separator)[0];
+            torrentsLabel.label = torrentsLabel.label.split(separator)[0];
+        }
     },
 
     loadDefaults : function() {
