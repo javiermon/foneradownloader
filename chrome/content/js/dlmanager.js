@@ -37,6 +37,8 @@ const styleB12C = "font-style: bold; font-size: 1.2em; text-align: center;";
 const styleDMGLH = "display:-moz-grid-line; -moz-box-orient:horizontal";
 const styleC200 = "text-align: center; min-width: 200px;";
 const style15I09 = "margin-left:15px; font-style: italic; font-size: 0.9em;";
+const style09r55 = "font-size: 0.9em; text-align: right; min-width: 55px;";
+const style09r25 = "font-size: 0.9em; text-align: right; min-width: 25px;";
 
 const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
 const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 6px;";
@@ -67,11 +69,11 @@ let FoneraDLManager = {
 
         let sizeString = document.createElement("label");
         sizeString.setAttribute("value", FoneraFormat.bytesToSize(downloadItem.size, 2));
-        sizeString.setAttribute("style", "font-size: 0.9em; text-align: right;");
+        sizeString.setAttribute("style", style09r55);
 
         let dwSize = document.createElement("label");
         dwSize.setAttribute("value", downloadItem.downloaded);
-        dwSize.setAttribute("style", "font-size: 0.9em; text-align: right;");
+        dwSize.setAttribute("style", style09r25);
 
         dl.insertBefore(dwSize, dl.firstChild);
         dl.insertBefore(sizeString, dl.firstChild);
