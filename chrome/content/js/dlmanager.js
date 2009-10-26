@@ -38,7 +38,7 @@ const styleDMGLH = "display:-moz-grid-line; -moz-box-orient:horizontal";
 const styleC200 = "text-align: center; min-width: 200px;";
 const style15I09 = "margin-left:15px; font-style: italic; font-size: 0.9em;";
 const style09r55 = "font-size: 0.9em; text-align: right; min-width: 55px;";
-const style09r25 = "font-size: 0.9em; text-align: right; min-width: 25px;";
+const style09r40 = "font-size: 0.9em; text-align: right; min-width: 40px;";
 
 const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
 const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 6px;";
@@ -59,12 +59,13 @@ let FoneraDLManager = {
         let icon = (extension != "") ? "moz-icon://" + extension + "?size=16" : "moz-icon://.file?size=16";
         image.setAttribute("src", icon);
         item.setAttribute("value", downloadItem.file);
+        item.setAttribute("style", "font-size: 0.9em;");
         let space = document.createElement("spacer");
         space.setAttribute("flex","1");
 
         let statusString = document.createElement("label");
         statusString.setAttribute("value", FoneraFormat.stateName(downloadItem.status));
-        statusString.setAttribute("style", "font-size: 0.9em; text-align: right;"
+        statusString.setAttribute("style", style09r55
                                   + "color: " + FoneraFormat.colorPicker(downloadItem.status) + ";");
 
         let sizeString = document.createElement("label");
@@ -73,7 +74,7 @@ let FoneraDLManager = {
 
         let dwSize = document.createElement("label");
         dwSize.setAttribute("value", downloadItem.downloaded);
-        dwSize.setAttribute("style", style09r25);
+        dwSize.setAttribute("style", style09r40);
 
         dl.insertBefore(dwSize, dl.firstChild);
         dl.insertBefore(sizeString, dl.firstChild);
