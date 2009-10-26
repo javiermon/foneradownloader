@@ -301,6 +301,9 @@ let FoneraDLManager = {
 
     checkStatus : function() {
         FoneraDLManager.startThrobbler();
+        
+        FoneraDLManager.drawErrors();
+
         let stringsBundle = document.getElementById("string-bundle");
         let text = stringsBundle.getString('loading') + "...";
         let icon = "chrome://global/skin/icons/loading_16.png";
@@ -354,6 +357,58 @@ let FoneraDLManager = {
         FoneraDLManager.stripeifyList(dialog);
         FoneraDLManager.updateCounterLabels();
         FoneraDLManager.stopThrobbler();
+    },
+
+    drawErrors : function() {
+        let dialog = document.getElementById("foneradownloader-errors-list"); // richlistbox
+        let errors = Application.storage.get(Fonera.LASTERROR, null);
+        if (errors == null) {
+            dialog.setAttribute('hidden', true);
+            return;
+        }
+        let stringsBundle = document.getElementById("string-bundle");
+        dialog.setAttribute('hidden', false);
+        Application.console.log("Last error found " + errors);
+        let icon = '';
+        let errormsg = '';
+        // TODO: refactor with status.js
+        if (errors.match(FoneraDownloader.NOACCOUNTERROR)) {
+            icon = "chrome://global/skin/icons/warning-16.png";
+            let error = errors.split(":")[0];
+            let domain = errors.split(":")[1];
+            errormsg = stringsBundle.getString(error) + ": " + domain;
+        } else if (errors != null && errors != FoneraDownloader.ACCOUNTERROR) {
+            icon = "chrome://global/skin/icons/warning-16.png";
+            errormsg = errors + " : "  + stringsBundle.getString('downloadFailed');
+        } else {
+            icon = "chrome://global/skin/icons/error-16.png";
+            errormsg = stringsBundle.getString("unknownerror");
+        }
+
+        while (dialog.hasChildNodes()) {
+            dialog.removeChild(dialog.firstChild);
+        }
+
+        let ritem = document.createElement("richlistitem");
+        dialog.insertBefore(ritem, dialog.firstChild);
+        let vbox = document.createElement("vbox");
+        let cancelb = document.createElement("image");
+        cancelb.setAttribute("src", "chrome://foneradownloader/skin/disabled.png");
+                           //miniActionButtons
+                           //  + cancelActionOffset);
+        cancelb.setAttribute("onclick","FoneraDLManager.clearErrors()");
+        cancelb.tooltipText = stringsBundle.getString("clear");
+        vbox.insertBefore(cancelb, vbox.firstChild);
+        ritem.insertBefore(vbox, ritem.firstChild);
+        FoneraDLManager.drawStatusItem(ritem, icon, errormsg);
+        FoneraDLManager.stripeifyList(dialog);
+    },
+
+    clearErrors : function() {
+        Application.storage.set(Fonera.LASTERROR, null);
+        let dialog = document.getElementById("foneradownloader-errors-list"); // richlistbox
+        dialog.setAttribute('hidden', true);
+        FoneraDLManager.stripeifyList(dialog);
     },
 
     drawStatusItem : function(dl, icon, dlName) {
@@ -510,6 +565,7 @@ let FoneraDLManager = {
     refreshAction : function() {
         FoneraDLManager.startThrobbler();
         Fonera.checkFoneraAvailable();
+        FoneraDLManager.drawErrors();
         // this is called from the previous call:
         // Fonera.checkDisks();
         // FoneraDownloader.checkDownloads();
