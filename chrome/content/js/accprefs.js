@@ -75,7 +75,7 @@ let FoneraAccountsPrefs = {
         let stringsBundle = document.getElementById("string-bundle");
         FoneraAccountsPrefs.stopThrobbler();
         let msglabel = document.getElementById("status-messages-text");
-        let errors = Application.storage.get(Fonera.LASTERROR, null);
+        let errors = Application.storage.get(FoneraDownloader.ACCOUNTERROR, null);
         Application.console.log("lastError: " + errors);
         if ((errors == FoneraDownloader.ACCOUNTERROR) || (errors == FoneraDownloader.ACCOUNTDELERROR))
             msglabel.value = stringsBundle.getString(errors);
@@ -91,6 +91,7 @@ let FoneraAccountsPrefs = {
         // empty labels seem to appear with "" as the default text
         if ((username != "") && (password != "")) {
             this.startThrobbler();
+            Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
             let stringsBundle = document.getElementById("string-bundle");
             let msglabel = document.getElementById("status-messages-text");
             msglabel.value = stringsBundle.getString("addingAccount");
@@ -106,6 +107,7 @@ let FoneraAccountsPrefs = {
         let index = tree.currentIndex;
         if (index == -1)
             return;
+        Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
         let selection = tree.view.selection;
         let cellType = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(0));
         let cellUname = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(1));
@@ -134,11 +136,13 @@ let FoneraAccountsPrefs = {
     },
 
     loadEvents : function() {
+        Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
         Fonera.addEventListener("onAuthenticate", FoneraAccountsPrefs.enableAccountManager);
         FoneraDownloader.addEventListener("onAccountsUpdates", FoneraAccountsPrefs.actionOnAccountCallback);
     },
 
     unloadEvents : function() {
+        Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
         Fonera.removeEventListener("onAuthenticate", FoneraAccountsPrefs.enableAccountManager);
         FoneraDownloader.removeEventListener("onAccountsUpdates", FoneraAccountsPrefs.actionOnAccountCallback);
     }

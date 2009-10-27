@@ -177,9 +177,7 @@ let FoneraDownloader = {
             callback = function(response) {
                 if (response.error != null) {
                     Application.console.log("Response Error");
-                }
-                else {
-                    Application.storage.set(Fonera.LASTERROR, null);
+                    Application.storage.set(Fonera.LASTERROR, id);
                 }
                 FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             };
@@ -225,9 +223,7 @@ let FoneraDownloader = {
             callback = function(response) {
                 if (response.error != null) {
                     Application.console.log("Response Error");
-                }
-                else {
-                    Application.storage.set(Fonera.LASTERROR, null);
+                    Application.storage.set(Fonera.LASTERROR, id);
                 }
                 FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             };
@@ -277,8 +273,7 @@ let FoneraDownloader = {
                     callback = function(response) {
                         if (response.error != null) {
                             Application.console.log("Response Error");
-                        } else {
-                            Application.storage.set(Fonera.LASTERROR, null);
+                            Application.storage.set(Fonera.LASTERROR, id);
                         }
                     };
                 }
@@ -325,9 +320,7 @@ let FoneraDownloader = {
             callback = function(response) {
                 if (response.error != null) {
                     Application.console.log("Response Error");
-                }
-                else {
-                    Application.storage.set(Fonera.LASTERROR, null);
+                    Application.storage.set(Fonera.LASTERROR, id);
                 }
                 FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             };
@@ -401,8 +394,6 @@ let FoneraDownloader = {
             if (!response.result.status) {
                 Application.storage.set(Fonera.LASTERROR, basename);
                 Application.console.log("Response Error");
-            } else {
-                Application.storage.set(Fonera.LASTERROR, null);
             }
             FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             FoneraDownloader.notify(FoneraDownloader.onSendUrl);
@@ -430,8 +421,6 @@ let FoneraDownloader = {
             if (response.result != "success") {
                 Application.storage.set(Fonera.LASTERROR, basename);
                 Application.console.log("Response Error");
-            } else {
-                Application.storage.set(Fonera.LASTERROR, null);
             }
             FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             FoneraDownloader.notify(FoneraDownloader.onSendUrl);
@@ -630,7 +619,7 @@ let FoneraDownloader = {
         let callback = function(response) {
             if (response.error != null || !response.result || response.result == false) {
                 Application.console.log("Response Error. Setting " + Fonera.LASTERROR + " to " + FoneraDownloader.ACCOUNTERROR);
-                Application.storage.set(Fonera.LASTERROR, FoneraDownloader.ACCOUNTERROR);
+                Application.storage.set(FoneraDownloader.ACCOUNTERROR, FoneraDownloader.ACCOUNTERROR);
             }
             // refresh accounts storage
             FoneraDownloader.checkAccountsSettings();
@@ -652,7 +641,7 @@ let FoneraDownloader = {
         let callback = function(response) {
             if (response.error != null || !response.result || response.result == false) {
                 Application.console.log("Response Error. Setting " + Fonera.LASTERROR + " to " + FoneraDownloader.ACCOUNTDELERROR);
-                Application.storage.set(Fonera.LASTERROR, FoneraDownloader.ACCOUNTDELERROR);
+                Application.storage.set(FoneraDownloader.ACCOUNTERROR, FoneraDownloader.ACCOUNTDELERROR);
             }
             // refresh accounts storage
             FoneraDownloader.checkAccountsSettings();
