@@ -394,12 +394,17 @@ let FoneraDLManager = {
         let vbox = document.createElement("vbox");
         let cancelb = document.createElement("image");
         cancelb.setAttribute("src", "chrome://foneradownloader/skin/disabled.png");
-                           //miniActionButtons
-                           //  + cancelActionOffset);
         cancelb.setAttribute("onclick","FoneraDLManager.clearErrors()");
         cancelb.tooltipText = stringsBundle.getString("clear");
+
+        let href = document.createElement("label");
+        href.setAttribute('href', Fonera.foneraURL());
+        href.setAttribute('class','text-link');
+        href.setAttribute('value', stringsBundle.getString('gotodashboard'));
+
         vbox.insertBefore(cancelb, vbox.firstChild);
         ritem.insertBefore(vbox, ritem.firstChild);
+        ritem.insertBefore(href, ritem.firstChild);
         FoneraDLManager.drawStatusItem(ritem, icon, errormsg);
         FoneraDLManager.stripeifyList(dialog);
     },
