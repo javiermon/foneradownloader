@@ -60,6 +60,7 @@ let FoneraStatus = {
             return;
         } else if (authToken == null) {
             Application.console.log("Waiting for authentication!\n");
+            panel.tooltipText = stringsBundle.getString('foneraloading');
             panel.src = "chrome://global/skin/icons/loading_16.png";
             return;
         }
