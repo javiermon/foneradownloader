@@ -71,8 +71,8 @@ let FoneraStatus = {
         }
         // check errors:
         let errors = Application.storage.get(Fonera.LASTERROR, null);
-        Application.console.log("status found error: " + errors);
         if (errors != null) {
+            Application.console.log("status found error: " + errors);
             clearErrorItem.setAttribute('hidden', false);
             if (errors.match(FoneraDownloader.NOACCOUNTERROR)) {
                 panel.src = "chrome://global/skin/icons/warning-16.png";
