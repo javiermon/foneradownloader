@@ -68,8 +68,10 @@
 		    onclick="FoneraDLManager.processClick(event);" context="foneradownloader-sbpanel-cxtmenu"/> 
     <popupset>
       <menupopup id="foneradownloader-sbpanel-cxtmenu">
-	<menuitem label="&preferences;" default="true"
+	<menuitem id="foneradownloader-sbpanel-prefs" label="&preferences;" default="true"
 		  oncommand="FoneraStatus.showPreferences()"/>
+	<menuitem id="foneradownloader-sbpanel-clearerrors" label="&clear-error;" hidden="true"
+		  oncommand="FoneraStatus.clearError()"/>
       </menupopup>
     </popupset>
 

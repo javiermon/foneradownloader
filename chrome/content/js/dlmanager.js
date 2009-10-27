@@ -390,7 +390,7 @@ let FoneraDLManager = {
         let cancelb = document.createElement("image");
         cancelb.setAttribute("src", "chrome://foneradownloader/skin/disabled.png");
         cancelb.setAttribute("onclick","FoneraDLManager.clearErrors()");
-        cancelb.tooltipText = stringsBundle.getString("clear");
+        cancelb.tooltipText = stringsBundle.getString("clearerror");
 
         let href = document.createElement("label");
         href.setAttribute('href', Fonera.foneraURL());
