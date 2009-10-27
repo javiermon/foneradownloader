@@ -40,6 +40,9 @@
     window.addEventListener("load", function(e) { Fonera.checkFoneraAvailable(); }, false);
     window.addEventListener("load", function(e) { FoneraCxtxtMenu.init(); }, false);
 
+    // necesary hack, some callbacks wont work on statusbar
+    window.setInterval(FoneraStatus.drawTooltip, 60*100); 
+
     // refresh policies:
     window.setInterval(function() { Fonera.checkFoneraAvailable(); FoneraDownloader.checkDownloads(); Fonera.checkDisks();}, 50*60*100); // 10*60*100
     // we want to re-authenticate so sessions don't expire

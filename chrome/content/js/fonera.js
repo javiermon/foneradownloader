@@ -52,7 +52,7 @@ let Fonera = {
     addEventListener : function(event, callback) {
         try {
             // example: event == onCheckFoneraAvailable
-            this[event].push(callback);
+            Fonera[event].push(callback);
         } catch (e) {
             Application.console.log("invalid event registration " + e);
         }
@@ -61,7 +61,7 @@ let Fonera = {
     removeEventListener : function(event, callback) {
         try {
             // example: event == onCheckFoneraAvailable
-            let eventCallbacks = this[event];
+            let eventCallbacks = Fonera[event];
             for (let i in eventCallbacks)
                 if (callback == eventCallbacks[i])
                     // remove from index i, 1 element

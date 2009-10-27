@@ -63,7 +63,7 @@ let FoneraDownloader = {
     addEventListener : function(event, callback) {
         try {
             // example: event == onCheckFoneraAvailable
-            this[event].push(callback);
+            FoneraDownloader[event].push(callback);
         } catch (e) {
             Application.console.log("invalid event registration " + e);
         }
@@ -72,7 +72,7 @@ let FoneraDownloader = {
     removeEventListener : function(event, callback) {
         try {
             // example: event == onCheckFoneraAvailable
-            let eventCallbacks = this[event];
+            let eventCallbacks = FoneraDownloader[event];
             for (let i in eventCallbacks)
                 if (callback == eventCallbacks[i])
                     // remove from index i, 1 element
@@ -285,7 +285,7 @@ let FoneraDownloader = {
                 this.callRpc(rpcCall, callback, url);
             }
         }
-        this.notify(this.onDownloadsAvailable);
+        FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
     },
 
     deleteDownloadById : function(id) {
