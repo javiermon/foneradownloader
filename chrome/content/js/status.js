@@ -69,6 +69,7 @@ let FoneraStatus = {
             panel.src = "chrome://global/skin/icons/warning-16.png";
             return;
         }
+        // FIXME: this code is duplicated in dlmanager
         // check errors:
         let errors = Application.storage.get(Fonera.LASTERROR, null);
         if (errors != null) {
