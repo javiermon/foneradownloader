@@ -40,9 +40,6 @@
     window.addEventListener("load", function(e) { Fonera.checkFoneraAvailable(); }, false);
     window.addEventListener("load", function(e) { FoneraCxtxtMenu.init(); }, false);
 
-    // necesary hack, onsendurl doesnt work on callbacks
-    window.setInterval(FoneraStatus.printErrors, 60*100); 
-
     // refresh policies:
     window.setInterval(function() { Fonera.checkFoneraAvailable(); FoneraDownloader.checkDownloads(); Fonera.checkDisks();}, 50*60*100); // 10*60*100
     // we want to re-authenticate so sessions don't expire
@@ -65,8 +62,6 @@
 
   <!-- statusbar -->
   <statusbar id="status-bar">
-    <statusbarpanel id="foneraDownloader-sbpanel-errors" tooltiptext=""
-		    class="statusbarpanel-iconic" src="" onclick="FoneraStatus.clearErrors();"/> 
     <!-- TODO: branding icons! -->
     <statusbarpanel id="foneraDownloader-sbpanel" label="&fonera_downloads;" tooltiptext="&loading;"
 		    class="statusbarpanel-iconic-text" src="chrome://global/skin/icons/loading_16.png" 

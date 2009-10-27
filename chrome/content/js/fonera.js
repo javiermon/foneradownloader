@@ -49,7 +49,6 @@ let Fonera = {
     onAuthenticate : [],
     onCheckDisks : [],
 
-
     addEventListener : function(event, callback) {
         try {
             // example: event == onCheckFoneraAvailable
@@ -145,7 +144,7 @@ let Fonera = {
             this.notify(this.onAuthenticate);
             return;
         }
-        
+
 	// checks if we can reach the luci interface
 	let req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
 	    .createInstance(Components.interfaces.nsIXMLHttpRequest);

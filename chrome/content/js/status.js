@@ -35,34 +35,6 @@ Components.utils.import("resource://modules/downloader.js");
 // STATUSBAR
 let FoneraStatus = {
 
-    printErrors : function() {
-        let stringsBundle = document.getElementById("string-bundle");
-        let errors = Application.storage.get(Fonera.LASTERROR, null);
-        if (errors != null)
-            Application.console.log("Last error found " + errors);
-        let panel = document.getElementById('foneraDownloader-sbpanel-errors');
-
-        if (errors != null && errors.match(FoneraDownloader.NOACCOUNTERROR)) {
-            panel.src = "chrome://global/skin/icons/warning-16.png";
-            let error = errors.split(":")[0];
-            let domain = errors.split(":")[1];
-            panel.tooltipText = stringsBundle.getString(error) + ": " + domain;
-        } else if (errors != null && errors != FoneraDownloader.ACCOUNTERROR) {
-            panel.src = "chrome://global/skin/icons/warning-16.png";
-            panel.tooltipText = errors + " : "  + stringsBundle.getString('downloadFailed');
-        } else {
-            panel.src = "";
-            panel.tooltipText = "";
-        }
-    },
-
-    clearErrors : function() {
-        Application.storage.set(Fonera.LASTERROR, null);
-        let panel = document.getElementById('foneraDownloader-sbpanel-errors');
-        panel.src = "";
-        panel.tooltipText = "";
-    },
-
     drawTooltip : function() {
         let stringsBundle = document.getElementById("string-bundle");
         let panel = document.getElementById('foneraDownloader-sbpanel');
@@ -94,7 +66,20 @@ let FoneraStatus = {
             panel.src = "chrome://global/skin/icons/warning-16.png";
             return;
         }
-
+        // check errors:
+        let errors = Application.storage.get(Fonera.LASTERROR, null);
+        if (errors != null && errors.match(FoneraDownloader.NOACCOUNTERROR)) {
+            panel.src = "chrome://global/skin/icons/warning-16.png";
+            let error = errors.split(":")[0];
+            let domain = errors.split(":")[1];
+            panel.tooltipText = stringsBundle.getString(error) + ": " + domain;
+            return;
+        } else if (errors != null && errors != FoneraDownloader.ACCOUNTERROR) {
+            panel.src = "chrome://global/skin/icons/warning-16.png";
+            panel.tooltipText = errors + " : "  + stringsBundle.getString('downloadFailed');
+            return;
+        }
+        // everything fine:
         panel.src = "chrome://foneradownloader/skin/information.png";
         let foneraStatus = document.getElementById("foneraDownloader-sbpanel");
         let foneradownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
@@ -114,13 +99,11 @@ let FoneraStatus = {
 
     loadEvents : function() {
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
-        FoneraDownloader.addEventListener("onSendUrl", FoneraStatus.printErrors);
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip);
     },
 
     unloadEvents : function() {
         FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
-        FoneraDownloader.removeEventListener("onSendUrl", FoneraStatus.printErrors);
         Fonera.removeEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip);
     }
 

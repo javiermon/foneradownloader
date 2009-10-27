@@ -301,7 +301,7 @@ let FoneraDLManager = {
 
     checkStatus : function() {
         FoneraDLManager.startThrobbler();
-        
+
         FoneraDLManager.drawErrors();
 
         let stringsBundle = document.getElementById("string-bundle");
@@ -409,6 +409,8 @@ let FoneraDLManager = {
         let dialog = document.getElementById("foneradownloader-errors-list"); // richlistbox
         dialog.setAttribute('hidden', true);
         FoneraDLManager.stripeifyList(dialog);
+        // call notification framework to propagate updates
+        Fonera.checkFoneraAvailable();
     },
 
     drawStatusItem : function(dl, icon, dlName) {
@@ -565,7 +567,6 @@ let FoneraDLManager = {
     refreshAction : function() {
         FoneraDLManager.startThrobbler();
         Fonera.checkFoneraAvailable();
-        FoneraDLManager.drawErrors();
         // this is called from the previous call:
         // Fonera.checkDisks();
         // FoneraDownloader.checkDownloads();
