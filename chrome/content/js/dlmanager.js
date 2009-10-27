@@ -369,20 +369,15 @@ let FoneraDLManager = {
         let stringsBundle = document.getElementById("string-bundle");
         dialog.setAttribute('hidden', false);
         Application.console.log("Last error found " + errors);
-        let icon = '';
-        let errormsg = '';
-        // TODO: refactor with status.js
+        let icon = "chrome://global/skin/icons/error-16.png";
+        let errormsg = stringsBundle.getString("unknownerror");
+
         if (errors.match(FoneraDownloader.NOACCOUNTERROR)) {
-            icon = "chrome://global/skin/icons/warning-16.png";
             let error = errors.split(":")[0];
             let domain = errors.split(":")[1];
             errormsg = stringsBundle.getString(error) + ": " + domain;
         } else if (errors != null && errors != FoneraDownloader.ACCOUNTERROR) {
-            icon = "chrome://global/skin/icons/warning-16.png";
             errormsg = errors + " : "  + stringsBundle.getString('downloadFailed');
-        } else {
-            icon = "chrome://global/skin/icons/error-16.png";
-            errormsg = stringsBundle.getString("unknownerror");
         }
 
         while (dialog.hasChildNodes()) {
