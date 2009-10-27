@@ -157,7 +157,9 @@ let FoneraLinkManager = {
             prompts.alert(window, name, msg);
             return;
         } else {
-            FoneraDownloader.checkDownloads();
+            Fonera.checkFoneraAvailable();
+            // FIXME: this doesn't seem to check anything?
+            // FoneraDownloader.checkDownloads();
         }
 
 

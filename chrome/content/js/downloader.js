@@ -360,8 +360,8 @@ let FoneraDownloader = {
 
             if (!found) {
                 Application.console.log("Found " + domain  + " link and no account associated");
-                Application.storage.set(errorStorage, this.NOACCOUNTERROR + ":" + domain);
-                this.notify(this.onSendUrl);
+                Application.storage.set(errorStorage, FoneraDownloader.NOACCOUNTERROR + ":" + domain);
+                FoneraDownloader.notify(FoneraDownloader.onSendUrl);
                 return null;
             }
         }

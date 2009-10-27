@@ -68,6 +68,7 @@ let FoneraStatus = {
         }
         // check errors:
         let errors = Application.storage.get(Fonera.LASTERROR, null);
+        Application.console.log("status found error: " + errors);
         if (errors != null && errors.match(FoneraDownloader.NOACCOUNTERROR)) {
             panel.src = "chrome://global/skin/icons/warning-16.png";
             let error = errors.split(":")[0];
@@ -100,11 +101,13 @@ let FoneraStatus = {
     loadEvents : function() {
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip);
+        Fonera.addEventListener("onSendUrl", FoneraStatus.drawTooltip);
     },
 
     unloadEvents : function() {
         FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
         Fonera.removeEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip);
+        Fonera.removeEventListener("onSendUrl", FoneraStatus.drawTooltip);
     }
 
 };
