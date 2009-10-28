@@ -70,23 +70,14 @@ let FoneraStatus = {
             panel.src = "chrome://global/skin/icons/warning-16.png";
             return;
         }
-        // FIXME: this code is duplicated in dlmanager
         // check errors:
         let errors = Application.storage.get(Fonera.LASTERROR, null);
         if (errors != null) {
             Application.console.log("status found error: " + errors);
             clearErrorItem.setAttribute('hidden', false);
-            if (errors.match(FoneraDownloader.NOACCOUNTERROR)) {
-                panel.src = "chrome://global/skin/icons/warning-16.png";
-                let error = errors.split(":")[0];
-                let domain = errors.split(":")[1];
-                panel.tooltipText = stringsBundle.getString(error) + ": " + domain;
-                return;
-            } else if (errors != null && errors != FoneraDownloader.ACCOUNTERROR) {
-                panel.src = "chrome://global/skin/icons/warning-16.png";
-                panel.tooltipText = errors + " : "  + stringsBundle.getString('downloadFailed');
-                return;
-            }
+            panel.src = "chrome://global/skin/icons/warning-16.png";
+            panel.tooltipText = FoneraDownloader.getErrorString(errors, stringsBundle);
+            return;
         }
         // everything fine:
         panel.src = "chrome://foneradownloader/skin/information.png";

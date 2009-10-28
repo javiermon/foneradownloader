@@ -163,8 +163,11 @@ let FoneraDownloader = {
             callback = function(response) {
                 if (response.result == "success")
                     FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
-                else
-                    Application.console.log("Response Error");
+                else {
+                    let errorMsg = id + ":" + response.result.replace(/\s/g,'');
+                    Application.console.log("Response Error: " + errorMsg);
+                    Application.storage.set(Fonera.LASTERROR, errorMsg);
+                }
             };
             url = this.transmissionUrl();
         } else {
@@ -176,8 +179,8 @@ let FoneraDownloader = {
             url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
             callback = function(response) {
                 if (response.error != null) {
-                    Application.console.log("Response Error");
-                    Application.storage.set(Fonera.LASTERROR, id);
+                    Application.console.log("Response Error: " + response.error);
+                    Application.storage.set(Fonera.LASTERROR, id + ":" + response.error);
                 }
                 FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             };
@@ -204,8 +207,11 @@ let FoneraDownloader = {
             callback = function(response) {
                 if (response.result == "success")
                     FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
-                else
-                    Application.console.log("Response Error");
+                else {
+                    let errorMsg = id + ":" + response.result.replace(/\s/g,'');
+                    Application.console.log("Response Error: " + errorMsg);
+                    Application.storage.set(Fonera.LASTERROR, errorMsg);
+                }
             };
             rpcCall = {
                 "method":"torrent-start",
@@ -222,8 +228,8 @@ let FoneraDownloader = {
 
             callback = function(response) {
                 if (response.error != null) {
-                    Application.console.log("Response Error");
-                    Application.storage.set(Fonera.LASTERROR, id);
+                    Application.console.log("Response Error: " + response.error);
+                    Application.storage.set(Fonera.LASTERROR, id + ":" + response.error);
                 }
                 FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             };
@@ -258,8 +264,11 @@ let FoneraDownloader = {
                     callback = function(response) {
                         if (response.result == "success")
                             FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
-                        else
-                            Application.console.log("Response Error");
+                        else {
+                            let errorMsg = id + ":" + response.result.replace(/\s/g,'');
+                            Application.console.log("Response Error: " + errorMsg);
+                            Application.storage.set(Fonera.LASTERROR, errorMsg);
+                        }
                     };
                     url = this.transmissionUrl();
                 } else {
@@ -272,8 +281,8 @@ let FoneraDownloader = {
 
                     callback = function(response) {
                         if (response.error != null) {
-                            Application.console.log("Response Error");
-                            Application.storage.set(Fonera.LASTERROR, id);
+                            Application.console.log("Response Error: " + response.error);
+                            Application.storage.set(Fonera.LASTERROR, id + ":" + response.error);
                         }
                     };
                 }
@@ -303,8 +312,11 @@ let FoneraDownloader = {
             callback = function(response) {
                 if (response.result == "success")
                     FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
-                else
-                    Application.console.log("Response Error");
+                else {
+                    let errorMsg = id + ":" + response.result.replace(/\s/g,'');
+                    Application.console.log("Response Error: " + errorMsg);
+                    Application.storage.set(Fonera.LASTERROR, errorMsg);
+                }
             };
             rpcCall = {
                 "method":"torrent-remove",
@@ -319,8 +331,8 @@ let FoneraDownloader = {
 
             callback = function(response) {
                 if (response.error != null) {
-                    Application.console.log("Response Error");
-                    Application.storage.set(Fonera.LASTERROR, id);
+                    Application.console.log("Response Error: " + response.error);
+                    Application.storage.set(Fonera.LASTERROR, id + ":" + response.error);
                 }
                 FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             };
@@ -392,8 +404,13 @@ let FoneraDownloader = {
         Application.console.log("My URL : " + myUrl + "\n");
         let callback = function(response) {
             if (!response.result.status) {
-                Application.storage.set(Fonera.LASTERROR, basename);
-                Application.console.log("Response Error");
+                if (response.error != null) {
+                    Application.console.log("Response Error: " + response.error);
+                    Application.storage.set(Fonera.LASTERROR, basename + ":" + response.error);
+                } else {
+                    Application.storage.set(Fonera.LASTERROR, basename + ":unknownerror");
+                    Application.console.log("Response Error: unknown error");
+                }
             }
             FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             FoneraDownloader.notify(FoneraDownloader.onSendUrl);
@@ -419,8 +436,9 @@ let FoneraDownloader = {
 
         let callback = function(response) {
             if (response.result != "success") {
-                Application.storage.set(Fonera.LASTERROR, basename);
-                Application.console.log("Response Error");
+                let errorMsg = basename + ":" + response.result.replace(' ','');
+                Application.storage.set(Fonera.LASTERROR, errorMsg);
+                Application.console.log("Response Error: " + errorMsg);
             }
             FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             FoneraDownloader.notify(FoneraDownloader.onSendUrl);
@@ -667,7 +685,7 @@ let FoneraDownloader = {
 
         let callback = function(response) {
             if (response.error != null) {
-                Application.console.log("Response Error");
+                Application.console.log("Response Error: " + response.error);
             } else {
                 // dont clean first as we are called from add/delete and
                 // we can have errors pending for reading
@@ -688,6 +706,34 @@ let FoneraDownloader = {
         FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
+    getErrorString : function(errors, stringsBundle) {
+        let formatSeparator = ": ";
+        let separator = ":";
+        Application.console.log("Found error: " + errors);
+        if (errors.match(FoneraDownloader.NOACCOUNTERROR)) {
+            let error = errors.split(separator)[0];
+            let domain = errors.split(separator)[1];
+            return stringsBundle.getString(error) + formatSeparator + domain;
+        } else if (errors == FoneraDownloader.ACCOUNTERROR) {
+            return stringsBundle.getString(errors);
+        } else {
+            try {
+                // see if its translated
+                let downloaditem = errors.split(separator)[0];
+                let errormsg = errors.split(separator)[1];
+                try {
+                    return downloaditem + formatSeparator + stringsBundle.getString(errormsg);
+                } catch (e) {
+                    return downloaditem + formatSeparator + stringsBundle.getString('downloadFailed');
+                }
+            } catch (e) {
+                Application.console.log("Error parsing error string: "
+                                        + errors + formatSeparator + e);
+            }
+            // generic error
+            return errors + formatSeparator + stringsBundle.getString('unknownerror');
+        }
+    },
 
     loadEvents : function() {
         Fonera.addEventListener("onCheckDisks", FoneraDownloader.checkDownloads);
@@ -705,54 +751,3 @@ let FoneraDownloader = {
                                 FoneraDownloader.checkAccountsSettings);
     }
 };
-
-// FIXME: This code probably doesn't work anymore
-//function sendFileToFonera(file) {
-//    try {
-//
-//	// https://developer.mozilla.org/En/Using_XMLHttpRequest
-//	let user = getUsername();
-//	let password = getUserPref("password");
-//
-//	// Make a stream from a file.
-//	let stream = Components.classes["@mozilla.org/network/file-input-stream;1"]
-//	    .createInstance(Components.interfaces.nsIFileInputStream);
-//	stream.init(file, 0x04 | 0x08, 0644, 0x04); // file is an nsIFile instance
-//
-//	// Try to determine the MIME type of the file
-//	let mimeType = "text/plain";
-//	try {
-//	    let mimeService = Components.classes["@mozilla.org/mime;1"]
-//		.getService(Components.interfaces.nsIMIMEService);
-//	    mimeType = mimeService.getTypeFromFile(file); // file is an nsIFile instance
-//	}
-//	catch (e) {
-//	    // eat it; just use text/plain
-//	}
-//
-//	// Send
-//	let req = Components.classes["@mozilla.org/xmlextras/xmlhttprequest;1"]
-//	    .createInstance(Components.interfaces.nsIXMLHttpRequest);
-//	// TODO: CHANGE!!!!!!!!
-//	let url = "http://127.0.0.1:8080/";
-//
-//	req.open('POST', url, true); /* asynchronous! */
-//	// FIXME: doesn't work:
-//	//req.onreadystatechange = function (aEvt) {
-//	//    try {
-//	//	if (req.readyState == 4) {
-//	//	    alert ("Transfer completed!");
-//	//	}
-//	//    } catch (e) {
-//	//	// FIXME: remove?
-//	//	alert(e);
-//	//    }
-//	//};
-//	req.setRequestHeader('Content-Type', mimeType);
-//	req.send(stream);
-//
-//    }
-//    catch (e) {
-//	alert(e);
-//    }
-//}
