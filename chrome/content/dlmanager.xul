@@ -63,6 +63,7 @@
         <menuitem id="load" label="&downloading-first;" type="radio" oncommand="FoneraDLManager.checkStatus()"/>
         <menuitem id="done" label="&completed-first;" type="radio" oncommand="FoneraDLManager.checkStatus()"/>
         <menuitem id="paused" label="&paused-first;" type="radio" oncommand="FoneraDLManager.checkStatus()"/>
+        <menuitem id="error" label="&erroneous-first;" type="radio" oncommand="FoneraDLManager.checkStatus()"/>
       </menupopup>
 
     </toolbarbutton>

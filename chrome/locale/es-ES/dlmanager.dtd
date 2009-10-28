@@ -10,5 +10,6 @@
 <!ENTITY downloading-first "Descargando">
 <!ENTITY completed-first "Completados">
 <!ENTITY paused-first "Pausados">
+<!ENTITY erroneous-first "Erróneos">
 <!ENTITY list-view "Vista de lista">
 <!ENTITY icon-view "Vista de icono">
