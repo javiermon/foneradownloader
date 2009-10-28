@@ -293,7 +293,6 @@ let FoneraDLManager = {
             }
         };
         // re-set
-        Application.console.log(filters[filter] + " selected");
         prefs.setCharPref('dlview', filter);
         return filters[filter];
     },
