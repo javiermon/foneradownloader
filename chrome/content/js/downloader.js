@@ -436,7 +436,7 @@ let FoneraDownloader = {
 
         let callback = function(response) {
             if (response.result != "success") {
-                let errorMsg = basename + ":" + response.result.replace(' ','');
+                let errorMsg = id + ":" + response.result.replace(/\s/g,'');
                 Application.storage.set(Fonera.LASTERROR, errorMsg);
                 Application.console.log("Response Error: " + errorMsg);
             }
