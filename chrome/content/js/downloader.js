@@ -707,7 +707,7 @@ let FoneraDownloader = {
     },
 
     getErrorString : function(errors, stringsBundle) {
-        let formatSeparator = ": ";
+        let formatSeparator = " : ";
         let separator = ":";
         Application.console.log("Found error: " + errors);
         if (errors.match(FoneraDownloader.NOACCOUNTERROR)) {
