@@ -661,13 +661,15 @@ let FoneraDLManager = {
     loadEvents : function() {
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.checkStatus);
-        FoneraDownloader.addEventListener("onSendUrl", FoneraDLManager.checkStatus);
+        // we call refreshAction so we ask for the list of downloads again, as it's been updated with
+        // a new download item or items
+        FoneraDownloader.addEventListener("onSendUrl", FoneraDLManager.refreshAction);
         FoneraDLManager.loadDefaults();
     },
 
     unloadEvents : function() {
         Fonera.removeEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
         FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraDLManager.checkStatus);
-        FoneraDownloader.removeEventListener("onSendUrl", FoneraDLManager.checkStatus);
+        FoneraDownloader.removeEventListener("onSendUrl", FoneraDLManager.refreshAction);
     }
 };
