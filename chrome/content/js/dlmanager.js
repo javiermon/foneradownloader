@@ -563,6 +563,37 @@ let FoneraDLManager = {
         // FoneraDLManager.checkStatus();
     },
 
+    showAddLinksWindow : function() {
+        if (!Fonera.isPluginEnabled())
+            return;
+
+        // https://developer.mozilla.org/en/Working_with_windows_in_chrome_code
+        let name = "chrome://foneradownloader/content/linkadder.xul";
+        let type = "foneradownloader:linkmanager";
+        let winMediator = Components.classes["@mozilla.org/appshell/window-mediator;1"]
+            .getService(Components.interfaces.nsIWindowMediator);
+
+        // FIXME: there should be a more efficient way of doing this
+        // get all windows:
+        let enumerator = winMediator.getEnumerator(null);
+        while (enumerator.hasMoreElements()) {
+            let wmWin = enumerator.getNext();
+            if (wmWin.location == name) {
+                wmWin.focus();
+                return;
+            }
+        }
+
+        // window object isn't available in this context:
+        // window.open(name, "", "chrome,width=520,height=230,centerscreen,resizable=yes");
+        let ww = Components.classes["@mozilla.org/embedcomp/window-watcher;1"]
+            .getService(Components.interfaces.nsIWindowWatcher);
+        let win = ww.openWindow(null, name,
+                                "", "chrome,width=520,height=230,centerscreen,resizable=yes", null);
+
+        return;
+    },
+
     clearCompleted : function() {
         FoneraDLManager.startThrobbler();
         FoneraDownloader.deleteCompletedDownloads();
