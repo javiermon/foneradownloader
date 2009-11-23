@@ -71,7 +71,7 @@
 
   <richlistbox id="foneradownloader-downloads-list" flex="1" onselect="FoneraDLManager.stripeifyList(this)"/>
   <!-- onselect="this.clearSelection()" == We dont want to select the error so no selection color is applied  -->
-  <richlistbox id="foneradownloader-errors-list" flex="0" hidden="true" onselect="this.clearSelection()"/>/>
+  <richlistbox id="foneradownloader-errors-list" flex="0" hidden="true" onselect="this.clearSelection()"/>
 
   <statusbar id="status-bar">
   <button id="refreshButton" oncommand="FoneraDLManager.refreshAction()"
