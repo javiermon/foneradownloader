@@ -24,7 +24,7 @@
 <!DOCTYPE window SYSTEM "chrome://foneradownloader/locale/linkadder.dtd">
 
 <window id="foneradownloader-linkadder" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
-	windowtype="foneradownloader:linkadder" title="Type links" class="dlmanager-window"
+	windowtype="foneradownloader:linkadder" title="&add-links;" class="dlmanager-window"
 	screenX="10" screenY="10"
 	persist="width height screenX screenY sizemode" orient="vertical">
 
