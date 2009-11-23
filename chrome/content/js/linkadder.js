@@ -79,7 +79,7 @@ let FoneraLinkadder = {
                 }
             } else {
                 let stringsBundle = document.getElementById("string-bundle");
-                let msg = stringsBundle.getString("noLinksSelected");
+                let msg = stringsBundle.getString("noLinksTyped");
                 let name = stringsBundle.getString("error");
 
                 let prompts = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]

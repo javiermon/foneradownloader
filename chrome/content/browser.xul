@@ -73,7 +73,7 @@
       <menupopup id="foneradownloader-sbpanel-cxtmenu">
 	<menuitem id="foneradownloader-sbpanel-prefs" label="&preferences;" default="true"
 		  oncommand="FoneraStatus.showPreferences()"/>
-	<menuitem id="foneradownloader-sbpanel-addlinks" label="add links"
+	<menuitem id="foneradownloader-sbpanel-addlinks" label="&add-links;"
 		  oncommand="FoneraDLManager.showAddLinksWindow()"/>
 	<menuitem id="foneradownloader-sbpanel-clearerrors" label="&clear-error;" hidden="true"
 		  oncommand="FoneraStatus.clearError()"/>

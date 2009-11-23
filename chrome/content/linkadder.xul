@@ -21,7 +21,7 @@
 
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://foneradownloader/skin/skin.css" type="text/css"?>
-<!DOCTYPE window SYSTEM "chrome://foneradownloader/locale/linkmanager.dtd">
+<!DOCTYPE window SYSTEM "chrome://foneradownloader/locale/linkadder.dtd">
 
 <window id="foneradownloader-linkadder" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul" 
 	windowtype="foneradownloader:linkadder" title="Type links" class="dlmanager-window"
@@ -37,12 +37,12 @@
     <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
   </stringbundleset>
 
-  <label value="Type links here"/>
+  <label value="&type-links;"/>
   <textbox id="foneradownloader-link-text" flex="1" multiline="true"/>
 
   <statusbar id="status-bar">
     <button id="sendLinks" oncommand="FoneraLinkadder.sendLinksToFonera()"
-            label="send links"/>
+            label="&send-links;"/>
     <spacer flex="1"/>
   </statusbar>
 </window>
