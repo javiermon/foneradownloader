@@ -45,6 +45,8 @@
     <menu id="downloads-menu" label="&downloads-tab;">
       <menupopup id="file-popup">
         <menuitem label="&add-links;" oncommand="FoneraDLManager.showAddLinksWindow()"/>
+        <menuitem label="&refresh;" oncommand="FoneraDLManager.refreshAction()"/>
+        <menuseparator/>
         <menuitem label="&clear-complete;" oncommand="FoneraDLManager.clearCompleted()"/>
         <menuitem label="&clear-erroneous;" oncommand="FoneraDLManager.clearErroneous()"/>
         <menuseparator/>
