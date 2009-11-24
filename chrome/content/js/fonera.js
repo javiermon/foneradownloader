@@ -54,7 +54,8 @@ let Fonera = {
             // example: event == onCheckFoneraAvailable
             Fonera[event].push(callback);
         } catch (e) {
-            Application.console.log("invalid event registration " + e);
+            Application.console.log("invalid registration for event " 
+                                    + event + ": " + callback + ": " + e);
         }
     },
 
@@ -67,7 +68,8 @@ let Fonera = {
                     // remove from index i, 1 element
                     eventCallbacks.splice(i,1);
         } catch (e) {
-            Application.console.log("invalid event registration " + e);
+            Application.console.log("invalid registration for event " 
+                                    + event + ": " + callback + ": " + e);
         }
     },
 

@@ -54,7 +54,6 @@ let FoneraDownloader = {
     ACCOUNTERROR : "account-error",
     ACCOUNTDELERROR : "account-delete-error",
     NOACCOUNTERROR : "no-account-for-link",
-    EMPTY_ACCOUNTS : [],
     DOMAINS : "megaupload|rapidshare",
 
     // http://snippets.dzone.com/posts/show/452
@@ -65,7 +64,8 @@ let FoneraDownloader = {
             // example: event == onCheckFoneraAvailable
             FoneraDownloader[event].push(callback);
         } catch (e) {
-            Application.console.log("invalid event registration " + e);
+            Application.console.log("invalid registration for event " 
+                                    + event + ": " + callback + ": " + e);
         }
     },
 
@@ -78,7 +78,8 @@ let FoneraDownloader = {
                     // remove from index i, 1 element
                     eventCallbacks.splice(i,1);
         } catch (e) {
-            Application.console.log("invalid event registration " + e);
+            Application.console.log("invalid registration for event " 
+                                    + event + ": " + callback + ": " + e);
         }
     },
 
@@ -695,10 +696,7 @@ let FoneraDownloader = {
             if (response.error != null) {
                 Application.console.log("Response Error: " + response.error);
             } else {
-                // dont clean first as we are called from add/delete and
-                // we can have errors pending for reading
-                Application.storage.set(FoneraDownloader.ACCOUNTS, FoneraDownloader.EMPTY_ACCOUNTS);
-                let accounts = Application.storage.get(FoneraDownloader.ACCOUNTS, []);
+                let accounts = [];
                 for (let i in response.result) {
                     let service = response.result[i].domain;
                     accounts.push({ "service" : response.result[i]["domain"],
@@ -747,7 +745,7 @@ let FoneraDownloader = {
         Fonera.addEventListener("onCheckDisks", FoneraDownloader.checkDownloads);
         Fonera.addEventListener("onCheckDisks",
                                 FoneraDownloader.authenticateInTransmission);
-        Fonera.addEventListener("onAuthenticate",
+        Fonera.addEventListener("onCheckDisks",
                                 FoneraDownloader.checkAccountsSettings);
     },
 
@@ -755,7 +753,7 @@ let FoneraDownloader = {
         Fonera.removeEventListener("onCheckDisks", FoneraDownloader.checkDownloads);
         Fonera.removeEventListener("onCheckDisks",
                                 FoneraDownloader.authenticateInTransmission);
-        Fonera.removeEventListener("onAuthenticate",
+        Fonera.removeEventListener("onCheckDisks",
                                 FoneraDownloader.checkAccountsSettings);
     }
 };
