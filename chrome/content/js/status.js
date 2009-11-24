@@ -106,13 +106,13 @@ let FoneraStatus = {
     loadEvents : function() {
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip);
-        Fonera.addEventListener("onSendUrl", FoneraStatus.drawTooltip);
+        FoneraDownloader.addEventListener("onSendUrl", FoneraStatus.drawTooltip);
     },
 
     unloadEvents : function() {
         FoneraDownloader.removeEventListener("onDownloadsAvailable", FoneraStatus.drawTooltip);
         Fonera.removeEventListener("onCheckFoneraAvailable", FoneraStatus.drawTooltip);
-        Fonera.removeEventListener("onSendUrl", FoneraStatus.drawTooltip);
+        FoneraDownloader.removeEventListener("onSendUrl", FoneraStatus.drawTooltip);
     }
 
 };
