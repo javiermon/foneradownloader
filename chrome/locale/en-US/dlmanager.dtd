@@ -13,3 +13,8 @@
 <!ENTITY erroneous-first "Erroneous">
 <!ENTITY list-view "List View">
 <!ENTITY icon-view "Icon View">
+<!ENTITY add-links "Add links ...">
+<!ENTITY clear-erroneous "Clear erroneous">
+<!ENTITY close "Close">
+<!ENTITY preferences "Plugin Preferences">
+<!ENTITY edit "Edit">

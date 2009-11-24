@@ -240,6 +240,14 @@ let FoneraDownloader = {
     },
 
     deleteCompletedDownloads : function() {
+        FoneraDownloader.deleteByStatus("done");
+    },
+
+    deleteErroneousDownloads : function() {
+        FoneraDownloader.deleteByStatus("error");
+    },
+
+    deleteByStatus : function(status) {
         // we do the same call as in deleteDownloadById, but
         // call the nofity at the end, not on every call
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
@@ -250,7 +258,7 @@ let FoneraDownloader = {
         downloads = downloads.concat(torrents);
 
         for (let i in downloads) {
-            if (downloads[i].status == "done") {
+            if (downloads[i].status == status) {
                 let rpcCall = null; let callback = null;
                 let url = null; let id = downloads[i].id;
 

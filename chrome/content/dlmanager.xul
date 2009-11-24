@@ -29,6 +29,7 @@
 	persist="width height screenX screenY sizemode" orient="vertical">
 
   <script type="application/x-javascript" src="chrome://foneradownloader/content/js/dlmanager.js" />    
+  <script type="application/x-javascript" src="chrome://foneradownloader/content/js/status.js" />    
   <script type="application/x-javascript">
 
     window.addEventListener("load", FoneraDLManager.loadEvents, false);
@@ -39,6 +40,24 @@
   <stringbundleset id="stringbundleset">
     <stringbundle id="string-bundle" src="chrome://foneradownloader/locale/foneradownloader.properties"/>
   </stringbundleset>
+
+  <menubar id="downloads-menubar">
+    <menu id="downloads-menu" label="&downloads-tab;">
+      <menupopup id="file-popup">
+        <menuitem label="&add-links;" oncommand="FoneraDLManager.showAddLinksWindow()"/>
+        <menuitem label="&clear-complete;" oncommand="FoneraDLManager.clearCompleted()"/>
+        <menuitem label="&clear-erroneous;" oncommand="FoneraDLManager.clearErroneous()"/>
+        <menuseparator/>
+        <menuitem label="&close;" oncommand="window.close()"/>
+      </menupopup>
+    </menu>
+    <menu id="edit-menu" label="&edit;">
+      <menupopup id="edit-popup">
+        <menuitem label="&preferences;" oncommand="FoneraStatus.showPreferences()"/>
+      </menupopup>
+    </menu>
+  </menubar>
+
 
   <toolbar id="filter-toolbar">
     <!-- filters -->

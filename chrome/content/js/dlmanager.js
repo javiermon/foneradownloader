@@ -601,6 +601,13 @@ let FoneraDLManager = {
         FoneraDLManager.refreshAction();
     },
 
+    clearErroneous : function() {
+        FoneraDLManager.startThrobbler();
+        FoneraDownloader.deleteErroneousDownloads();
+        // Force UI update:
+        FoneraDLManager.refreshAction();
+    },
+
     updateCounterLabels : function() {
         let allLabel = document.getElementById("filter-all");
         let downloadsLabel = document.getElementById("filter-downloads");
