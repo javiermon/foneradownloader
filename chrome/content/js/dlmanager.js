@@ -268,6 +268,9 @@ let FoneraDLManager = {
 
         vboxPercent.insertBefore(dwSize,vboxPercent.firstChild);
 
+        // custom attribute to identify download
+        dl.setAttribute('item-id', downloadItem.id);
+
         dl.insertBefore(vboxPercent,dl.firstChild);
         dl.insertBefore(space,dl.firstChild);
         dl.insertBefore(vboxData,dl.firstChild);
