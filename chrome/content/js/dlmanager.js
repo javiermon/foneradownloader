@@ -90,15 +90,15 @@ let FoneraDLManager = {
         dl.insertBefore(tooltip, dl.firstChild);
     },
 
-    onRightClick: function() {
+    getDownloadById: function (itemId, array) {
+        for (let j in array) {
+            if (itemId == array[j].id)
+                return array[j];
+        }
+        return null;
+    },
 
-        let getDownloadById = function (itemId, array) {
-            for (let j in array) {
-                if (itemId == array[j].id)
-                    return array[j];
-            }
-            return null;
-        };
+    onRightClick: function() {
 
         // get common status of downloads selected
         // cancel -> always posible. pause -> all started. start -> all paused
@@ -111,7 +111,7 @@ let FoneraDLManager = {
         let selection = dialog.selectedItems;
         for (let di in selection) {
             let theDownloadId = selection[di].getAttribute('item-id');
-            let theDownload = getDownloadById(theDownloadId, allDownloads);
+            let theDownload = FoneraDLManager.getDownloadById(theDownloadId, allDownloads);
             actions.pause = (actions.pause && theDownload.status == "load");
             actions.start = (actions.start &&
                              (theDownload.status != "load" && theDownload.status != "done" && theDownload.status != "hashing"));
