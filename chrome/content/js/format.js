@@ -92,10 +92,17 @@ let FoneraFormat = {
     },
 
     stripeifyList : function(list, style) {
+        let selection = list.selectedItems;
+        let isIn = function (item, array) {
+            for (let j in array)
+                if (item == array[j])
+                    return true;
+            return false;
+        };
         let item = list.firstChild;
         let i = 0;
         while (item) {
-            if (item != list.selectedItem && (i % 2) != 0)
+            if (!isIn(item, selection) && (i % 2) != 0)
                 item.setAttribute("style", style + " background-color: Lavender;");
             else
                 item.setAttribute("style", style);

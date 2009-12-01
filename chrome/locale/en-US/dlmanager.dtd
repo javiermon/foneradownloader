@@ -18,3 +18,6 @@
 <!ENTITY close "Close">
 <!ENTITY preferences "Plugin Preferences">
 <!ENTITY edit "Edit">
+<!ENTITY start "Start/Resume">
+<!ENTITY pause "Pause">
+<!ENTITY cancel "Cancel">

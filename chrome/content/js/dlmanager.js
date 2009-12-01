@@ -75,54 +75,53 @@ let FoneraDLManager = {
         dwSize.setAttribute("value", downloadItem.downloaded);
         dwSize.setAttribute("style", style09r40);
 
+        // custom attribute to identify download
+        dl.setAttribute('item-id', downloadItem.id);
+
         dl.insertBefore(dwSize, dl.firstChild);
         dl.insertBefore(sizeString, dl.firstChild);
         dl.insertBefore(statusString, dl.firstChild);
         dl.insertBefore(space, dl.firstChild);
         dl.insertBefore(item, dl.firstChild);
         dl.insertBefore(image, dl.firstChild);
-        // rightclick:
-        let id = downloadItem.id;
-        let context = document.createElement('popupset');
-        let contextmenupopup = document.createElement('menupopup');
-        contextmenupopup.setAttribute('id', 'cxtpopup-' + id);
-        context.insertBefore(contextmenupopup, context.firstChild);
 
-        if (downloadItem.status == "load") {
-            let menuPause = document.createElement('menuitem');
-            menuPause.setAttribute('label', stringsBundle.getString("pause"));
-            menuPause.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'pause')");
-            menuPause.setAttribute('class', 'menuitem-iconic');
-            menuPause.setAttribute("style",
-                           miniActionButtons
-                           + pauseActionOffset);
-            contextmenupopup.insertBefore(menuPause, contextmenupopup.firstChild);
-        } else if (downloadItem.status != "done" && downloadItem.status != "hashing") {
-            let menuPlay = document.createElement('menuitem');
-            menuPlay.setAttribute('label', stringsBundle.getString("start"));
-            menuPlay.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'start')");
-            menuPlay.setAttribute('class', 'menuitem-iconic');
-            menuPlay.setAttribute("style",
-                           miniActionButtons
-                           + playActionOffset);
-            contextmenupopup.insertBefore(menuPlay, contextmenupopup.firstChild);
-        }
-
-        let menuCancel = document.createElement('menuitem');
-        menuCancel.setAttribute('label', stringsBundle.getString("cancel"));
-        menuCancel.setAttribute('oncommand', "FoneraDLManager.downloadAction('" + downloadItem.id + "', 'delete')");
-        menuCancel.setAttribute('class', 'menuitem-iconic');
-        menuCancel.setAttribute("style",
-                           miniActionButtons
-                             + cancelActionOffset);
-        // we want this action to be the last one:
-        contextmenupopup.appendChild(menuCancel);
-
-        dl.setAttribute('context', 'cxtpopup-' + id);
-        dl.insertBefore(context, dl.firstChild);
         let tooltip = FoneraDLManager.drawDownloadTooltip(downloadItem);
         dl.setAttribute("tooltip", tooltip.id);
         dl.insertBefore(tooltip, dl.firstChild);
+    },
+
+    onRightClick: function() {
+
+        let getDownloadById = function (itemId, array) {
+            for (let j in array) {
+                if (itemId == array[j].id)
+                    return array[j];
+            }
+            return null;
+        };
+
+        // get common status of downloads selected
+        // cancel -> always posible. pause -> all started. start -> all paused
+        let actions = { cancel :  true, pause : true, start : true };
+        let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+        let allDownloads = downloads.concat(torrents);
+
+        let dialog = document.getElementById('foneradownloader-downloads-list');
+        let selection = dialog.selectedItems;
+        for (let di in selection) {
+            let theDownloadId = selection[di].getAttribute('item-id');
+            let theDownload = getDownloadById(theDownloadId, allDownloads);
+            actions.pause = (actions.pause && theDownload.status == "load");
+            actions.start = (actions.start &&
+                             (theDownload.status != "load" && theDownload.status != "done" && theDownload.status != "hashing"));
+        }
+
+        let menuStart = document.getElementById('cxt-start-action');
+        let menuPause = document.getElementById('cxt-pause-action');
+        menuStart.hidden = !actions.start;
+        menuPause.hidden = !actions.pause;
+
     },
 
     drawDownloadTooltip : function(downloadItem) {
@@ -493,6 +492,31 @@ let FoneraDLManager = {
         }
     },
 
+
+    runDownloadAction : function(action) {
+        let dialog = document.getElementById('foneradownloader-downloads-list');
+        let selection = dialog.selectedItems;
+        let actions = { 'pause' : FoneraDownloader.pauseDownloadById,
+                        'delete' : FoneraDownloader.deleteDownloadById,
+                        'start' : FoneraDownloader.startDownloadById
+                      };
+
+        let call = null;
+        try {
+            call = actions[action];
+        } catch (e) {
+            Application.console.log('invalid call :' + action);
+            return;
+        }
+
+        for (let i in selection) {
+            let id = selection[i].getAttribute('item-id');
+            FoneraDLManager.startThrobbler();
+            call(id);
+        }
+        FoneraDLManager.refreshAction();
+    },
+
     downloadAction : function(id, action) {
         // FIXME: we trigger refresh action so the throbbler spins and gives some UI feedback
         Application.console.log("action :" + action + " called on " + id);
@@ -697,6 +721,7 @@ let FoneraDLManager = {
     },
 
     loadEvents : function() {
+        document.getElementById('foneradownloader-downloads-list-cxtmenu').addEventListener("popupshowing", FoneraDLManager.onRightClick, false);
         Fonera.addEventListener("onCheckFoneraAvailable", FoneraDLManager.checkStatus);
         FoneraDownloader.addEventListener("onDownloadsAvailable", FoneraDLManager.checkStatus);
         // we call refreshAction so we ask for the list of downloads again, as it's been updated with

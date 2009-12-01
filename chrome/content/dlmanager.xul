@@ -35,6 +35,7 @@
     window.addEventListener("load", FoneraDLManager.loadEvents, false);
     window.addEventListener("load", FoneraDLManager.refreshAction, false);
     window.addEventListener("unload", FoneraDLManager.unloadEvents, false);
+
   </script>
 
   <stringbundleset id="stringbundleset">
@@ -90,7 +91,24 @@
     </toolbarbutton>
   </toolbar>
 
-  <richlistbox id="foneradownloader-downloads-list" flex="1" onselect="FoneraDLManager.stripeifyList(this)"/>
+  <!-- right click menu -->
+  <context id="foneradownloader-downloads-list-cxt">
+    <popupset>
+      <menupopup id="foneradownloader-downloads-list-cxtmenu">
+	<menuitem id="cxt-start-action" label="&start;" class="menuitem-iconic" style="list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); 
+										 -moz-image-region: rect(0px, 16px, 16px, 0px);"
+		  oncommand="FoneraDLManager.runDownloadAction('start')" hidden="true"/>
+	<menuitem id="cxt-pause-action" label="&pause;" class="menuitem-iconic" style="list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); 
+										 -moz-image-region: rect(0px, 48px, 16px, 32px);"
+		  oncommand="FoneraDLManager.runDownloadAction('pause')" hidden="true"/>
+	<menuitem id="cxt-cancel-action" label="&cancel;" class="menuitem-iconic" style="list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png');
+										 -moz-image-region: rect(0px, 32px, 16px, 16px);"
+		  oncommand="FoneraDLManager.runDownloadAction('cancel')"/>
+      </menupopup>
+    </popupset>
+  </context>
+
+  <richlistbox id="foneradownloader-downloads-list" flex="1" onselect="FoneraDLManager.stripeifyList(this)" seltype="multiple" context="foneradownloader-downloads-list-cxtmenu"/>
   <!-- onselect="this.clearSelection()" == We dont want to select the error so no selection color is applied  -->
   <richlistbox id="foneradownloader-errors-list" flex="0" hidden="true" onselect="this.clearSelection()"/>
 

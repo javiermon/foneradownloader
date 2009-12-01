@@ -64,7 +64,7 @@ let FoneraDownloader = {
             // example: event == onCheckFoneraAvailable
             FoneraDownloader[event].push(callback);
         } catch (e) {
-            Application.console.log("invalid registration for event " 
+            Application.console.log("invalid registration for event "
                                     + event + ": " + callback + ": " + e);
         }
     },
@@ -78,7 +78,7 @@ let FoneraDownloader = {
                     // remove from index i, 1 element
                     eventCallbacks.splice(i,1);
         } catch (e) {
-            Application.console.log("invalid registration for event " 
+            Application.console.log("invalid registration for event "
                                     + event + ": " + callback + ": " + e);
         }
     },
@@ -170,7 +170,7 @@ let FoneraDownloader = {
                     Application.storage.set(Fonera.LASTERROR, errorMsg);
                 }
             };
-            url = this.transmissionUrl();
+            url = FoneraDownloader.transmissionUrl();
         } else {
             rpcCall = {
                 "method" : "dl_pause",
@@ -186,7 +186,7 @@ let FoneraDownloader = {
                 FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             };
         }
-        this.callRpc(rpcCall, callback, url);
+        FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
     startDownloadById : function(id) {
@@ -218,7 +218,7 @@ let FoneraDownloader = {
                 "method":"torrent-start",
                 "arguments":{ "ids":[id] }
                 };
-            url = this.transmissionUrl();
+            url = FoneraDownloader.transmissionUrl();
         } else {
             rpcCall = {
                 "method" : "dl_start",
@@ -237,7 +237,7 @@ let FoneraDownloader = {
             let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
             url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
         }
-        this.callRpc(rpcCall, callback, url);
+        FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
     deleteCompletedDownloads : function() {
@@ -279,7 +279,7 @@ let FoneraDownloader = {
                             Application.storage.set(Fonera.LASTERROR, errorMsg);
                         }
                     };
-                    url = this.transmissionUrl();
+                    url = FoneraDownloader.transmissionUrl();
                 } else {
                     let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
                     url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
@@ -295,7 +295,7 @@ let FoneraDownloader = {
                         }
                     };
                 }
-                this.callRpc(rpcCall, callback, url);
+                FoneraDownloader.callRpc(rpcCall, callback, url);
             }
         }
         FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
@@ -331,7 +331,7 @@ let FoneraDownloader = {
                 "method":"torrent-remove",
                 "arguments": { "ids": [id] }
             };
-            url = this.transmissionUrl();
+            url = FoneraDownloader.transmissionUrl();
         } else {
             rpcCall = {
                 "method" : "dl_delete",
@@ -348,7 +348,7 @@ let FoneraDownloader = {
             let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
             url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
         }
-        this.callRpc(rpcCall, callback, url);
+        FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
     urlHandlerParser : function(myUrl) {
@@ -426,7 +426,7 @@ let FoneraDownloader = {
         };
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
-        this.callRpc(rpcCall, callback, url);
+        FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
     /**
@@ -452,8 +452,8 @@ let FoneraDownloader = {
             FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             FoneraDownloader.notify(FoneraDownloader.onSendUrl);
         };
-        let url = this.transmissionUrl();
-        this.callRpc(rpcCall, callback, url);
+        let url = FoneraDownloader.transmissionUrl();
+        FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
     callRpc : function (rpcCall, callback, url) {
@@ -488,7 +488,7 @@ let FoneraDownloader = {
         req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
         // req.setRequestHeader('Content-Type', "application/json");
 
-        if (this.transmissionUrl() == url) {
+        if (FoneraDownloader.transmissionUrl() == url) {
             let session = Application.storage.get(FoneraDownloader.TRANSSESSION, null);
             if (session != null)
                 req.setRequestHeader(FoneraDownloader.TRANSSESSION, session);
@@ -565,8 +565,8 @@ let FoneraDownloader = {
             // we do the callback on the other rpc response
             //FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
         };
-        let url = this.transmissionUrl();
-        this.callRpc(rpcCall, callback, url);
+        let url = FoneraDownloader.transmissionUrl();
+        FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
     checkDownloadsItems : function() {
@@ -613,7 +613,7 @@ let FoneraDownloader = {
         };
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
-        this.callRpc(rpcCall, callback, url);
+        FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
     checkDownloads : function() {
@@ -653,7 +653,7 @@ let FoneraDownloader = {
         };
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
-        this.callRpc(rpcCall, callback, url);
+        FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
     deleteAccount : function(id) {
@@ -675,7 +675,7 @@ let FoneraDownloader = {
         };
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
-        this.callRpc(rpcCall, callback, url);
+        FoneraDownloader.callRpc(rpcCall, callback, url);
     },
 
     checkAccountsSettings : function() {

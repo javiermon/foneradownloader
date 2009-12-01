@@ -18,3 +18,6 @@
 <!ENTITY close "Cerrar">
 <!ENTITY preferences "Preferencias del complemento">
 <!ENTITY edit "Editar">
+<!ENTITY start "Comenzar/Reanudar">
+<!ENTITY pause "Pausar">
+<!ENTITY cancel "Cancelar">
