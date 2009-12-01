@@ -155,7 +155,13 @@ let FoneraDownloader = {
             if (downloads[i].id == id)
                 download = downloads[i];
         }
-        if (download != null && download.type == "torrent") {
+
+        if (download == null) {
+            Application.console.log("Download id not found: " + id);
+            return;
+        }
+
+        if (download.type == "torrent") {
             id = parseInt(id);
             rpcCall = {
                 "method":"torrent-stop",
@@ -203,7 +209,13 @@ let FoneraDownloader = {
             if (downloads[i].id == id)
                 download = downloads[i];
         }
-        if (download != null && download.type == "torrent") {
+
+        if (download == null) {
+            Application.console.log("Download id not found: " + id);
+            return;
+        }
+
+        if (download.type == "torrent") {
             id = parseInt(id);
             callback = function(response) {
                 if (response.result == "success")
@@ -254,8 +266,8 @@ let FoneraDownloader = {
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
 
-        let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
-        let torrents = Application.storage.get(this.FONERATORRENTS, []);
+        let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         downloads = downloads.concat(torrents);
 
         for (let i in downloads) {
@@ -308,15 +320,21 @@ let FoneraDownloader = {
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
 
-        let downloads = Application.storage.get(this.FONERADOWNLOADS, []);
-        let torrents = Application.storage.get(this.FONERATORRENTS, []);
+        let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         downloads = downloads.concat(torrents);
 
         for (let i in downloads) {
             if (downloads[i].id == id)
                 download = downloads[i];
         }
-        if (download != null && download.type == "torrent") {
+
+        if (download == null) {
+            Application.console.log("Download id not found: " + id);
+            return;
+        }
+
+        if (download.type == "torrent") {
             id = parseInt(id);
             callback = function(response) {
                 if (response.result == "success")
@@ -498,7 +516,7 @@ let FoneraDownloader = {
             }
         }
 
-	var thisself = this;
+	let thisself = this;
         req.onload = function (aEvt) {
             if (req.readyState == 4) {
                 Application.console.log("Response :" + req.responseText + "\n");
