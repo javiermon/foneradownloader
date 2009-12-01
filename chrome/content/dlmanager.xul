@@ -103,7 +103,7 @@
 		  oncommand="FoneraDLManager.runDownloadAction('pause')" hidden="true"/>
 	<menuitem id="cxt-cancel-action" label="&cancel;" class="menuitem-iconic" style="list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png');
 										 -moz-image-region: rect(0px, 32px, 16px, 16px);"
-		  oncommand="FoneraDLManager.runDownloadAction('cancel')"/>
+		  oncommand="FoneraDLManager.runDownloadAction('delete')"/>
       </menupopup>
     </popupset>
   </context>
