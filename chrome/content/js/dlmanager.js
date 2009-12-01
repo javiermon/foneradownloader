@@ -114,7 +114,8 @@ let FoneraDLManager = {
             let theDownload = FoneraDLManager.getDownloadById(theDownloadId, allDownloads);
             actions.pause = (actions.pause && theDownload.status == "load");
             actions.start = (actions.start &&
-                             (theDownload.status != "load" && theDownload.status != "done" && theDownload.status != "hashing"));
+                             (theDownload.status != "load" && theDownload.status != "done"
+                              && theDownload.status != "hashing" && theDownload.status != "error"));
         }
 
         let menuStart = document.getElementById('cxt-start-action');
@@ -233,7 +234,8 @@ let FoneraDLManager = {
                            miniActionButtons
                            + pauseActionOffset);
             playb.tooltipText = stringsBundle.getString("pause");
-        } else if (downloadItem.status != "done" && downloadItem.status != "hashing") {
+        } else if (downloadItem.status != "done" && downloadItem.status != "hashing"
+                  && downloadItem.status != "error") {
             action = "start";
             playb.setAttribute("style",
                            miniActionButtons
