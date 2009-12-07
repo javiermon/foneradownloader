@@ -140,6 +140,17 @@ let FoneraDownloader = {
         req.send(null);
     },
 
+    getDownloadById: function(id, downloads) {
+        let download = null;
+        for (let i in downloads) {
+            if (downloads[i].id == id) {
+                download = downloads[i];
+                return download;
+            }
+        }
+        return download;
+    },
+
     pauseDownloadById : function(id) {
         let rpcCall = null; let callback = null;
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
@@ -148,13 +159,8 @@ let FoneraDownloader = {
         let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
         let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         downloads = downloads.concat(torrents);
-
-        let download  = null; let url = null;
-
-        for (let i in downloads) {
-            if (downloads[i].id == id)
-                download = downloads[i];
-        }
+        let url = null;
+        let download  = FoneraDownloader.getDownloadById(id, downloads);
 
         if (download == null) {
             Application.console.log("Download id not found: " + id);
@@ -203,12 +209,9 @@ let FoneraDownloader = {
         let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         downloads = downloads.concat(torrents);
 
-        let download  = null; let url = null;
+        let url = null;
         let rpcCall = null; let callback = null;
-        for (let i in downloads) {
-            if (downloads[i].id == id)
-                download = downloads[i];
-        }
+        let download  = FoneraDownloader.getDownloadById(id, downloads);
 
         if (download == null) {
             Application.console.log("Download id not found: " + id);
@@ -314,7 +317,7 @@ let FoneraDownloader = {
     },
 
     deleteDownloadById : function(id) {
-        let rpcCall = null; let download = null;
+        let rpcCall = null;
         let callback = null; let url = null;
 
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
@@ -323,11 +326,7 @@ let FoneraDownloader = {
         let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
         let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         downloads = downloads.concat(torrents);
-
-        for (let i in downloads) {
-            if (downloads[i].id == id)
-                download = downloads[i];
-        }
+        let download  = FoneraDownloader.getDownloadById(id, downloads);
 
         if (download == null) {
             Application.console.log("Download id not found: " + id);
