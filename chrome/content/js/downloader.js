@@ -408,7 +408,7 @@ let FoneraDownloader = {
     },
 
     /**
-     * Private: use sendDownloadUrlToFonera istead
+     * Private: use sendDownloadUrlToFonera instead
      */
     sendDownloadToFonera : function(myUrl) {
         let rpcCall = {
