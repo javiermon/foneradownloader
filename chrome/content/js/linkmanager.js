@@ -139,13 +139,25 @@ let FoneraLinkManager = {
         //
         let links = document.getElementById("foneradownloader-link-list").children;
         let selected = false;
+        let selectedLinks = [];
+
+        // get selected links:
         for (let i in links) {
             let link = links[i].firstChild;
             if (link.checked) {
+                selectedLinks.push(i);
                 selected = true;
-                FoneraDownloader.sendDownloadUrlToFonera(link.label);
             }
         }
+
+        let dontUpdateUI = true;
+        while (selectedLinks.length > 0) {
+            let linki = selectedLinks.pop();
+            let link = links[linki].firstChild;
+            dontUpdateUI = (selectedLinks.length != 0);
+            FoneraDownloader.sendDownloadUrlToFonera(link.label, dontUpdateUI);
+        }
+
 
         if (!selected) {
             let stringsBundle = document.getElementById("string-bundle");

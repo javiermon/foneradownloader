@@ -415,18 +415,18 @@ let FoneraDownloader = {
         return myUrl;
     },
 
-    sendDownloadUrlToFonera : function(myUrl) {
+    sendDownloadUrlToFonera : function(myUrl, dontUpdateUI) {
         if (myUrl.replace( /.*\//, "" ).lastIndexOf(".torrent") != -1) {
-            this.sendTorrentToFonera(myUrl);
+            this.sendTorrentToFonera(myUrl, dontUpdateUI);
         } else {
-            this.sendDownloadToFonera(myUrl);
+            this.sendDownloadToFonera(myUrl, dontUpdateUI);
         }
     },
 
     /**
      * Private: use sendDownloadUrlToFonera instead
      */
-    sendDownloadToFonera : function(myUrl) {
+    sendDownloadToFonera : function(myUrl, dontUpdateUI) {
         let rpcCall = {
             "method" : "downloads_add",
             "params" : [myUrl]
@@ -454,7 +454,8 @@ let FoneraDownloader = {
                     Application.console.log("Response Error: unknown error");
                 }
             }
-            FoneraDownloader.notify(FoneraDownloader.onSendUrl);
+            if (!dontUpdateUI)
+                FoneraDownloader.notify(FoneraDownloader.onSendUrl);
         };
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
         let url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
@@ -464,7 +465,7 @@ let FoneraDownloader = {
     /**
      * Private: use sendDownloadUrlToFonera istead
      */
-    sendTorrentToFonera : function(myUrl) {
+    sendTorrentToFonera : function(myUrl, dontUpdateUI) {
         // get basename and strip the .torrent in the end as the fonera will add it eventually
         let basename = myUrl.replace( /.*\//, "" ).replace( ".torrent", "" );
         let rpcCall = {
@@ -481,7 +482,8 @@ let FoneraDownloader = {
                 Application.storage.set(Fonera.LASTERROR, errorMsg);
                 Application.console.log("Response Error: " + errorMsg);
             }
-            FoneraDownloader.notify(FoneraDownloader.onSendUrl);
+            if (!dontUpdateUI)
+                FoneraDownloader.notify(FoneraDownloader.onSendUrl);
         };
         let url = FoneraDownloader.transmissionUrl();
         FoneraDownloader.callRpc(rpcCall, callback, url);
