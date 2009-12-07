@@ -514,10 +514,11 @@ let FoneraDLManager = {
             return;
         }
 
+        FoneraDLManager.startThrobbler();
         for (let i in selection) {
             let id = selection[i].getAttribute('item-id');
-            FoneraDLManager.startThrobbler();
-            call(id);
+            // dontUpdateUI = true
+            call(id, true);
         }
         FoneraDLManager.refreshAction();
     },
