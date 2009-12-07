@@ -514,13 +514,18 @@ let FoneraDLManager = {
             return;
         }
 
+        let dontUpdateUI = true;
+
         FoneraDLManager.startThrobbler();
         for (let i in selection) {
+            // if this is the last item we trigger want the update callback to be run
+            // specially in regular downloads as the RPC is much slower than the torrent's
+            if (i == selection.length - 1)
+                dontUpdateUI = false;
             let id = selection[i].getAttribute('item-id');
-            // dontUpdateUI = true
-            call(id, true);
+            call(id, dontUpdateUI);
         }
-        FoneraDLManager.refreshAction();
+
     },
 
     downloadAction : function(id, action) {
