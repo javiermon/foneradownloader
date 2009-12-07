@@ -180,7 +180,7 @@ let FoneraDownloader = {
             callback = function(response) {
                 if (response.result == "success") {
                     if (!dontUpdateUI)
-                        FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
+                        FoneraDownloader.notify(FoneraDownloader.onSendUrl);
                 } else {
                     let errorMsg = id + ":" + response.result.replace(/\s/g,'');
                     Application.console.log("Response Error: " + errorMsg);
@@ -201,7 +201,7 @@ let FoneraDownloader = {
                     Application.storage.set(Fonera.LASTERROR, id + ":" + response.error);
                 }
                 if (!dontUpdateUI)
-                    FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
+                    FoneraDownloader.notify(FoneraDownloader.onSendUrl);
             };
         }
         FoneraDownloader.callRpc(rpcCall, callback, url);
@@ -225,7 +225,7 @@ let FoneraDownloader = {
             callback = function(response) {
                 if (response.result == "success") {
                     if (!dontUpdateUI)
-                        FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
+                        FoneraDownloader.notify(FoneraDownloader.onSendUrl);
                 } else {
                     let errorMsg = id + ":" + response.result.replace(/\s/g,'');
                     Application.console.log("Response Error: " + errorMsg);
@@ -251,7 +251,7 @@ let FoneraDownloader = {
                     Application.storage.set(Fonera.LASTERROR, id + ":" + response.error);
                 }
                 if (!dontUpdateUI)
-                    FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
+                    FoneraDownloader.notify(FoneraDownloader.onSendUrl);
             };
             let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
             url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
@@ -276,8 +276,17 @@ let FoneraDownloader = {
         let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
         let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         downloads = downloads.concat(torrents);
+        let targetDownloads = [];
 
-        for (let i in downloads) {
+        // find downloads targets:
+        for (let di in downloads) {
+            if (downloads[di].status == status) {
+                targetDownloads.push(di);
+            }
+        }
+
+        while (targetDownloads.length > 0) {
+            let i = targetDownloads.pop();
             if (downloads[i].status == status) {
                 let rpcCall = null; let callback = null;
                 let url = null; let id = downloads[i].id;
@@ -290,12 +299,13 @@ let FoneraDownloader = {
                     };
 
                     callback = function(response) {
-                        if (response.result == "success")
-                            FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
-                        else {
+                        if (response.result != "success") {
                             let errorMsg = id + ":" + response.result.replace(/\s/g,'');
                             Application.console.log("Response Error: " + errorMsg);
                             Application.storage.set(Fonera.LASTERROR, errorMsg);
+                        } else {
+                            if (targetDownloads.length == 0)
+                                FoneraDownloader.notify(FoneraDownloader.onSendUrl);
                         }
                     };
                     url = FoneraDownloader.transmissionUrl();
@@ -311,13 +321,16 @@ let FoneraDownloader = {
                         if (response.error != null) {
                             Application.console.log("Response Error: " + response.error);
                             Application.storage.set(Fonera.LASTERROR, id + ":" + response.error);
+                        } else {
+                            if (targetDownloads.length == 0)
+                                FoneraDownloader.notify(FoneraDownloader.onSendUrl);
                         }
                     };
                 }
                 FoneraDownloader.callRpc(rpcCall, callback, url);
             }
         }
-        FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
+        FoneraDownloader.notify(FoneraDownloader.onSendUrl);
     },
 
     deleteDownloadById : function(id, dontUpdateUI) {
@@ -339,7 +352,7 @@ let FoneraDownloader = {
             callback = function(response) {
                 if (response.result == "success") {
                     if (!dontUpdateUI)
-                        FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
+                        FoneraDownloader.notify(FoneraDownloader.onSendUrl);
                 } else {
                     let errorMsg = id + ":" + response.result.replace(/\s/g,'');
                     Application.console.log("Response Error: " + errorMsg);
@@ -363,7 +376,7 @@ let FoneraDownloader = {
                     Application.storage.set(Fonera.LASTERROR, id + ":" + response.error);
                 }
                 if (!dontUpdateUI)
-                    FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
+                    FoneraDownloader.notify(FoneraDownloader.onSendUrl);
             };
             let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
             url =  Fonera.foneraURL() + "/fon_rpc/ff?auth=" + authToken;
@@ -441,7 +454,6 @@ let FoneraDownloader = {
                     Application.console.log("Response Error: unknown error");
                 }
             }
-            FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             FoneraDownloader.notify(FoneraDownloader.onSendUrl);
         };
         let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
@@ -469,7 +481,6 @@ let FoneraDownloader = {
                 Application.storage.set(Fonera.LASTERROR, errorMsg);
                 Application.console.log("Response Error: " + errorMsg);
             }
-            FoneraDownloader.notify(FoneraDownloader.onDownloadsAvailable);
             FoneraDownloader.notify(FoneraDownloader.onSendUrl);
         };
         let url = FoneraDownloader.transmissionUrl();
