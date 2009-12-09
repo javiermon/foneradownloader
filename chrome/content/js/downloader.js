@@ -94,7 +94,7 @@ let FoneraDownloader = {
         let ip = Fonera.getUserPref("foneraip").split(":")[0];
 
         let transCredentials = Fonera.getUsername()
-            + ":" + Fonera.getUserPref("password") + "@";
+            + ":" + encodeURIComponent(Fonera.getUserPref("password")) + "@";
         let url = "http://" + transCredentials + ip
             + ":9091/transmission/rpc";
         return url;

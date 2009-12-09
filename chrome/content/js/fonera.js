@@ -54,7 +54,7 @@ let Fonera = {
             // example: event == onCheckFoneraAvailable
             Fonera[event].push(callback);
         } catch (e) {
-            Application.console.log("invalid registration for event " 
+            Application.console.log("invalid registration for event "
                                     + event + ": " + callback + ": " + e);
         }
     },
@@ -68,7 +68,7 @@ let Fonera = {
                     // remove from index i, 1 element
                     eventCallbacks.splice(i,1);
         } catch (e) {
-            Application.console.log("invalid registration for event " 
+            Application.console.log("invalid registration for event "
                                     + event + ": " + callback + ": " + e);
         }
     },
@@ -101,7 +101,7 @@ let Fonera = {
         if (!onwan)
             return "http://" + this.getUserPref("foneraip") + "/luci";
         else {
-            return "https://" + this.getUsername() + ":" + this.getUserPref("password") + "@"
+            return "https://" + this.getUsername() + ":" + encodeURIComponent(this.getUserPref("password")) + "@"
                 + this.getUserPref("foneraip") + "/luci";
         }
     },
@@ -184,7 +184,8 @@ let Fonera = {
             .createInstance(Components.interfaces.nsIXMLHttpRequest);
         let url =  this.foneraURL() + "/fon_rpc/ff/auth";
         let stream = nJSON.encode({"method": "plain",
-            "params" : [this.getUsername(), this.getUserPref("password")] });
+            "params" : [this.getUsername(),
+                        this.getUserPref("password")] });
 
         Application.console.log("Authenticating to URL : " + url + "\n");
         Application.console.log("POST : " + stream + "\n");
