@@ -32,6 +32,12 @@ let Application = Components.classes["@mozilla.org/fuel/application;1"]
 let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
     .getService(Components.interfaces.nsIPrefService);
 
+let nsLoginInfo = new Components.Constructor("@mozilla.org/login-manager/loginInfo;1",
+                                             Components.interfaces.nsILoginInfo,
+                                             "init");
+let passwordManager = Components.classes["@mozilla.org/login-manager;1"].
+    getService(Components.interfaces.nsILoginManager);
+
 let Fonera = {
     // authentication status:
     AUTHTOKEN : "authToken",
@@ -94,14 +100,33 @@ let Fonera = {
         return prefs.getBoolPref("enabled");
     },
 
+    getPassword : function() {
+        // retrieve password with password manager
+        let password = '';
+        let username = Fonera.getUsername();
+        try {
+            let logins = passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
+                for (let i = 0; i < logins.length; i++) {
+                    if (logins[i].username == username) {
+                        password = logins[i].password;
+                        break;
+                    }
+                }
+        } catch(e) {
+            Application.console.log(e);
+        }
+        return password;
+    },
+
     // url for reaching the fonera.
     foneraURL : function () {
         let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
         let onwan = prefs.getBoolPref("onwan");
+        let password = Fonera.getPassword();
         if (!onwan)
             return "http://" + this.getUserPref("foneraip") + "/luci";
         else {
-            return "https://" + this.getUsername() + ":" + encodeURIComponent(this.getUserPref("password")) + "@"
+            return "https://" + this.getUsername() + ":" + encodeURIComponent(password) + "@"
                 + this.getUserPref("foneraip") + "/luci";
         }
     },
@@ -185,7 +210,7 @@ let Fonera = {
         let url =  this.foneraURL() + "/fon_rpc/ff/auth";
         let stream = nJSON.encode({"method": "plain",
             "params" : [this.getUsername(),
-                        this.getUserPref("password")] });
+                        Fonera.getPassword()] });
 
         Application.console.log("Authenticating to URL : " + url + "\n");
         Application.console.log("POST : " + stream + "\n");

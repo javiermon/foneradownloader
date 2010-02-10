@@ -29,6 +29,12 @@ let Application = Components.classes["@mozilla.org/fuel/application;1"]
 let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
 			.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
 
+let nsLoginInfo = new Components.Constructor("@mozilla.org/login-manager/loginInfo;1",
+                                             Components.interfaces.nsILoginInfo,
+                                             "init");
+let passwordManager = Components.classes["@mozilla.org/login-manager;1"].
+    getService(Components.interfaces.nsILoginManager);
+
 Components.utils.import("resource://modules/fonera.js");
 
 let FoneraPrefs = {
@@ -37,8 +43,6 @@ let FoneraPrefs = {
         try {
 
             let password = document.getElementById("password");
-            PreferencesBranch.setCharPref("password", password.value);
-
             let foneraip = document.getElementById("foneraip");
             PreferencesBranch.setCharPref("foneraip", foneraip.value);
 
@@ -48,6 +52,21 @@ let FoneraPrefs = {
             let enabled = document.getElementById("enabled");
             PreferencesBranch.setBoolPref("enabled", enabled.checked);
 
+            if (password.value != null && password.value != "") {
+                let extLoginInfo = new nsLoginInfo('chrome://foneradownloader',
+                    null, 'Fonera user Login',
+                    Fonera.getUsername(), password.value, "", "");
+
+                // remove all logins and create a new one:
+                let logins = passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
+                for (let i = 0; i < logins.length; i++) {
+                    passwordManager.removeLogin(logins[i]);
+                }
+                passwordManager.addLogin(extLoginInfo);
+            }
+
+
+            // PreferencesBranch.setCharPref("password", password.value);
             Fonera.checkFoneraAvailable(true);
 
         } catch(e) {
@@ -60,7 +79,9 @@ let FoneraPrefs = {
         try {
 
             let password = document.getElementById("password");
-            password.value = PreferencesBranch.getCharPref("password");
+            password.value = Fonera.getPassword();
+
+            // password.value = PreferencesBranch.getCharPref("password");
 
             let foneraip = document.getElementById("foneraip");
             foneraip.value = PreferencesBranch.getCharPref("foneraip");
