@@ -65,8 +65,6 @@ let FoneraPrefs = {
                 passwordManager.addLogin(extLoginInfo);
             }
 
-
-            // PreferencesBranch.setCharPref("password", password.value);
             Fonera.checkFoneraAvailable(true);
 
         } catch(e) {
@@ -80,8 +78,6 @@ let FoneraPrefs = {
 
             let password = document.getElementById("password");
             password.value = Fonera.getPassword();
-
-            // password.value = PreferencesBranch.getCharPref("password");
 
             let foneraip = document.getElementById("foneraip");
             foneraip.value = PreferencesBranch.getCharPref("foneraip");

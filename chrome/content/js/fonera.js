@@ -104,28 +104,7 @@ let Fonera = {
         let password = '';
         let username = Fonera.getUsername();
 
-        // migration code:
-        try {
-            password = Fonera.getUserPref('password');
-            // store new password in loginManager:
-            let extLoginInfo = new nsLoginInfo('chrome://foneradownloader',
-                null, 'Fonera user Login',
-                Fonera.getUsername(), password, "", "");
-
-            // remove all logins and create a new one:
-            let logins = passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
-            for (let i = 0; i < logins.length; i++) {
-                passwordManager.removeLogin(logins[i]);
-            }
-            passwordManager.addLogin(extLoginInfo);
-            // lock this preference as it will be stored from now on inside loginManager
-            Preferences.getBranch("extensions.foneradownloader.").lockPref('password');
-
-        } catch(e) {
-
-        }
         // retrieve password with password manager
-
         try {
             let logins = passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
                 for (let i = 0; i < logins.length; i++) {
@@ -136,6 +115,29 @@ let Fonera = {
                 }
         } catch(e) {
             Application.console.log(e);
+            // migration code:
+            try {
+                password = Fonera.getUserPref('password');
+                // store new password in loginManager:
+                let extLoginInfo = new nsLoginInfo('chrome://foneradownloader',
+                    null, 'Fonera user Login',
+                    Fonera.getUsername(), password, "", "");
+
+                // remove all logins and create a new one:
+                let logins = passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
+                for (let i = 0; i < logins.length; i++) {
+                    passwordManager.removeLogin(logins[i]);
+                }
+                passwordManager.addLogin(extLoginInfo);
+                // lock this preference as it will be stored from now on inside loginManager
+                Preferences.getBranch("extensions.foneradownloader.").setCharPref("password", "");
+                Preferences.getBranch("extensions.foneradownloader.").lockPref('password');
+                return password;
+
+            } catch(e) {
+                Application.console.log(e);
+            }
+
         }
         return password;
     },
