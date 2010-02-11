@@ -106,7 +106,7 @@ let Fonera = {
         if (prefs.prefHasUserValue("enabled"))
             return prefs.getBoolPref("enabled");
         else
-            return null;
+            return true;
     },
 
     getPassword : function() {
