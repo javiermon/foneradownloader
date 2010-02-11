@@ -26,9 +26,6 @@ let EXPORTED_SYMBOLS = ["FoneraLinkManager"];
 let Application = Components.classes["@mozilla.org/fuel/application;1"]
     .getService(Components.interfaces.fuelIApplication);
 
-let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
-			.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
-
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/format.js");
 Components.utils.import("resource://modules/downloader.js");
@@ -72,7 +69,7 @@ let FoneraLinkManager = {
     },
 
     drawLinks : function() {
-        let links = Application.storage.get(FoneraLinkManager.links, []);
+        let links = Fonera.Application.storage.get(FoneraLinkManager.links, []);
         FoneraLinkManager.drawLinksList(links);
     },
 
@@ -195,6 +192,9 @@ let FoneraLinkManager = {
     },
 
     quickFilter : function() {
+        let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
+			.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
+        
         let filters = {
             "images": PreferencesBranch.getCharPref("filters.images"),
             "movies": PreferencesBranch.getCharPref("filters.movies"),
@@ -216,7 +216,7 @@ let FoneraLinkManager = {
             }
         }
         if (myFilter != "") {
-            Application.console.log("toolbar filter: " + myFilter);
+            Fonera.Application.console.log("toolbar filter: " + myFilter);
             this.filterLinks(myFilter, false);
         }
     },
@@ -248,11 +248,11 @@ let FoneraLinkManager = {
                 // case insensitive:
                 filter = new RegExp(filter,'i');
             } catch (e) {
-                Application.console.log("could not parse filter: " + filter);
+                Fonera.Application.console.log("could not parse filter: " + filter);
                 return;
             }
 
-            Application.console.log("Filter: " + filter);
+            Fonera.Application.console.log("Filter: " + filter);
             let filtered = false;
             for (let i in links) {
                 let item = links[i].firstChild;

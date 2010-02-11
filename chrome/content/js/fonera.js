@@ -26,19 +26,20 @@
 
 let EXPORTED_SYMBOLS = ["Fonera"];
 
-let Application = Components.classes["@mozilla.org/fuel/application;1"]
-    .getService(Components.interfaces.fuelIApplication);
-
-let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
-    .getService(Components.interfaces.nsIPrefService);
-
-let nsLoginInfo = new Components.Constructor("@mozilla.org/login-manager/loginInfo;1",
-                                             Components.interfaces.nsILoginInfo,
-                                             "init");
-let passwordManager = Components.classes["@mozilla.org/login-manager;1"].
-    getService(Components.interfaces.nsILoginManager);
-
 let Fonera = {
+
+    Application : Components.classes["@mozilla.org/fuel/application;1"]
+        .getService(Components.interfaces.fuelIApplication),
+
+    Preferences : Components.classes["@mozilla.org/preferences-service;1"]
+        .getService(Components.interfaces.nsIPrefService),
+
+    nsLoginInfo : new Components.Constructor("@mozilla.org/login-manager/loginInfo;1",
+                                             Components.interfaces.nsILoginInfo,
+                                             "init"),
+    passwordManager : Components.classes["@mozilla.org/login-manager;1"].
+        getService(Components.interfaces.nsILoginManager),
+
     // authentication status:
     AUTHTOKEN : "authToken",
     authError : "ERROR", // Cannot reach the fonera
@@ -60,7 +61,7 @@ let Fonera = {
             // example: event == onCheckFoneraAvailable
             Fonera[event].push(callback);
         } catch (e) {
-            Application.console.log("invalid registration for event "
+            Fonera.Application.console.log("invalid registration for event "
                                     + event + ": " + callback + ": " + e);
         }
     },
@@ -74,7 +75,7 @@ let Fonera = {
                     // remove from index i, 1 element
                     eventCallbacks.splice(i,1);
         } catch (e) {
-            Application.console.log("invalid registration for event "
+            Fonera.Application.console.log("invalid registration for event "
                                     + event + ": " + callback + ": " + e);
         }
     },
@@ -87,8 +88,13 @@ let Fonera = {
     },
 
     getUserPref : function(preference) {
+        let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
+            .getService(Components.interfaces.nsIPrefService);
         let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
-        return prefs.getCharPref(preference);
+        if (prefs.prefHasUserValue(preference))
+            return prefs.getCharPref(preference);
+        else
+            return null;
     },
 
     getUsername : function() {
@@ -96,8 +102,11 @@ let Fonera = {
     },
 
     isPluginEnabled : function() {
-        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
-        return prefs.getBoolPref("enabled");
+        let prefs = Fonera.Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        if (prefs.prefHasUserValue("enabled"))
+            return prefs.getBoolPref("enabled");
+        else
+            return null;
     },
 
     getPassword : function() {
@@ -106,7 +115,7 @@ let Fonera = {
 
         // retrieve password with password manager
         try {
-            let logins = passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
+            let logins = Fonera.passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
                 for (let i = 0; i < logins.length; i++) {
                     if (logins[i].username == username) {
                         password = logins[i].password;
@@ -114,28 +123,29 @@ let Fonera = {
                     }
                 }
         } catch(e) {
-            Application.console.log(e);
+            Fonera.Application.console.log(e);
             // migration code:
             try {
-                password = Fonera.getUserPref('password');
-                // store new password in loginManager:
-                let extLoginInfo = new nsLoginInfo('chrome://foneradownloader',
-                    null, 'Fonera user Login',
-                    Fonera.getUsername(), password, "", "");
+                if (prefs.prefHasUserValue("password")) {
+                    password = Fonera.getUserPref('password');
+                    // store new password in loginManager:
+                    let extLoginInfo = new Fonera.nsLoginInfo('chrome://foneradownloader',
+                        null, 'Fonera user Login',
+                        Fonera.getUsername(), password, "", "");
 
-                // remove all logins and create a new one:
-                let logins = passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
-                for (let i = 0; i < logins.length; i++) {
-                    passwordManager.removeLogin(logins[i]);
+                    // remove all logins and create a new one:
+                    let logins = Fonera.passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
+                    for (let i = 0; i < logins.length; i++) {
+                        Fonera.passwordManager.removeLogin(logins[i]);
+                    }
+                    Fonera.passwordManager.addLogin(extLoginInfo);
+                    // lock this preference as it will be stored from now on inside loginManager
+                    Fonera.Preferences.getBranch("extensions.foneradownloader.").setCharPref("password", "");
+                    Fonera.Preferences.getBranch("extensions.foneradownloader.").lockPref('password');
+                    return password;
                 }
-                passwordManager.addLogin(extLoginInfo);
-                // lock this preference as it will be stored from now on inside loginManager
-                Preferences.getBranch("extensions.foneradownloader.").setCharPref("password", "");
-                Preferences.getBranch("extensions.foneradownloader.").lockPref('password');
-                return password;
-
             } catch(e) {
-                Application.console.log(e);
+                Fonera.Application.console.log(e);
             }
 
         }
@@ -144,7 +154,7 @@ let Fonera = {
 
     // url for reaching the fonera.
     foneraURL : function () {
-        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        let prefs = Fonera.Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
         let onwan = prefs.getBoolPref("onwan");
         let password = Fonera.getPassword();
         if (!onwan)
@@ -172,14 +182,14 @@ let Fonera = {
         // do we want to re-authenticate?
         let reAuth = false;
         reAuth = (arguments.length == 1 && arguments[0] == true);
-        let authToken = Application.storage.get(this.AUTHTOKEN, null);
+        let authToken = Fonera.Application.storage.get(this.AUTHTOKEN, null);
         if (reAuth) {
             // disable sessions:
-            Application.console.log("Disable session storage");
-            Application.storage.set(this.AUTHTOKEN, null);
-            Application.storage.set(this.FONERADOWNLOADS, []);
-            Application.storage.set(this.FONERATORRENTS, []);
-            Application.storage.set(this.DISKS, null);
+            Fonera.Application.console.log("Disable session storage");
+            Fonera.Application.storage.set(this.AUTHTOKEN, null);
+            Fonera.Application.storage.set(this.FONERADOWNLOADS, []);
+            Fonera.Application.storage.set(this.FONERATORRENTS, []);
+            Fonera.Application.storage.set(this.DISKS, null);
             this.notifyAllEvents();
         }
 
@@ -191,7 +201,7 @@ let Fonera = {
         }
 
         if (!reAuth && this.authenticated(authToken)) {
-            Application.console.log("already authenticated\n");
+            Fonera.Application.console.log("already authenticated\n");
             this.notify(this.onAuthenticate);
             return;
         }
@@ -201,7 +211,7 @@ let Fonera = {
 	    .createInstance(Components.interfaces.nsIXMLHttpRequest);
 
 	let url = this.foneraURL();
-        Application.console.log("Checking URL : " + url + "\n");
+        Fonera.Application.console.log("Checking URL : " + url + "\n");
 	req.open('GET', url, true); /* asynchronous! */
         req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
 	req.onreadystatechange = function (aEvt) {
@@ -209,8 +219,8 @@ let Fonera = {
 	        if(req.status == 200) {
                     Fonera.authenticate(reAuth);
 	        } else {
-                    Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
-                    Application.console.log("Fonera NOT ready\n");
+                    Fonera.Application.storage.set(Fonera.AUTHTOKEN, Fonera.authError);
+                    Fonera.Application.console.log("Fonera NOT ready\n");
 	        }
                 Fonera.notify(Fonera.onCheckFoneraAvailable);
 	    }
@@ -219,9 +229,9 @@ let Fonera = {
     },
 
     authenticate: function(reAuth) {
-        let authToken = Application.storage.get(this.AUTHTOKEN, null);
+        let authToken = Fonera.Application.storage.get(this.AUTHTOKEN, null);
         if (!reAuth && this.authenticated(authToken)) {
-            Application.console.log("already authenticated\n");
+            Fonera.Application.console.log("already authenticated\n");
             this.notify(this.onAuthenticate);
             return;
         }
@@ -236,8 +246,8 @@ let Fonera = {
             "params" : [this.getUsername(),
                         Fonera.getPassword()] });
 
-        Application.console.log("Authenticating to URL : " + url + "\n");
-        Application.console.log("POST : " + stream + "\n");
+        Fonera.Application.console.log("Authenticating to URL : " + url + "\n");
+        Fonera.Application.console.log("POST : " + stream + "\n");
 
         req.open('POST', url, true); /* asynchronous! */
         req.channel.loadFlags |= Components.interfaces.nsIRequest.LOAD_BYPASS_CACHE;
@@ -245,16 +255,16 @@ let Fonera = {
 
         req.onreadystatechange = function (aEvt) {
             if (req.readyState == 4) {
-                Application.console.log("Response :" + req.responseText + "\n");
+                Fonera.Application.console.log("Response :" + req.responseText + "\n");
     	        if(req.status == 200) {
                     let response = nJSON.decode(req.responseText);
                     if (response.error == null && response.result != null) {
-                        Application.console.log(Fonera.AUTHTOKEN + " : " + response.result);
-                        Application.storage.set(Fonera.AUTHTOKEN, response.result);
+                        Fonera.Application.console.log(Fonera.AUTHTOKEN + " : " + response.result);
+                        Fonera.Application.storage.set(Fonera.AUTHTOKEN, response.result);
                         // Fonera.checkDisks();
                     } else {
-                        Application.storage.set(Fonera.AUTHTOKEN, Fonera.authFailed);
-                        Application.console.log("Authentication FAILED\n");
+                        Fonera.Application.storage.set(Fonera.AUTHTOKEN, Fonera.authFailed);
+                        Fonera.Application.console.log("Authentication FAILED\n");
                     }
                     Fonera.notify(Fonera.onAuthenticate);
     	        }
@@ -267,9 +277,9 @@ let Fonera = {
         let Application = Components.classes["@mozilla.org/fuel/application;1"]
             .getService(Components.interfaces.fuelIApplication);
 
-        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        let authToken = Fonera.Application.storage.get(Fonera.AUTHTOKEN, null);
         if (!Fonera.authenticated(authToken)) {
-            Application.console.log("Not authenticated\n");
+            Fonera.Application.console.log("Not authenticated\n");
             return;
         }
 
@@ -287,7 +297,7 @@ let Fonera = {
         let rpcCall = {"method": "get_discs"};
         let stream = nJSON.encode(rpcCall);
 
-        Application.console.log("POST : " + stream + "\n");
+        Fonera.Application.console.log("POST : " + stream + "\n");
 
         // async even if dialog is closed:
         req.mozBackgroundRequest = true;
@@ -297,22 +307,22 @@ let Fonera = {
 
         req.onload = function (aEvt) {
             if (req.readyState == 4) {
-                Application.console.log("Response :" + req.responseText + "\n");
+                Fonera.Application.console.log("Response :" + req.responseText + "\n");
     	        if (req.status == 200) {
                     let response = nJSON.decode(req.responseText);
                     if (response.error == null) {
                         if (response.result == null) {
-                            Application.console.log("No disks found");
-                            Application.storage.set(Fonera.DISKS, Fonera.noDisk);
+                            Fonera.Application.console.log("No disks found");
+                            Fonera.Application.storage.set(Fonera.DISKS, Fonera.noDisk);
                         } else {
-                            Application.storage.set(Fonera.DISKS, response.result);
+                            Fonera.Application.storage.set(Fonera.DISKS, response.result);
                         }
                     } else {
-                        Application.console.log("Response Error: " + response.error + "\n");
+                        Fonera.Application.console.log("Response Error: " + response.error + "\n");
                     }
                     Fonera.notify(Fonera.onCheckDisks);
                 } else {
-                    Application.console.log("Http Status Error :" + req.status + "\n");
+                    Fonera.Application.console.log("Http Status Error :" + req.status + "\n");
                 }
             }
         };
@@ -320,7 +330,7 @@ let Fonera = {
     },
 
     hasDisk : function() {
-        let disks = Application.storage.get(Fonera.DISKS, Fonera.noDisk);
+        let disks = Fonera.Application.storage.get(Fonera.DISKS, Fonera.noDisk);
         return (disks != Fonera.noDisk);
     },
 

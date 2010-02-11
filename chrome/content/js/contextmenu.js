@@ -25,9 +25,6 @@
 
 let EXPORTED_SYMBOLS = ["FoneraCxtxtMenu"];
 
-let Application = Components.classes["@mozilla.org/fuel/application;1"]
-    .getService(Components.interfaces.fuelIApplication);
-
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
 Components.utils.import("resource://modules/linkmanager.js");
@@ -66,7 +63,7 @@ let FoneraCxtxtMenu = {
         let show = document.getElementById("send-link-to-fonera");
         let links = document.getElementById("get-links-for-fonera");
         let showSeparator = document.getElementById("send-link-to-fonera-separator");
-        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        let authToken = Fonera.Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken) && Fonera.hasDisk()) {
             // we want this option visible:
             links.hidden = false;
@@ -80,7 +77,7 @@ let FoneraCxtxtMenu = {
                     hide = false;
                 }
             } catch (e) {
-                Application.console.log("showHideItem failed :" + e);
+                Fonera.Application.console.log("showHideItem failed :" + e);
             }
         } else {
             links.hidden = true;
@@ -119,11 +116,11 @@ let FoneraCxtxtMenu = {
 
             // remove duplicates
             links = unique(links);
-            Application.console.log("found " + links.length + " links");
-            Application.storage.set(FoneraLinkManager.links, links);
+            Fonera.Application.console.log("found " + links.length + " links");
+            Fonera.Application.storage.set(FoneraLinkManager.links, links);
             FoneraLinkManager.showLinksWindow();
         } catch (e) {
-            Application.console.log("Error finding links in page: " + e);
+            Fonera.Application.console.log("Error finding links in page: " + e);
         }
     },
 
@@ -140,7 +137,7 @@ let FoneraCxtxtMenu = {
                 FoneraDownloader.sendDownloadUrlToFonera(href);
             }
         } catch (e) {
-            Application.console.log("send link failed :" + e);
+            Fonera.Application.console.log("send link failed :" + e);
         }
     }
 };

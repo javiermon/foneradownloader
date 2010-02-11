@@ -23,24 +23,23 @@
 
 let EXPORTED_SYMBOLS = ["FoneraPrefs"];
 
-let Application = Components.classes["@mozilla.org/fuel/application;1"]
-    .getService(Components.interfaces.fuelIApplication);
-
-let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
-			.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
-
-let nsLoginInfo = new Components.Constructor("@mozilla.org/login-manager/loginInfo;1",
-                                             Components.interfaces.nsILoginInfo,
-                                             "init");
-let passwordManager = Components.classes["@mozilla.org/login-manager;1"].
-    getService(Components.interfaces.nsILoginManager);
-
 Components.utils.import("resource://modules/fonera.js");
 
 let FoneraPrefs = {
 
     applyAction : function () {
         try {
+            let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
+		.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
+
+
+            let nsLoginInfo = new Components.Constructor("@mozilla.org/login-manager/loginInfo;1",
+                Components.interfaces.nsILoginInfo,
+                "init");
+            
+            let passwordManager = Components.classes["@mozilla.org/login-manager;1"].
+                getService(Components.interfaces.nsILoginManager);
+
 
             let password = document.getElementById("password");
             let foneraip = document.getElementById("foneraip");
@@ -68,13 +67,16 @@ let FoneraPrefs = {
             Fonera.checkFoneraAvailable(true);
 
         } catch(e) {
-            Application.console.log(e);
+            Fonera.Application.console.log(e);
         }
 
     },
 
     loadValues : function () {
         try {
+
+            let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
+			.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
 
             let password = document.getElementById("password");
             password.value = Fonera.getPassword();
@@ -89,7 +91,7 @@ let FoneraPrefs = {
             enabled.checked = PreferencesBranch.getBoolPref("enabled");
 
         } catch(e) {
-            Application.console.log(e);
+            Fonera.Application.console.log(e);
         }
 
     },

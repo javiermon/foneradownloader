@@ -23,9 +23,6 @@
 
 let EXPORTED_SYMBOLS = ["FoneraFormat"];
 
-let strBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"].
-    getService(Components.interfaces.nsIStringBundleService);
-
 let FoneraFormat = {
 
     /**
@@ -58,6 +55,8 @@ let FoneraFormat = {
     stateName : function(elmt) {
         // translate state to human
         // http://www.oreillynet.com/pub/a/mozilla/2000/11/10/localizing.html?page=2
+        let strBundleService = Components.classes["@mozilla.org/intl/stringbundle;1"].
+            getService(Components.interfaces.nsIStringBundleService);
         let stringsBundle = strBundleService.
             createBundle("chrome://foneradownloader/locale/foneradownloader.properties");
         try {

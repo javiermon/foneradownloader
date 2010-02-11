@@ -23,12 +23,6 @@
 
 let EXPORTED_SYMBOLS = ["FoneraStatus"];
 
-let Application = Components.classes["@mozilla.org/fuel/application;1"]
-    .getService(Components.interfaces.fuelIApplication);
-
-let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
-    .getService(Components.interfaces.nsIPrefService);
-
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
 
@@ -47,9 +41,9 @@ let FoneraStatus = {
             return;
         }
 
-        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        let authToken = Fonera.Application.storage.get(Fonera.AUTHTOKEN, null);
         if (authToken == Fonera.authFailed) {
-            Application.console.log("Authentication failed!\n");
+            Fonera.Application.console.log("Authentication failed!\n");
             // TODO: style="color: red;""
             panel.tooltipText = stringsBundle.getString('authFailString');
             panel.src = "chrome://global/skin/icons/warning-16.png";
@@ -59,7 +53,7 @@ let FoneraStatus = {
             panel.src = "chrome://global/skin/icons/error-16.png";
             return;
         } else if (authToken == null) {
-            Application.console.log("Waiting for authentication!\n");
+            Fonera.Application.console.log("Waiting for authentication!\n");
             panel.tooltipText = stringsBundle.getString('foneraloading');
             panel.src = "chrome://global/skin/icons/loading_16.png";
             return;
@@ -71,9 +65,9 @@ let FoneraStatus = {
             return;
         }
         // check errors:
-        let errors = Application.storage.get(Fonera.LASTERROR, null);
+        let errors = Fonera.Application.storage.get(Fonera.LASTERROR, null);
         if (errors != null) {
-            Application.console.log("status found error: " + errors);
+            Fonera.Application.console.log("status found error: " + errors);
             clearErrorItem.setAttribute('hidden', false);
             panel.src = "chrome://global/skin/icons/warning-16.png";
             panel.tooltipText = FoneraDownloader.getErrorString(errors, stringsBundle);
@@ -82,8 +76,8 @@ let FoneraStatus = {
         // everything fine:
         panel.src = "chrome://foneradownloader/skin/information.png";
         let foneraStatus = document.getElementById("foneraDownloader-sbpanel");
-        let foneradownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
-        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+        let foneradownloads = Fonera.Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        let torrents = Fonera.Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
 
         let totaldownloads = foneradownloads.length + torrents.length;
         if (totaldownloads == 0)
@@ -93,7 +87,7 @@ let FoneraStatus = {
     },
 
     clearError : function() {
-        Application.storage.set(Fonera.LASTERROR, null);
+        Fonera.Application.storage.set(Fonera.LASTERROR, null);
         // propagate updates:
         Fonera.checkFoneraAvailable();
     },

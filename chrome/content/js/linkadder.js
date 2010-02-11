@@ -23,12 +23,6 @@
 
 let EXPORTED_SYMBOLS = ["FoneraLinkadder"];
 
-let Application = Components.classes["@mozilla.org/fuel/application;1"]
-    .getService(Components.interfaces.fuelIApplication);
-
-let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
-			.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
-
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
 
@@ -36,7 +30,7 @@ let FoneraLinkadder = {
 
     parseLinks : function() {
         let text = document.getElementById('foneradownloader-link-text').value;
-        Application.console.log("parsed: " + text);
+        Fonera.Application.console.log("parsed: " + text);
         let urlRegexp = FoneraDownloader.urlRegexp;
 
         let matches = [];
@@ -88,10 +82,10 @@ let FoneraLinkadder = {
                 return;
             }
         } catch (e) {
-            Application.console.log("send link failed :" + e);
+            Fonera.Application.console.log("send link failed :" + e);
         }
     },
-    
+
     loadEvents : function() {
 
     },

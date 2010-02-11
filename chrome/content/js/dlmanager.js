@@ -23,11 +23,6 @@
 
 let EXPORTED_SYMBOLS = ["FoneraDLManager"];
 
-let Application = Components.classes["@mozilla.org/fuel/application;1"]
-    .getService(Components.interfaces.fuelIApplication);
-
-let Preferences = Components.classes["@mozilla.org/preferences-service;1"]
-    .getService(Components.interfaces.nsIPrefService);
 
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
@@ -103,8 +98,8 @@ let FoneraDLManager = {
         // get common status of downloads selected
         // cancel -> always posible. pause -> all started. start -> all paused
         let actions = { cancel :  true, pause : true, start : true };
-        let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
-        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+        let downloads = Fonera.Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        let torrents = Fonera.Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         let allDownloads = downloads.concat(torrents);
 
         let dialog = document.getElementById('foneradownloader-downloads-list');
@@ -285,7 +280,7 @@ let FoneraDLManager = {
             'list-view' : listStyleSmall
         };
         let children = document.getElementById("filter-toolbar").childNodes;
-        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        let prefs = Fonera.Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
         let filter = prefs.getCharPref('dlview');
         for (let i = 0; i < children.length; i++) {
             try {
@@ -293,7 +288,7 @@ let FoneraDLManager = {
                     filter = children[i].id;
                 }
             } catch (e) {
-                Application.console.log(e);
+                Fonera.Application.console.log(e);
             }
         };
         // re-set
@@ -316,7 +311,7 @@ let FoneraDLManager = {
         } else {
             FoneraDLManager.toggleListView();
 
-            let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+            let authToken = Fonera.Application.storage.get(Fonera.AUTHTOKEN, null);
             if (authToken == Fonera.authFailed) {
                 text = stringsBundle.getString('authFailString');
                 icon = "chrome://global/skin/icons/Warning.png";
@@ -325,15 +320,15 @@ let FoneraDLManager = {
                 text = stringsBundle.getString('authErrorString');
                 icon = "chrome://global/skin/icons/Error.png";
             } else if (authToken != null ) {
-                Application.console.log("authenticated");
+                Fonera.Application.console.log("authenticated");
                 // check disks:
                 if (!Fonera.hasDisk()) {
-                    Application.console.log("no disk available");
+                    Fonera.Application.console.log("no disk available");
                     text = stringsBundle.getString('noDiskErrorString');
                     icon = "chrome://global/skin/icons/Warning.png";
                 } else {
-                    let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
-                    let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+                    let downloads = Fonera.Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+                    let torrents = Fonera.Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
                     if (torrents.length == 0 && downloads.length == 0) {
                         text = stringsBundle.getString("noFilesFound");
                         icon = "chrome://foneradownloader/skin/context.png";
@@ -344,7 +339,7 @@ let FoneraDLManager = {
                     }
                 }
             } else {
-                Application.console.log("not authenticated");
+                Fonera.Application.console.log("not authenticated");
             }
         }
 
@@ -363,14 +358,14 @@ let FoneraDLManager = {
 
     drawErrors : function() {
         let dialog = document.getElementById("foneradownloader-errors-list"); // richlistbox
-        let errors = Application.storage.get(Fonera.LASTERROR, null);
+        let errors = Fonera.Application.storage.get(Fonera.LASTERROR, null);
         if (errors == null) {
             dialog.setAttribute('hidden', true);
             return;
         }
         let stringsBundle = document.getElementById("string-bundle");
         dialog.setAttribute('hidden', false);
-        Application.console.log("Last error found " + errors);
+        Fonera.Application.console.log("Last error found " + errors);
         let icon = "chrome://global/skin/icons/error-16.png";
         let errormsg = FoneraDownloader.getErrorString(errors, stringsBundle);
 
@@ -399,7 +394,7 @@ let FoneraDLManager = {
     },
 
     clearErrors : function() {
-        Application.storage.set(Fonera.LASTERROR, null);
+        Fonera.Application.storage.set(Fonera.LASTERROR, null);
         let dialog = document.getElementById("foneradownloader-errors-list"); // richlistbox
         dialog.setAttribute('hidden', true);
         FoneraDLManager.stripeifyList(dialog);
@@ -435,16 +430,16 @@ let FoneraDLManager = {
         // Example: http://www.nexgenmedia.net/mozilla/richlistbox/richlistbox-simple.xul
         let foneraDownloads = [];
         if (filter == 'filter-all') {
-            foneraDownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
-            let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+            foneraDownloads = Fonera.Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+            let torrents = Fonera.Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
             foneraDownloads = foneraDownloads.concat(torrents);
         } else if (filter == 'filter-torrents') {
-            foneraDownloads = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+            foneraDownloads = Fonera.Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         } else {
-            foneraDownloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+            foneraDownloads = Fonera.Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
         }
 
-        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        let prefs = Fonera.Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
         let filter = prefs.getCharPref('dlview');
         let drawFunction = (filter == 'icon-view') ? FoneraDLManager.drawDownloadItem : FoneraDLManager.drawDownloadItemSmall;
 
@@ -458,13 +453,13 @@ let FoneraDLManager = {
                 // can't seem to get attributes directly from the object, need getAttribute
                 if (children[j].getAttribute('type') == 'radio' && children[j].getAttribute('checked') == 'true') {
                     sortCriteria = children[j].id;
-                    Application.console.log(children[j].id + " selected");
+                    Fonera.Application.console.log(children[j].id + " selected");
                 }
             } catch (e) {
-                Application.console.log(e);
+                Fonera.Application.console.log(e);
             }
         };
-        Application.console.log(sortCriteria + " sorting selected");
+        Fonera.Application.console.log(sortCriteria + " sorting selected");
         // save status:
         prefs.setCharPref('dlsort', sortCriteria);
         let sortFunction = function (a, b) {
@@ -510,7 +505,7 @@ let FoneraDLManager = {
         try {
             call = actions[action];
         } catch (e) {
-            Application.console.log('invalid call :' + action);
+            Fonera.Application.console.log('invalid call :' + action);
             return;
         }
 
@@ -529,7 +524,7 @@ let FoneraDLManager = {
 
     downloadAction : function(id, action) {
         // FIXME: we trigger refresh action so the throbbler spins and gives some UI feedback
-        Application.console.log("action :" + action + " called on " + id);
+        Fonera.Application.console.log("action :" + action + " called on " + id);
         switch(action) {
         case "pause":
             FoneraDLManager.startThrobbler();
@@ -572,10 +567,10 @@ let FoneraDLManager = {
             try {
                 if (children[i].type == 'radio' && children[i].checked && children[i].group == 'FilterGroup') {
                     filter = children[i].id;
-                    Application.console.log(children[i].id + " selected");
+                    Fonera.Application.console.log(children[i].id + " selected");
                 }
             } catch (e) {
-                Application.console.log(e);
+                Fonera.Application.console.log(e);
             }
         };
         FoneraDLManager.drawDownloads(dialog, filter);
@@ -647,13 +642,13 @@ let FoneraDLManager = {
         let downloadsLabel = document.getElementById("filter-downloads");
         let torrentsLabel = document.getElementById("filter-torrents");
 
-        let downloads = Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
-        let torrents = Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
+        let downloads = Fonera.Application.storage.get(FoneraDownloader.FONERADOWNLOADS, []);
+        let torrents = Fonera.Application.storage.get(FoneraDownloader.FONERATORRENTS, []);
         let total = downloads.length + torrents.length;
         let separator = ' (';
         let close = ')';
         if (total != 0) {
-            Application.console.log('Updating counters');
+            Fonera.Application.console.log('Updating counters');
             allLabel.label = allLabel.label.split(separator)[0] + separator + total + close;
             downloadsLabel.label = downloadsLabel.label.split(separator)[0] + separator + downloads.length + close;
             torrentsLabel.label = torrentsLabel.label.split(separator)[0] + separator + torrents.length + close;
@@ -665,7 +660,7 @@ let FoneraDLManager = {
     },
 
     loadDefaults : function() {
-        let prefs = Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
+        let prefs = Fonera.Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
         let sortCriteria = prefs.getCharPref('dlsort');
 
         let children = document.getElementById("sort-menu").childNodes;
@@ -676,7 +671,7 @@ let FoneraDLManager = {
                     children[j].setAttribute('checked', true);
                 }
             } catch (e) {
-                Application.console.log(e);
+                Fonera.Application.console.log(e);
             }
         }
 
@@ -688,7 +683,7 @@ let FoneraDLManager = {
                     children[i].checked = true;
                 }
             } catch (e) {
-                Application.console.log(e);
+                Fonera.Application.console.log(e);
             }
         };
 

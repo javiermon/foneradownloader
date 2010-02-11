@@ -23,19 +23,13 @@
 
 let EXPORTED_SYMBOLS = ["FoneraAccountsPrefs"];
 
-let Application = Components.classes["@mozilla.org/fuel/application;1"]
-    .getService(Components.interfaces.fuelIApplication);
-
-let PreferencesBranch = Components.classes["@mozilla.org/preferences-service;1"]
-			.getService(Components.interfaces.nsIPrefService).getBranch("extensions.foneradownloader.");
-
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
 
 let FoneraAccountsPrefs = {
 
     fillAccountsIntoTree : function () {
-        let accounts = Application.storage.get(FoneraDownloader.ACCOUNTS,[]);
+        let accounts = Fonera.Application.storage.get(FoneraDownloader.ACCOUNTS,[]);
         let tree = document.getElementById("accounts-list-items");
 
         while (tree.hasChildNodes()) {
@@ -50,7 +44,7 @@ let FoneraAccountsPrefs = {
 
             let treeRow = document.createElement("treerow");
 
-            Application.console.log(accounts[i].service + " - " + accounts[i].uname);
+            Fonera.Application.console.log(accounts[i].service + " - " + accounts[i].uname);
             treeCellType.setAttribute("label", accounts[i].service);
             treeCellUname.setAttribute("label", accounts[i].uname);
 
@@ -75,13 +69,13 @@ let FoneraAccountsPrefs = {
         let stringsBundle = document.getElementById("string-bundle");
         FoneraAccountsPrefs.stopThrobbler();
         let msglabel = document.getElementById("status-messages-text");
-        let errors = Application.storage.get(FoneraDownloader.ACCOUNTERROR, null);
-        Application.console.log("lastError: " + errors);
+        let errors = Fonera.Application.storage.get(FoneraDownloader.ACCOUNTERROR, null);
+        Fonera.Application.console.log("lastError: " + errors);
         if ((errors == FoneraDownloader.ACCOUNTERROR) || (errors == FoneraDownloader.ACCOUNTDELERROR))
             msglabel.value = stringsBundle.getString(errors);
         else
             msglabel.value = "";
-        Application.storage.set(Fonera.LASTERROR, null);
+        Fonera.Application.storage.set(Fonera.LASTERROR, null);
         FoneraAccountsPrefs.fillAccountsIntoTree();
     },
 
@@ -91,7 +85,7 @@ let FoneraAccountsPrefs = {
         // empty labels seem to appear with "" as the default text
         if ((username != "") && (password != "")) {
             this.startThrobbler();
-            Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
+            Fonera.Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
             let stringsBundle = document.getElementById("string-bundle");
             let msglabel = document.getElementById("status-messages-text");
             msglabel.value = stringsBundle.getString("addingAccount");
@@ -107,12 +101,12 @@ let FoneraAccountsPrefs = {
         let index = tree.currentIndex;
         if (index == -1)
             return;
-        Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
+        Fonera.Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
         let selection = tree.view.selection;
         let cellType = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(0));
         let cellUname = tree.view.getCellText(tree.currentIndex, tree.columns.getColumnAt(1));
         // find the id of the username/domain:
-        let accounts = Application.storage.get(FoneraDownloader.ACCOUNTS, []);
+        let accounts = Fonera.Application.storage.get(FoneraDownloader.ACCOUNTS, []);
         for (let i in accounts) {
             if ((accounts[i].service == cellType) && (accounts[i].uname == cellUname))
                 FoneraDownloader.deleteAccount(accounts[i].id);
@@ -125,7 +119,7 @@ let FoneraAccountsPrefs = {
     },
 
     enableAccountManager : function () {
-        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        let authToken = Fonera.Application.storage.get(Fonera.AUTHTOKEN, null);
         let disabled = !Fonera.authenticated(authToken);
         if (disabled) {
             let tree = document.getElementById("accounts-list-items");
@@ -143,13 +137,13 @@ let FoneraAccountsPrefs = {
     },
 
     loadEvents : function() {
-        Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
+        Fonera.Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
         Fonera.addEventListener("onAuthenticate", FoneraAccountsPrefs.enableAccountManager);
         FoneraDownloader.addEventListener("onAccountsUpdates", FoneraAccountsPrefs.actionOnAccountCallback);
     },
 
     unloadEvents : function() {
-        Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
+        Fonera.Application.storage.set(FoneraDownloader.ACCOUNTERROR, null);
         Fonera.removeEventListener("onAuthenticate", FoneraAccountsPrefs.enableAccountManager);
         FoneraDownloader.removeEventListener("onAccountsUpdates", FoneraAccountsPrefs.actionOnAccountCallback);
     }

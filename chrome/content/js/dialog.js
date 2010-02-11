@@ -20,9 +20,6 @@
 
 */
 
-let Application = Components.classes["@mozilla.org/fuel/application;1"]
-    .getService(Components.interfaces.fuelIApplication);
-
 Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
 
@@ -90,7 +87,7 @@ let FoneraDialog = {
 
     openDownloaderHandler : function() {
         // launched by unknownContentType load event
-        let authToken = Application.storage.get(Fonera.AUTHTOKEN, null);
+        let authToken = Fonera.Application.storage.get(Fonera.AUTHTOKEN, null);
         if (Fonera.authenticated(authToken) && Fonera.hasDisk())
             document.getElementById("foneraDownloader-option").disabled = false;
         else
