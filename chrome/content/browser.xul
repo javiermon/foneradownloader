@@ -59,9 +59,9 @@
   </popup>
 
   <!-- tools menu -->
-  <!--menupopup id="menu_ToolsPopup">
+  <menupopup id="menu_ToolsPopup">
     <menuitem id="show-fonera-dlwindow"  label="&showfoneradownloads;" oncommand="FoneraDLManager.showDownloadsWindow();"/>
-  </menupopup-->
+  </menupopup>
 
   <!-- statusbar -->
   <statusbar id="status-bar">
