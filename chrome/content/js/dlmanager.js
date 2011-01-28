@@ -28,22 +28,22 @@ Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/downloader.js");
 Components.utils.import("resource://modules/format.js");
 
-const styleB12C = "font-style: bold; font-size: 1.2em; text-align: center;";
-const styleDMGLH = "display:-moz-grid-line; -moz-box-orient:horizontal";
-const styleC200 = "text-align: center; min-width: 200px;";
-const style15I09 = "margin-left:15px; font-style: italic; font-size: 0.9em;";
-const style09r55 = "text-align: right; min-width: 60px;";
-const style09r40 = "text-align: right; min-width: 45px;";
-
-const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;";
-const listStyleSmall = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 6px;";
-const miniActionButtons = "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); ";
-const playActionOffset = "-moz-image-region: rect(0px, 16px, 16px, 0px);";
-const pauseActionOffset = "-moz-image-region: rect(0px, 48px, 16px, 32px);";
-const cancelActionOffset = "-moz-image-region: rect(0px, 32px, 16px, 16px);";
-
 // The Download Manager Window
 let FoneraDLManager = {
+
+    styleB12C : "font-style: bold; font-size: 1.2em; text-align: center;",
+    styleDMGLH : "display:-moz-grid-line; -moz-box-orient:horizontal",
+    styleC200 : "text-align: center; min-width: 200px;",
+    style15I09 : "margin-left:15px; font-style: italic; font-size: 0.9em;",
+    style09r55 : "text-align: right; min-width: 60px;",
+    style09r40 : "text-align: right; min-width: 45px;",
+    
+    listStyle : "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 10px;",
+    listStyleSmall : "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 6px;",
+    miniActionButtons : "list-style-image: url('chrome://foneradownloader/skin/downloadButtons.png'); ",
+    playActionOffset : "-moz-image-region: rect(0px, 16px, 16px, 0px);",
+    pauseActionOffset : "-moz-image-region: rect(0px, 48px, 16px, 32px);",
+    cancelActionOffset : "-moz-image-region: rect(0px, 32px, 16px, 16px);",
 
     drawDownloadItemSmall : function(downloadItem, dl, stringsBundle) {
         let item = document.createElement("label");
@@ -59,16 +59,16 @@ let FoneraDLManager = {
 
         let statusString = document.createElement("label");
         statusString.setAttribute("value", FoneraFormat.stateName(downloadItem.status));
-        statusString.setAttribute("style", style09r55
+        statusString.setAttribute("style", FoneraDLManager.style09r55
                                   + "color: " + FoneraFormat.colorPicker(downloadItem.status) + ";");
 
         let sizeString = document.createElement("label");
         sizeString.setAttribute("value", FoneraFormat.bytesToSize(downloadItem.size, 2));
-        sizeString.setAttribute("style", style09r55);
+        sizeString.setAttribute("style", FoneraDLManager.style09r55);
 
         let dwSize = document.createElement("label");
         dwSize.setAttribute("value", downloadItem.downloaded);
-        dwSize.setAttribute("style", style09r40);
+        dwSize.setAttribute("style", FoneraDLManager.style09r40);
 
         // custom attribute to identify download
         dl.setAttribute('item-id', downloadItem.id);
@@ -168,21 +168,21 @@ let FoneraDLManager = {
 
         // DATA
         let vboxData = document.createElement("vbox");
-        vboxData.setAttribute("style", styleC200);
+        vboxData.setAttribute("style", FoneraDLManager.styleC200);
         // name
         let hboxName = document.createElement("hbox");
         hboxName.setAttribute("flex", "1");
         let description = document.createElement("description");
 
         description.appendChild(document.createTextNode(dlName));
-        description.setAttribute("style", styleB12C);
+        description.setAttribute("style", FoneraDLManager.styleB12C);
         hboxName.insertBefore(description, hboxName.firstChild);
         // data
         let hboxData = document.createElement("hbox");
-        hboxData.setAttribute("style",styleDMGLH);
+        hboxData.setAttribute("style", FoneraDLManager.styleDMGLH);
         let type = document.createElement("label");
         type.setAttribute("value", stringsBundle.getString('type'));
-        type.setAttribute("style", style15I09);
+        type.setAttribute("style", FoneraDLManager.style15I09);
 
         let typeString = document.createElement("label");
         typeString.setAttribute("value", stringsBundle.getString(downloadItem.type));
@@ -190,7 +190,7 @@ let FoneraDLManager = {
 
         let status = document.createElement("label");
         status.setAttribute("value", stringsBundle.getString('status'));
-        status.setAttribute("style", style15I09);
+        status.setAttribute("style", FoneraDLManager.style15I09);
 
         let statusString = document.createElement("label");
         statusString.setAttribute("value", FoneraFormat.stateName(downloadItem.status));
@@ -199,7 +199,7 @@ let FoneraDLManager = {
 
         let size = document.createElement("label");
         size.setAttribute("value", stringsBundle.getString('size'));
-        size.setAttribute("style", style15I09);
+        size.setAttribute("style", FoneraDLManager.style15I09);
 
         let sizeString = document.createElement("label");
         sizeString.setAttribute("value", FoneraFormat.bytesToSize(downloadItem.size, 2));
@@ -226,15 +226,15 @@ let FoneraDLManager = {
         if (downloadItem.status == "load") {
             action = "pause";
             playb.setAttribute("style",
-                           miniActionButtons
-                           + pauseActionOffset);
+                           FoneraDLManager.miniActionButtons
+                           + FoneraDLManager.pauseActionOffset);
             playb.tooltipText = stringsBundle.getString("pause");
         } else if (downloadItem.status != "done" && downloadItem.status != "hashing"
                   && downloadItem.status != "error") {
             action = "start";
             playb.setAttribute("style",
-                           miniActionButtons
-                           + playActionOffset);
+                           FoneraDLManager.miniActionButtons
+                           + FoneraDLManager.playActionOffset);
             playb.tooltipText = stringsBundle.getString("start");
         } else {
             playb.setAttribute("style","");
@@ -243,8 +243,8 @@ let FoneraDLManager = {
 
         let cancelb = document.createElement("image");
         cancelb.setAttribute("style",
-                           miniActionButtons
-                             + cancelActionOffset);
+                           FoneraDLManager.miniActionButtons
+                             + FoneraDLManager.cancelActionOffset);
 
         cancelb.setAttribute("onclick","FoneraDLManager.downloadAction('" + downloadItem.id + "','delete')");
         cancelb.tooltipText = stringsBundle.getString("cancel");
@@ -276,8 +276,8 @@ let FoneraDLManager = {
 
     toggleListView : function() {
         let filters = {
-            'icon-view' : listStyle,
-            'list-view' : listStyleSmall
+            'icon-view' : FoneraDLManager.listStyle,
+            'list-view' : FoneraDLManager.listStyleSmall
         };
         let children = document.getElementById("filter-toolbar").childNodes;
         let prefs = Fonera.Preferences.getBranch("extensions.foneradownloader."); // the final . is needed
@@ -412,11 +412,11 @@ let FoneraDLManager = {
         // name
         let hboxName = document.createElement("hbox");
         hboxName.setAttribute("flex", "1");
-        hboxName.setAttribute("style", styleC200);
+        hboxName.setAttribute("style", FoneraDLManager.styleC200);
         let description = document.createElement("description");
 
         description.appendChild(document.createTextNode(dlName));
-        description.setAttribute("style", styleB12C);
+        description.setAttribute("style", FoneraDLManager.styleB12C);
         let space = document.createElement("spacer");
         hboxName.insertBefore(space, hboxName.firstChild);
         hboxName.insertBefore(description, hboxName.firstChild);

@@ -30,12 +30,13 @@ Components.utils.import("resource://modules/fonera.js");
 Components.utils.import("resource://modules/format.js");
 Components.utils.import("resource://modules/downloader.js");
 
-const listStyle = "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 4px;";
 
 // The Download Manager Window
 let FoneraLinkManager = {
 
     links : "FONERAPAGELINKS",
+
+    listStyle : "display:-moz-grid-line; -moz-box-orient:horizontal; padding: 4px;",
 
     showLinksWindow : function() {
         if (!Fonera.isPluginEnabled())
@@ -112,7 +113,7 @@ let FoneraLinkManager = {
                 }
             }
         }
-        FoneraFormat.stripeifyList(dialog, listStyle);
+        FoneraFormat.stripeifyList(dialog, FoneraLinkManager.listStyle);
     },
 
     processClick : function(event) {
@@ -267,7 +268,7 @@ let FoneraLinkManager = {
             if (!filtered && hide)
                 this.drawLinksList([]);
         }
-        FoneraFormat.stripeifyList(dialog, listStyle);
+        FoneraFormat.stripeifyList(dialog, FoneraLinkManager.listStyle);
     },
 
     loadEvents : function() {
