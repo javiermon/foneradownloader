@@ -88,7 +88,7 @@ let FoneraDownloader = {
         let ip = Fonera.getUserPref("foneraip").split(":")[0];
 
         let transCredentials = Fonera.getUsername()
-            + ":" + encodeURIComponent(Fonera.getUserPref("password")) + "@";
+            + ":" + encodeURIComponent(Fonera.getPassword()) + "@";
         let url = "http://" + transCredentials + ip
             + ":9091/transmission/rpc";
         return url;
@@ -122,7 +122,7 @@ let FoneraDownloader = {
 
         req.onload = function (aEvt) {
             if (req.readyState == 4) {
-                Fonera.Application.console.log("Response :" + req.responseText + "\n");
+                Fonera.Application.console.log("Response :" + req.responseText + "\n" + "req.status == " + req.status);
     	        if (req.status == 409) {
                     let session = req.getResponseHeader(FoneraDownloader.TRANSSESSION);
                     Fonera.Application.console.log(FoneraDownloader.TRANSSESSION + " : " +  session);
