@@ -24,9 +24,9 @@
 let EXPORTED_SYMBOLS = ["FoneraDLManager"];
 
 
-Components.utils.import("resource://modules/fonera.js");
-Components.utils.import("resource://modules/downloader.js");
-Components.utils.import("resource://modules/format.js");
+Components.utils.import("resource://jsmodules/fonera.js");
+Components.utils.import("resource://jsmodules/downloader.js");
+Components.utils.import("resource://jsmodules/format.js");
 
 // The Download Manager Window
 let FoneraDLManager = {

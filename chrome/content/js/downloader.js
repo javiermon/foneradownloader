@@ -26,8 +26,8 @@
 
 let EXPORTED_SYMBOLS = ["FoneraDownloader"];
 
-Components.utils.import("resource://modules/format.js");
-Components.utils.import("resource://modules/fonera.js");
+Components.utils.import("resource://jsmodules/format.js");
+Components.utils.import("resource://jsmodules/fonera.js");
 
 let FoneraDownloader = {
 

@@ -25,9 +25,9 @@
 
 let EXPORTED_SYMBOLS = ["FoneraCxtxtMenu"];
 
-Components.utils.import("resource://modules/fonera.js");
-Components.utils.import("resource://modules/downloader.js");
-Components.utils.import("resource://modules/linkmanager.js");
+Components.utils.import("resource://jsmodules/fonera.js");
+Components.utils.import("resource://jsmodules/downloader.js");
+Components.utils.import("resource://jsmodules/linkmanager.js");
 
 let FoneraCxtxtMenu = {
 

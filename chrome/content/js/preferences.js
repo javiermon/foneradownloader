@@ -23,7 +23,7 @@
 
 let EXPORTED_SYMBOLS = ["FoneraPrefs"];
 
-Components.utils.import("resource://modules/fonera.js");
+Components.utils.import("resource://jsmodules/fonera.js");
 
 let FoneraPrefs = {
 

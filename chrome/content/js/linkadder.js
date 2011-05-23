@@ -23,8 +23,8 @@
 
 let EXPORTED_SYMBOLS = ["FoneraLinkadder"];
 
-Components.utils.import("resource://modules/fonera.js");
-Components.utils.import("resource://modules/downloader.js");
+Components.utils.import("resource://jsmodules/fonera.js");
+Components.utils.import("resource://jsmodules/downloader.js");
 
 let FoneraLinkadder = {
 
