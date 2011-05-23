@@ -1,7 +1,7 @@
 content	foneradownloader	chrome/content/
 locale foneradownloader en-US chrome/locale/en-US/
 locale foneradownloader es-ES chrome/locale/es-ES/
-resource modules chrome/content/js/
+resource jsmodules chrome/content/js/
 overlay chrome://mozapps/content/downloads/unknownContentType.xul chrome://foneradownloader/content/dialog.xul
 overlay chrome://browser/content/browser.xul chrome://foneradownloader/content/browser.xul
 skin foneradownloader default chrome/skin/

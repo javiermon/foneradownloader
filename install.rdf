@@ -7,6 +7,7 @@
     <em:id>foneradownloader@fon.com</em:id>
     <em:name>Fonera 2.0 Downloader Helper extension</em:name>
     <em:version>0.1.9</em:version>
+    <em:type>2</em:type>
     <em:description>Extension to send your download links files to your fonera</em:description>
     <em:creator>Javier Monteagudo</em:creator>
     <em:homepageURL>http://www.fonosfera.org</em:homepageURL>
@@ -19,7 +20,7 @@
       <Description>
         <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
         <em:minVersion>3.0</em:minVersion>
-        <em:maxVersion>4.0.*</em:maxVersion>
+        <em:maxVersion>5.0.*</em:maxVersion>
       </Description>
     </em:targetApplication>
 
