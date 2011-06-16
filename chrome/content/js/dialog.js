@@ -20,8 +20,8 @@
 
 */
 
-Components.utils.import("resource://jsmodules/fonera.js");
-Components.utils.import("resource://jsmodules/downloader.js");
+Components.utils.import("resource://foneradjsmodules/fonera.js");
+Components.utils.import("resource://foneradjsmodules/downloader.js");
 
 
 //let torrentDownloadObserver = {

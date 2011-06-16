@@ -124,30 +124,6 @@ let Fonera = {
                 }
         } catch(e) {
             Fonera.Application.console.log(e);
-            // migration code:
-            try {
-                if (prefs.prefHasUserValue("password")) {
-                    password = Fonera.getUserPref('password');
-                    // store new password in loginManager:
-                    let extLoginInfo = new Fonera.nsLoginInfo('chrome://foneradownloader',
-                        null, 'Fonera user Login',
-                        Fonera.getUsername(), password, "", "");
-
-                    // remove all logins and create a new one:
-                    let logins = Fonera.passwordManager.findLogins({}, 'chrome://foneradownloader', null, 'Fonera user Login');
-                    for (let i = 0; i < logins.length; i++) {
-                        Fonera.passwordManager.removeLogin(logins[i]);
-                    }
-                    Fonera.passwordManager.addLogin(extLoginInfo);
-                    // lock this preference as it will be stored from now on inside loginManager
-                    Fonera.Preferences.getBranch("extensions.foneradownloader.").setCharPref("password", "");
-                    Fonera.Preferences.getBranch("extensions.foneradownloader.").lockPref('password');
-                    return password;
-                }
-            } catch(e) {
-                Fonera.Application.console.log(e);
-            }
-
         }
         return password;
     },

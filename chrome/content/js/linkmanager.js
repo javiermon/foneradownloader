@@ -26,9 +26,9 @@ let EXPORTED_SYMBOLS = ["FoneraLinkManager"];
 let Application = Components.classes["@mozilla.org/fuel/application;1"]
     .getService(Components.interfaces.fuelIApplication);
 
-Components.utils.import("resource://jsmodules/fonera.js");
-Components.utils.import("resource://jsmodules/format.js");
-Components.utils.import("resource://jsmodules/downloader.js");
+Components.utils.import("resource://foneradjsmodules/fonera.js");
+Components.utils.import("resource://foneradjsmodules/format.js");
+Components.utils.import("resource://foneradjsmodules/downloader.js");
 
 
 // The Download Manager Window

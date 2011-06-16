@@ -24,9 +24,9 @@
 let EXPORTED_SYMBOLS = ["FoneraDLManager"];
 
 
-Components.utils.import("resource://jsmodules/fonera.js");
-Components.utils.import("resource://jsmodules/downloader.js");
-Components.utils.import("resource://jsmodules/format.js");
+Components.utils.import("resource://foneradjsmodules/fonera.js");
+Components.utils.import("resource://foneradjsmodules/downloader.js");
+Components.utils.import("resource://foneradjsmodules/format.js");
 
 // The Download Manager Window
 let FoneraDLManager = {
@@ -239,14 +239,19 @@ let FoneraDLManager = {
         } else {
             playb.setAttribute("style","");
         }
-        playb.setAttribute("onclick","FoneraDLManager.downloadAction('" + downloadItem.id + "','" + action  + "')");
+        playb.setAttribute("id", downloadItem.id);
+        playb.setAttribute("action", action);
+        playb.setAttribute("onclick", "FoneraDLManager.downloadAction(this.getAttribute('id'), this.getAttribute('action'))")
 
         let cancelb = document.createElement("image");
         cancelb.setAttribute("style",
                            FoneraDLManager.miniActionButtons
                              + FoneraDLManager.cancelActionOffset);
 
-        cancelb.setAttribute("onclick","FoneraDLManager.downloadAction('" + downloadItem.id + "','delete')");
+        cancelb.setAttribute("id", downloadItem.id);
+        cancelb.setAttribute("action", "delete");
+        cancelb.setAttribute("onclick", "FoneraDLManager.downloadAction(this.getAttribute('id'), this.getAttribute('action'))")
+
         cancelb.tooltipText = stringsBundle.getString("cancel");
 
         let spaceb = document.createElement("spacer");
